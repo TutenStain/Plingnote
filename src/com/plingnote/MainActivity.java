@@ -9,19 +9,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
 public class MainActivity extends FragmentActivity{
 
-	ViewPager viewPager;
+	ScrollableViewPager viewPager;
 	TabsAdapter tabsAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		viewPager = new ViewPager(this);
+		viewPager = new ScrollableViewPager(this);
 		viewPager.setId(1);
 		setContentView(viewPager);
 
@@ -50,11 +49,11 @@ public class MainActivity extends FragmentActivity{
 		outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
 	}
 
-	public static class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
+	public static class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ScrollableViewPager.OnPageChangeListener {
 
 		private final Context context;
 		private final ActionBar actionBar;
-		private final ViewPager viewPager;
+		private final ScrollableViewPager viewPager;
 		private final ArrayList<TabInfo> tabs = new ArrayList<TabInfo>();
 
 		static final class TabInfo {
@@ -67,7 +66,7 @@ public class MainActivity extends FragmentActivity{
 			}
 		}
 
-		public TabsAdapter(FragmentActivity activity, ViewPager pager) {
+		public TabsAdapter(FragmentActivity activity, ScrollableViewPager pager) {
 			super(activity.getSupportFragmentManager());
 			context = activity;
 			actionBar = activity.getActionBar();
