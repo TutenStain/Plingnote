@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Plingnote</string>
+    <string name="notetexthint">Note Title\nWrite your note here.</string>
+</resources>
