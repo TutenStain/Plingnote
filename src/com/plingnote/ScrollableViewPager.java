@@ -15,13 +15,39 @@ import android.view.MotionEvent;
  * classes. 
  */
 public class ScrollableViewPager extends ViewPager {
-
+	private boolean pagingEnabled;
+	
 	public ScrollableViewPager(Context context) {
 		super(context);
+		this.pagingEnabled = false;
+	}
+	
+	public ScrollableViewPager(Context context, boolean pagingEnabled){
+		this(context);
+		this.pagingEnabled = pagingEnabled;
+	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if(this.pagingEnabled)
+			return super.onTouchEvent(event);
+		
+		return false;
 	}
 
 	@Override
-	public boolean onInterceptTouchEvent(MotionEvent ev) {   
-		return super.onInterceptHoverEvent(ev);
+	public boolean onInterceptTouchEvent(MotionEvent event) {   
+		if(this.pagingEnabled)
+			return super.onInterceptHoverEvent(event);
+			
+		return false;
 	}
+	
+	 public void setPagingEnabled(boolean enabled) {
+	        this.pagingEnabled = enabled;
+	 }
+	 
+	 public boolean isPagingEnabled(){
+		 return this.pagingEnabled;
+	 }
 }
