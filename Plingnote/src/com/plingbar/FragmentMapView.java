@@ -20,10 +20,10 @@ public class FragmentMapView extends MapActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_mapview);
         MapView mapView = (MapView) findViewById(R.id.mapview);
-        mapView.setBuiltInZoomControls(true);
         List<Overlay> mapOverlays = mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.androidmarker);
         ItemOverlay itemizedoverlay = new ItemOverlay(drawable, this);
+        setMapAtStartUp(mapView);
     }
 
     @Override
@@ -35,5 +35,10 @@ public class FragmentMapView extends MapActivity {
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
+	}
+	
+	private void setMapAtStartUp(MapView mapView){
+        mapView.setBuiltInZoomControls(true);
+        mapView.setSatellite(true);
 	}
 }
