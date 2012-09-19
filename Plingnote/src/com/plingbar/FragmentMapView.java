@@ -1,10 +1,16 @@
 package com.plingbar;
 
+import java.util.List;
+
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.view.Menu;
 
 public class FragmentMapView extends MapActivity {
@@ -15,6 +21,9 @@ public class FragmentMapView extends MapActivity {
         setContentView(R.layout.activity_fragment_mapview);
         MapView mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
+        List<Overlay> mapOverlays = mapView.getOverlays();
+        Drawable drawable = this.getResources().getDrawable(R.drawable.androidmarker);
+        ItemOverlay itemizedoverlay = new ItemOverlay(drawable, this);
     }
 
     @Override
