@@ -18,7 +18,7 @@
             android:name="com.google.android.maps"/>
         <activity
             android:name=".FragmentMapView"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:label="@string/title_activity_fragment_map_view" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
