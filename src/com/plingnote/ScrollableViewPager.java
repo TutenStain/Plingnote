@@ -1,7 +1,10 @@
 package com.plingnote;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -12,19 +15,25 @@ import android.view.MotionEvent;
  * If this class decides that the user wanted to
  * change view (tab), it consumes the MotionEvent.
  * Otherwise it passes the MotionEvent on to other
- * classes. 
+ * classes. The default behavior is that a swipe to
+ * change view is intercepted if it starts from the
+ * edges of the screen.
  */
 public class ScrollableViewPager extends ViewPager {
 	private boolean pagingEnabled;
+	private Context context;
+	private int screenWidth;
+	private int screenHiehgt;
+	private Rect rect = new Rect();
 	
 	public ScrollableViewPager(Context context) {
 		super(context);
+		this.context = context;
 		this.pagingEnabled = false;
-	}
-	
-	public ScrollableViewPager(Context context, boolean pagingEnabled){
-		this(context);
-		this.pagingEnabled = pagingEnabled;
+		DisplayMetrics metrics = this.context.getResources().getDisplayMetrics();
+		this.screenWidth = metrics.widthPixels;
+		this.screenHiehgt = metrics.heightPixels;
+		rect.set(25, 0, screenWidth - 25, screenHiehgt);
 	}
 	
 	@Override
@@ -36,11 +45,14 @@ public class ScrollableViewPager extends ViewPager {
 	}
 
 	@Override
-	public boolean onInterceptTouchEvent(MotionEvent event) {   
-		if(this.pagingEnabled)
-			return super.onInterceptHoverEvent(event);
-			
-		return false;
+	public boolean onInterceptTouchEvent(MotionEvent event) {   				
+		if(rect.contains((int)event.getX(), (int)event.getY()) == false) {
+			pagingEnabled = true;
+			return true;
+		} else {
+			pagingEnabled = false;
+			return false;
+		}
 	}
 	
 	 public void setPagingEnabled(boolean enabled) {
