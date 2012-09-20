@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.Menu;
 
-public class MainActivity extends FragmentActivity{
+public class ActivityMain extends FragmentActivity{
 
 	ScrollableViewPager viewPager;
 	TabsAdapter tabsAdapter;
