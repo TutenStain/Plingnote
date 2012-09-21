@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -21,21 +20,33 @@ import android.view.MotionEvent;
  */
 public class ScrollableViewPager extends ViewPager {
 	private boolean pagingEnabled;
+	private boolean scrollablePaging = true;
 	private Context context;
-	private int screenWidth;
-	private int screenHiehgt;
-	private Rect rect = new Rect();
+	private Rect disabledScrollRect = new Rect();
 	
 	public ScrollableViewPager(Context context) {
 		super(context);
 		this.context = context;
 		this.pagingEnabled = false;
 		DisplayMetrics metrics = this.context.getResources().getDisplayMetrics();
-		this.screenWidth = metrics.widthPixels;
-		this.screenHiehgt = metrics.heightPixels;
-		rect.set(25, 0, screenWidth - 25, screenHiehgt);
+		this.disabledScrollRect.set(30, 0, metrics.widthPixels - 30, metrics.heightPixels);
 	}
 	
+	/**
+	 * @param context the context
+	 * @param scrollablePaging edge page swipe to change tabs
+	 */
+	public ScrollableViewPager(Context context, boolean scrollablePaging){
+		this(context);
+		this.scrollablePaging = scrollablePaging;
+	}
+	
+	/**
+	 * Handle the touch event. If we decided that we
+	 * want to scroll we call on super to handle it
+	 * for us. Otherwise if we do not want to scroll
+	 * we just return false 
+	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if(this.pagingEnabled)
@@ -43,23 +54,36 @@ public class ScrollableViewPager extends ViewPager {
 		
 		return false;
 	}
-
+	/**
+	 * Intercept the touch events and if we decide that
+	 * a swipe started from the edges of the screen, 
+	 * consume the event.
+	 */
 	@Override
-	public boolean onInterceptTouchEvent(MotionEvent event) {   				
-		if(rect.contains((int)event.getX(), (int)event.getY()) == false) {
-			pagingEnabled = true;
-			return true;
-		} else {
-			pagingEnabled = false;
-			return false;
+	public boolean onInterceptTouchEvent(MotionEvent event) {
+		if(scrollablePaging) {
+			if(disabledScrollRect.contains((int)event.getX(), (int)event.getY()) == false) {
+				pagingEnabled = true;
+				return true;
+			} else
+				pagingEnabled = false;
 		}
+		
+		return false;
 	}
-	
-	 public void setPagingEnabled(boolean enabled) {
-	        this.pagingEnabled = enabled;
+	/**
+	 * This enables swipe between tabs if the swipe is
+	 * originated from either side of the edges
+	 * @param enabled edge page swipe to change tabs
+	 */
+	 public void setEdgeSwipePagingEnabled(boolean enabled) {
+	        this.scrollablePaging = enabled;
 	 }
 	 
-	 public boolean isPagingEnabled(){
-		 return this.pagingEnabled;
+	 /**
+	  * @return if edge swipe is enabled for this pager
+	  */
+	 public boolean isEdgeSwipePagingEnabled(){
+		 return this.scrollablePaging;
 	 }
 }
