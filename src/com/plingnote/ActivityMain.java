@@ -20,8 +20,8 @@ public class ActivityMain extends FragmentActivity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		viewPager = new ScrollableViewPager(this);
-		viewPager.setId(1);
+		this.viewPager = new ScrollableViewPager(this);
+		this.viewPager.setId(1);
 		setContentView(viewPager);
 
 		final ActionBar actionBar = getActionBar();
@@ -68,19 +68,19 @@ public class ActivityMain extends FragmentActivity{
 
 		public TabsAdapter(FragmentActivity activity, ScrollableViewPager pager) {
 			super(activity.getSupportFragmentManager());
-			context = activity;
-			actionBar = activity.getActionBar();
-			viewPager = pager;
-			viewPager.setAdapter(this);
-			viewPager.setOnPageChangeListener(this);
+			this.context = activity;
+			this.actionBar = activity.getActionBar();
+			this.viewPager = pager;
+			this.viewPager.setAdapter(this);
+			this.viewPager.setOnPageChangeListener(this);
 		}
 
 		public void addTab(ActionBar.Tab tab, Class<?> clss, Bundle args) {
 			TabInfo info = new TabInfo(clss, args);
 			tab.setTag(info);
 			tab.setTabListener(this);
-			tabs.add(info);
-			actionBar.addTab(tab);
+			this.tabs.add(info);
+			this.actionBar.addTab(tab);
 			notifyDataSetChanged();
 		}
 
@@ -89,16 +89,16 @@ public class ActivityMain extends FragmentActivity{
 		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
 
 		public void onPageSelected(int position) {
-			actionBar.setSelectedNavigationItem(position);
+			this.actionBar.setSelectedNavigationItem(position);
 		}
 
 		public void onTabReselected(Tab tab, android.app.FragmentTransaction ft) { }
 
 		public void onTabSelected(Tab tab, android.app.FragmentTransaction ft) {
 			Object tag = tab.getTag();
-			for (int i = 0 ; i < tabs.size(); i++) {
-				if (tabs.get(i) == tag) {
-					viewPager.setCurrentItem(i);
+			for (int i = 0 ; i < this.tabs.size(); i++) {
+				if (this.tabs.get(i) == tag) {
+					this.viewPager.setCurrentItem(i);
 				}
 			}
 		}
@@ -107,13 +107,13 @@ public class ActivityMain extends FragmentActivity{
 
 		@Override
 		public Fragment getItem(int position) {
-			TabInfo info = tabs.get(position);
-			return Fragment.instantiate(context, info.clss.getName(), info.args);
+			TabInfo info = this.tabs.get(position);
+			return Fragment.instantiate(this.context, info.clss.getName(), info.args);
 		}
 
 		@Override
 		public int getCount() {
-			return tabs.size();
+			return this.tabs.size();
 		}
 	}
 }
