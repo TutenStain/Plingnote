@@ -13,8 +13,8 @@ import android.view.Menu;
 
 public class ActivityMain extends FragmentActivity{
 
-	ScrollableViewPager viewPager;
-	TabsAdapter tabsAdapter;
+	private ScrollableViewPager viewPager;
+	private TabsAdapter tabsAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
