@@ -29,8 +29,8 @@ public class ActivityMain extends FragmentActivity{
 		actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
 
 		tabsAdapter = new TabsAdapter(this, viewPager);
-		tabsAdapter.addTab(actionBar.newTab().setText("Map"), FragmentMapView.class, null);
-		tabsAdapter.addTab(actionBar.newTab().setText("List"), FragmentListView.class, null);
+		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_mapmode), FragmentMapView.class, null);
+		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_sort_by_size), FragmentListView.class, null);
 
 		if (savedInstanceState != null) {
 			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
