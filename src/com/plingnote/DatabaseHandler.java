@@ -34,12 +34,20 @@ public class DatabaseHandler {
 	private Context context;
 	private DBHelper dbHelp;
 	private SQLiteDatabase db;
-
+	private static DatabaseHandler instance = null;
+	
 	/**
 	 * 
 	 * @param con the context
+	 * @return the singleton instance
 	 */
-	public DatabaseHandler(Context con){
+	public static DatabaseHandler getInstance(Context con){
+		if(instance == null)
+			instance = new DatabaseHandler(con);
+		return instance;
+	}
+	
+	private DatabaseHandler(Context con){
 		this.context = con;
 		this.dbHelp = new DBHelper(this.context);
 	}
