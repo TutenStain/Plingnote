@@ -19,11 +19,11 @@ public class ActivityMain extends FragmentActivity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 		this.viewPager = new ScrollableViewPager(this);
-		this.viewPager.setId(1);
+		this.viewPager.setId(R.id.viewPager);
 		setContentView(viewPager);
-
+		
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
