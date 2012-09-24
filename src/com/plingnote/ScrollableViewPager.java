@@ -19,6 +19,9 @@ import android.view.MotionEvent;
  * edges of the screen.
  */
 public class ScrollableViewPager extends ViewPager {
+	private final int LEFT_DEAD_ZONE_PIXELS = 30;
+	private final int RIGHT_DEAD_ZONE_PIXELS = 30;
+
 	private boolean pagingEnabled;
 	private boolean scrollablePaging = true;
 	private Context context;
@@ -28,8 +31,8 @@ public class ScrollableViewPager extends ViewPager {
 		super(context);
 		this.context = context;
 		this.pagingEnabled = false;
-		DisplayMetrics metrics = this.context.getResources().getDisplayMetrics();
-		this.disabledScrollRect.set(30, 0, metrics.widthPixels - 30, metrics.heightPixels);
+		DisplayMetrics metrics = this.context.getResources().getDisplayMetrics();	
+		this.disabledScrollRect.set(this.LEFT_DEAD_ZONE_PIXELS, 0, metrics.widthPixels - this.RIGHT_DEAD_ZONE_PIXELS, metrics.heightPixels);
 	}
 	
 	/**
