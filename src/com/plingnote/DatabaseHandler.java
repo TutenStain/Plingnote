@@ -28,14 +28,14 @@ public class DatabaseHandler {
 	/* SQL statement to create Note table */
 	private static final String CREATE_TABLE_NOTE =
 			"create table " + TABLE_NOTE + " (" + KEY_ROWID + " integer primary key autoincrement, "
-					+ KEY_TITLE + " String not null, " + KEY_TEXT + " String not null, " 
+					+ KEY_TITLE + " String, " + KEY_TEXT + " String, " 
 					+ KEY_LONGITUDE +" Double not null, "+ KEY_LATITUDE +" Double not null);";
 
 	private Context context;
 	private DBHelper dbHelp;
 	private SQLiteDatabase db;
 	private static DatabaseHandler instance = null;
-	
+
 	/**
 	 * 
 	 * @param con the context
@@ -46,7 +46,7 @@ public class DatabaseHandler {
 			instance = new DatabaseHandler(con);
 		return instance;
 	}
-	
+
 	private DatabaseHandler(Context con){
 		this.context = con;
 		this.dbHelp = new DBHelper(this.context);
@@ -79,6 +79,8 @@ public class DatabaseHandler {
 	 * @return row id or -1 if an error occurred
 	 */
 	public long insertNote(String title, String text, Location l){
+		if(l == null)
+			l = new Location(0.0, 0.0);
 		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_TITLE, title);
@@ -125,18 +127,21 @@ public class DatabaseHandler {
 	}
 
 	private Cursor getAllNotes(){
-		return this.db.query(TABLE_NOTE, new String[]{ KEY_ROWID, KEY_TITLE, KEY_TEXT, KEY_LONGITUDE, KEY_LATITUDE }, 
-				null, null, null, null, null);
+		return this.db.query(TABLE_NOTE, new String[]{ KEY_ROWID, KEY_TITLE, KEY_TEXT,
+				KEY_LONGITUDE, KEY_LATITUDE },
+				null, null,null, null, null);
 	}
 
 	/**
 	 * 
-	 * @param rowId	 row id of the note to update
+	 * @param rowId row id of the note to update
 	 * @param title the title to update to
 	 * @param text the text to update to
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean updateNote(long rowId, String title, String text, Location l){
+		if(l == null)
+			l = new Location(0.0, 0.0);
 		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_TITLE, title);
