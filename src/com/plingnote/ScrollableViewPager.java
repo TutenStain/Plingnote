@@ -31,8 +31,8 @@ public class ScrollableViewPager extends ViewPager {
 		super(context);
 		this.context = context;
 		this.pagingEnabled = false;
-		DisplayMetrics metrics = this.context.getResources().getDisplayMetrics();	
-		this.disabledScrollRect.set(this.LEFT_DEAD_ZONE_PIXELS, 0, metrics.widthPixels - this.RIGHT_DEAD_ZONE_PIXELS, metrics.heightPixels);
+		Rect r = Utils.getScreenPixels(this.context);
+		this.disabledScrollRect.set(this.LEFT_DEAD_ZONE_PIXELS, 0, r.width() - this.RIGHT_DEAD_ZONE_PIXELS, r.height());
 	}
 	
 	/**
