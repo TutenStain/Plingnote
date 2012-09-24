@@ -1,6 +1,8 @@
 package com.plingnote;
 
-public class Note {
+
+
+public class Note  {
 	private Integer rowId;
 	private String title;
 	private String text;
@@ -18,6 +20,7 @@ public class Note {
 		this.title = ti;
 		this.text = txt;
 		this.location = l;
+
 	}
 
 	/**
@@ -50,4 +53,5 @@ public class Note {
 	public Location getLocation(){
 		return this.location;
 	}
+
 }

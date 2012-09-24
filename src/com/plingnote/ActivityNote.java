@@ -1,6 +1,8 @@
 package com.plingnote;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 
 /**
  * A note fragment activity with a layout holding a fragment. 
@@ -17,7 +19,6 @@ public class ActivityNote extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_note);
-
 	}
 	
 	@Override
@@ -52,6 +53,18 @@ public class ActivityNote extends FragmentActivity {
 	public void onDestroy(){
 		super.onDestroy();
 
+	}
+	
+	/**
+	 * Makes the back button behave like the home button
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	        moveTaskToBack(true);
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
 	}
 
 }
