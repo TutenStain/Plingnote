@@ -7,8 +7,14 @@
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dip"
         android:layout_weight="1"
         android:drawSelectorOnTop="false" />
 
+   <ImageView
+       android:id="@+id/imageViewList"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:scaleType="center"
+       android:src="@drawable/ic_launcher"/>
 </LinearLayout>
