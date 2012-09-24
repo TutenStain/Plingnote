@@ -6,6 +6,6 @@ import android.util.DisplayMetrics;
 public class Utils {
 	public static Rect getScreenPixels(Context context){
 		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-		return new Rect(0, metrics.heightPixels, metrics.widthPixels, 0);
+		return new Rect(0, 0, metrics.widthPixels, metrics.heightPixels);
 	}
 }
