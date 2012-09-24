@@ -25,8 +25,9 @@ import android.widget.ListView;
  */
 public class FragmentListView extends ListFragment {
 	private String[] groupies = { "Bar n' a bass", "Mushu", "Cristmas I A",
-			"*PI", "Bolle" };
-	List<String> groupiesList = new ArrayList<String>(Arrays.asList(groupies));
+			"*PI", "Bolle", "Kleff", "Bark", "Sol"};
+	private List<String> groupiesList = new ArrayList<String>(
+			Arrays.asList(groupies));
 	private ArrayAdapter<String> listAdapter;
 
 	@Override
@@ -34,7 +35,7 @@ public class FragmentListView extends ListFragment {
 			Bundle savedState) {
 		// Fill adapter with items from the array.
 		listAdapter = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_1, groupiesList);
+				android.R.layout.simple_list_item_activated_1, groupiesList);
 		setListAdapter(listAdapter);
 		return super.onCreateView(inflater, container, savedState);
 	}
@@ -42,7 +43,8 @@ public class FragmentListView extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedState) {
 		super.onActivityCreated(savedState);
-
+		
+		// Make it possible for the user to select multiple items.
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setMultiChoiceModeListener(new LongPress());
 	}
@@ -51,8 +53,9 @@ public class FragmentListView extends ListFragment {
 	 * Handles single clicks on the notes. Opens the note of choice in a new
 	 * activity.
 	 */
+	@Override
 	public void onListItemClick(ListView parent, View v, int position, long id) {
-		// TODO
+		// Open the note in edit view.
 	}
 
 	/**
@@ -73,6 +76,7 @@ public class FragmentListView extends ListFragment {
 			default:
 				return false;
 			}
+
 		}
 
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -117,13 +121,17 @@ public class FragmentListView extends ListFragment {
 
 	}
 
+	/**
+	 * Remove checked notes from the list.
+	 */
 	public void removeListItem() {
-		for (int i = 0; i < getListView().getCheckedItemPositions().size(); i++) {
+		// Iterate through the list and remove the selected items from the adapter.
+		for (int i = getListView().getCount() - 1; i >= 0; i--) {
 			if (getListView().getCheckedItemPositions().get(i)) {
-				listAdapter.remove(groupiesList.get(i));
-
+				listAdapter.remove(listAdapter.getItem(i));
 			}
 		}
+		// Update the view.
 		listAdapter.notifyDataSetChanged();
 	}
 }
