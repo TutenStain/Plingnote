@@ -24,18 +24,20 @@ public class DatabaseHandler {
 	private static final String KEY_TITLE = "Title";
 	private static final String KEY_LONGITUDE = "Longitude";
 	private static final String KEY_LATITUDE = "Latitude";
-
+	private static final String KEY_IMAGEPATH = "ImagePath";
+	
 	/* SQL statement to create Note table */
 	private static final String CREATE_TABLE_NOTE =
 			"create table " + TABLE_NOTE + " (" + KEY_ROWID + " integer primary key autoincrement, "
-					+ KEY_TITLE + " String not null, " + KEY_TEXT + " String not null, " 
-					+ KEY_LONGITUDE +" Double not null, "+ KEY_LATITUDE +" Double not null);";
+					+ KEY_TITLE + " String, " + KEY_TEXT + " String, " 
+					+ KEY_LONGITUDE +" Double not null, "+ KEY_LATITUDE +" Double not null, " 
+					+ KEY_IMAGEPATH + " String);";
 
 	private Context context;
 	private DBHelper dbHelp;
 	private SQLiteDatabase db;
 	private static DatabaseHandler instance = null;
-	
+
 	/**
 	 * 
 	 * @param con the context
@@ -46,7 +48,7 @@ public class DatabaseHandler {
 			instance = new DatabaseHandler(con);
 		return instance;
 	}
-	
+
 	private DatabaseHandler(Context con){
 		this.context = con;
 		this.dbHelp = new DBHelper(this.context);
@@ -78,13 +80,16 @@ public class DatabaseHandler {
 	 * @param text text of the note to insert
 	 * @return row id or -1 if an error occurred
 	 */
-	public long insertNote(String title, String text, Location l){
+	public long insertNote(String title, String text, Location l, String path){
+		if(l == null)
+			l = new Location(0.0, 0.0);
 		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_TITLE, title);
 		cv.put(KEY_TEXT, text);
 		cv.put(KEY_LONGITUDE, l.getLongitude());
 		cv.put(KEY_LATITUDE, l.getLatitude());
+		cv.put(KEY_IMAGEPATH, path);
 		long tmp = this.db.insert(TABLE_NOTE, null, cv);
 		this.close();
 		return tmp;
@@ -117,7 +122,8 @@ public class DatabaseHandler {
 				String text = c.getString(2);
 				Double longitude = Double.parseDouble(c.getString(3));
 				Double latitude = Double.parseDouble(c.getString(4));
-				l.add(new Note(rowId, title, text, new Location(longitude, latitude)));
+				String imagePath = c.getString(5);
+				l.add(new Note(rowId, title, text, new Location(longitude, latitude), imagePath));
 			}while(c.moveToNext());
 		}
 		this.close();
@@ -125,24 +131,28 @@ public class DatabaseHandler {
 	}
 
 	private Cursor getAllNotes(){
-		return this.db.query(TABLE_NOTE, new String[]{ KEY_ROWID, KEY_TITLE, KEY_TEXT, KEY_LONGITUDE, KEY_LATITUDE }, 
-				null, null, null, null, null);
+		return this.db.query(TABLE_NOTE, new String[]{ KEY_ROWID, KEY_TITLE, KEY_TEXT,
+				KEY_LONGITUDE, KEY_LATITUDE, KEY_IMAGEPATH },
+				null, null,null, null, null);
 	}
 
 	/**
 	 * 
-	 * @param rowId	 row id of the note to update
+	 * @param rowId row id of the note to update
 	 * @param title the title to update to
 	 * @param text the text to update to
 	 * @return true if database was updated, false otherwise
 	 */
-	public boolean updateNote(long rowId, String title, String text, Location l){
+	public boolean updateNote(long rowId, String title, String text, Location l, String path){
+		if(l == null)
+			l = new Location(0.0, 0.0);
 		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_TITLE, title);
 		cv.put(KEY_TEXT, text);
 		cv.put(KEY_LONGITUDE, l.getLongitude());
 		cv.put(KEY_LONGITUDE, l.getLatitude());
+		cv.put(KEY_IMAGEPATH, path);
 		boolean b = this.db.update(TABLE_NOTE, cv, KEY_ROWID + "=" + rowId, null) > 0;
 		this.close();
 		return b;
