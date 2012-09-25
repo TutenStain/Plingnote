@@ -1,19 +1,16 @@
 package com.plingnote;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import android.support.v4.app.ListFragment;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /**
@@ -24,26 +21,19 @@ import android.widget.ListView;
  * 
  */
 public class FragmentListView extends ListFragment {
-	private String[] groupies = { "Bar n' a bass", "Mushu", "Cristmas I A",
-			"*PI", "Bolle", "Kleff", "Bark", "Sol"};
-	private List<String> groupiesList = new ArrayList<String>(
-			Arrays.asList(groupies));
-	private ArrayAdapter<String> listAdapter;
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedState) {
-		// Fill adapter with items from the array.
-		listAdapter = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_activated_1, groupiesList);
-		setListAdapter(listAdapter);
-		return super.onCreateView(inflater, container, savedState);
-	}
+	private DatabaseHandler db;
+	private NoteAdapter noteAdapter;
+	private List<Note> notes = new ArrayList<Note>();
 
 	@Override
 	public void onActivityCreated(Bundle savedState) {
 		super.onActivityCreated(savedState);
+		db = DatabaseHandler.getInstance(getActivity());
+		refreshNotes();
 		
+		noteAdapter = new NoteAdapter(getActivity(), R.layout.fragment_listview, notes);
+        setListAdapter(noteAdapter);
+
 		// Make it possible for the user to select multiple items.
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setMultiChoiceModeListener(new LongPress());
@@ -122,16 +112,37 @@ public class FragmentListView extends ListFragment {
 	}
 
 	/**
+	 * Get notes from database and add them to a list.
+	 */
+	public void refreshNotes() {
+		
+		// Clear list from previous notes.
+		notes.clear();
+		
+		for(Note n : db.getNoteList()) {
+			this.notes.add(n);
+		}		
+	}
+
+	/**
 	 * Remove checked notes from the list.
 	 */
 	public void removeListItem() {
-		// Iterate through the list and remove the selected items from the adapter.
-		for (int i = getListView().getCount() - 1; i >= 0; i--) {
-			if (getListView().getCheckedItemPositions().get(i)) {
-				listAdapter.remove(listAdapter.getItem(i));
+		
+		// Get the positions of all the checked items.
+		SparseBooleanArray checkedItemPositions = getListView().getCheckedItemPositions(); 
+		
+		// Walk through the notes and delete the checked ones.
+		for(int i = getListView().getCount() - 1; i >= 0; i--) {
+			if(checkedItemPositions.get(i)) {
+				db.deleteNote(notes.get(i).getRowId());
 			}
 		}
-		// Update the view.
-		listAdapter.notifyDataSetChanged();
+		
+		// Refresh the note list.
+		refreshNotes();
+		
+		// Update the adapter.
+		noteAdapter.notifyDataSetChanged();
 	}
 }
