@@ -59,7 +59,6 @@ public class ActivityMain extends FragmentActivity{
 	}
 
 	public static class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ScrollableViewPager.OnPageChangeListener {
-
 		private final Context context;
 		private final ActionBar actionBar;
 		private final ScrollableViewPager viewPager;
