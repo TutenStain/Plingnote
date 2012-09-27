@@ -10,7 +10,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.SearchView;
 
 public class ActivityMain extends FragmentActivity{
@@ -46,12 +49,27 @@ public class ActivityMain extends FragmentActivity{
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-		searchView.setQueryHint(getString(R.string.search_hint));
+		//searchView.setQueryHint(getString(R.string.search_hint));
 		searchView.setIconifiedByDefault(true);
-		    
+		
 		return true;
 	}
-
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        	/*If there is no room to display the search widget it will
+        	 * be placed in the overflow menu. To display the widget
+        	 * once pressed we have to manually call it from here.
+        	 */
+            case R.id.search:
+                onSearchRequested();
+                return true;
+            default:
+                return false;
+        }
+    }
+	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
