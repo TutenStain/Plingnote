@@ -47,7 +47,6 @@ public class ActivityMain extends FragmentActivity{
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-		//searchView.setQueryHint(getString(R.string.search_hint));
 		searchView.setIconifiedByDefault(true);
 		
 		return true;
