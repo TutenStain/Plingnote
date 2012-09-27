@@ -3,7 +3,9 @@ package com.plingnote;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.ListFragment;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -29,10 +31,11 @@ public class FragmentListView extends ListFragment {
 	public void onActivityCreated(Bundle savedState) {
 		super.onActivityCreated(savedState);
 		db = DatabaseHandler.getInstance(getActivity());
+
 		refreshNotes();
-		
-		noteAdapter = new NoteAdapter(getActivity(), R.layout.fragment_listview, notes);
-        setListAdapter(noteAdapter);
+		noteAdapter = new NoteAdapter(getActivity(),
+				android.R.layout.simple_list_item_multiple_choice, notes);
+		setListAdapter(noteAdapter);
 
 		// Make it possible for the user to select multiple items.
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -52,7 +55,7 @@ public class FragmentListView extends ListFragment {
 	 * Private class handling long presses, which forces the action bar to show
 	 * up. Users can also choose multiple notes.
 	 * 
-	 * @author l1nuskarlsson
+	 * @author Linus Karlsson
 	 * 
 	 */
 	private class LongPress implements ListView.MultiChoiceModeListener {
@@ -70,7 +73,10 @@ public class FragmentListView extends ListFragment {
 		}
 
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			// Display contextual bar to user.
+			// Make the mobile vibrate on long click
+			((Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE)).vibrate(50);
+			
+			// Display contextual action bar to user.
 			MenuInflater inflater = mode.getMenuInflater();
 			inflater.inflate(R.menu.multi_select_menu, menu);
 			mode.setTitle("Select notes");
@@ -93,11 +99,11 @@ public class FragmentListView extends ListFragment {
 				long id, boolean checked) {
 			switch (getListView().getCheckedItemCount()) {
 			case (0):
-				// If no note is selected, leave the subtitle alone.
+				// If no note is selected, don't set any subtitle.
 				mode.setSubtitle(null);
 				break;
 			case (1):
-				// If one note is selected, show the following text.
+				// If one note is selected
 				mode.setSubtitle("One note selected");
 				break;
 			default:
@@ -115,33 +121,42 @@ public class FragmentListView extends ListFragment {
 	 * Get notes from database and add them to a list.
 	 */
 	public void refreshNotes() {
-		
+
 		// Clear list from previous notes.
 		notes.clear();
-		
-		for(Note n : db.getNoteList()) {
+
+		for (Note n : db.getNoteList()) {
 			this.notes.add(n);
-		}		
+		}
+	}
+	
+	/**
+	 * The number of notes displayed to the user.
+	 * @return number of notes displayed on the screen.
+	 */
+	public int numberOfNotes() {
+		return noteAdapter.getCount();
 	}
 
 	/**
 	 * Remove checked notes from the list.
 	 */
 	public void removeListItem() {
-		
+
 		// Get the positions of all the checked items.
-		SparseBooleanArray checkedItemPositions = getListView().getCheckedItemPositions(); 
-		
+		SparseBooleanArray checkedItemPositions = getListView()
+				.getCheckedItemPositions();
+
 		// Walk through the notes and delete the checked ones.
-		for(int i = getListView().getCount() - 1; i >= 0; i--) {
-			if(checkedItemPositions.get(i)) {
+		for (int i = getListView().getCount() - 1; i >= 0; i--) {
+			if (checkedItemPositions.get(i)) {
 				db.deleteNote(notes.get(i).getRowId());
 			}
 		}
-		
+
 		// Refresh the note list.
 		refreshNotes();
-		
+
 		// Update the adapter.
 		noteAdapter.notifyDataSetChanged();
 	}
