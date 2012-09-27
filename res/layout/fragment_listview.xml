@@ -2,18 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="#FFFFFF">
 
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
+        android:divider="#dedede"
+        android:dividerHeight="1px"
         android:drawSelectorOnTop="false" />
-    
-    <TextView android:id="@android:id/empty"
+
+    <TextView
+        android:id="@android:id/empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/empty_list"/>
-    
+        android:text="@string/empty_list" />
+
 </LinearLayout>

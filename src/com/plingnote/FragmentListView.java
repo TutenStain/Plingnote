@@ -9,10 +9,12 @@ import android.os.Vibrator;
 import android.support.v4.app.ListFragment;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 /**
@@ -30,16 +32,23 @@ public class FragmentListView extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedState) {
 		super.onActivityCreated(savedState);
+
 		db = DatabaseHandler.getInstance(getActivity());
 
 		refreshNotes();
 		noteAdapter = new NoteAdapter(getActivity(),
-				android.R.layout.simple_list_item_multiple_choice, notes);
+				android.R.layout.simple_list_item_activated_1, notes);
 		setListAdapter(noteAdapter);
 
 		// Make it possible for the user to select multiple items.
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setMultiChoiceModeListener(new LongPress());
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_listview, container, false);
 	}
 
 	/**
@@ -74,8 +83,9 @@ public class FragmentListView extends ListFragment {
 
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 			// Make the mobile vibrate on long click
-			((Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE)).vibrate(50);
-			
+			((Vibrator) getActivity()
+					.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(50);
+
 			// Display contextual action bar to user.
 			MenuInflater inflater = mode.getMenuInflater();
 			inflater.inflate(R.menu.multi_select_menu, menu);
@@ -129,9 +139,10 @@ public class FragmentListView extends ListFragment {
 			this.notes.add(n);
 		}
 	}
-	
+
 	/**
 	 * The number of notes displayed to the user.
+	 * 
 	 * @return number of notes displayed on the screen.
 	 */
 	public int numberOfNotes() {
@@ -160,4 +171,5 @@ public class FragmentListView extends ListFragment {
 		// Update the adapter.
 		noteAdapter.notifyDataSetChanged();
 	}
+	
 }
