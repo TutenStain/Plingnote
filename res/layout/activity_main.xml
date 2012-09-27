@@ -17,6 +17,14 @@
 					android:layout_height="wrap_content" android:gravity="center"
 					android:text="Loading" />
 			</LinearLayout>
+			<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:id="@+id/mainlayout" android:orientation="vertical"
+				android:layout_width="fill_parent" android:layout_height="fill_parent">
+				<com.google.android.maps.MapView
+					android:id="@+id/mapview" android:layout_width="fill_parent"
+					android:layout_height="fill_parent" android:clickable="true"
+					android:apiKey="0DjJH-LkGjLUC7TicZmZF0JV3MTRl2zJN7uv2hw" />
+			</RelativeLayout>
 		</FrameLayout>
 	</LinearLayout>
 </TabHost>
