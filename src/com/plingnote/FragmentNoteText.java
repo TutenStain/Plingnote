@@ -114,6 +114,11 @@ public class FragmentNoteText extends Fragment {
 		String[] txtLines = txt.split("\n");
 		return txtLines[0];
 	}
+	
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+	}
 
 	/**
 	 * If savedInstanceState isn't null the method will set isEditing an rowId to new values 

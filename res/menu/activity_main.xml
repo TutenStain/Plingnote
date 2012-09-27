@@ -5,7 +5,8 @@
         android:showAsAction="never" />
      <item android:id="@+id/add_new_note"
         android:icon="@android:drawable/ic_menu_add"
-        android:showAsAction="always" />
+        android:showAsAction="always"
+        android:onClick="addNewNote"/>
     <item android:id="@+id/search"
         android:icon="@android:drawable/ic_menu_search"
 		android:actionViewClass="android.widget.SearchView"

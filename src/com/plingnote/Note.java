@@ -53,5 +53,9 @@ public class Note  {
 	public Location getLocation(){
 		return this.location;
 	}
+	@Override
+	public String toString(){
+		return this.rowId + " " + this.text + this.title;
+	}
 
 }

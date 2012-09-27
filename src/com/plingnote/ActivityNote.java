@@ -3,6 +3,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 /**
  * A note fragment activity with a layout holding a fragment. 
@@ -53,15 +54,16 @@ public class ActivityNote extends FragmentActivity {
 	public void onDestroy(){
 		super.onDestroy();
 
-	}
+	} 
 	
 	/**
-	 * Makes the back button behave like the home button
+	 * Makes the back button behave like the home button. Calling finsih() if back button is pressed.
 	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_BACK) {
 	        finish();
+	        Toast.makeText(this,""+ DatabaseHandler.getInstance(this.getBaseContext()).getNoteList().get(DatabaseHandler.getInstance(this).getNoteList().size()-1), Toast.LENGTH_LONG).show();
 	        return true;
 	    }
 	    return super.onKeyDown(keyCode, event);
