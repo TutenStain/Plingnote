@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen 
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Search">
+    	<com.plingnote.OptionDialogPreference
+       		android:key="resetSearchHistory"
+            android:dialogIcon="@android:drawable/ic_dialog_alert"
+            android:title="Clear Search History"
+            android:summary="Clear recent search history"
+            android:dialogMessage="Are you sure you wish to reset your search history? This action cannot be undone!"
+            android:positiveButtonText="Clear History"
+            android:negativeButtonText="Cancel"/>
+    </PreferenceCategory>   
+    <PreferenceCategory android:title="About">
+        <com.plingnote.DialogInfoPreference
+        	android:title="Plingnote" 
+            android:summary="Plingnote Android version 0.1"
+            android:dialogIcon="@android:drawable/ic_dialog_info" />
+        <com.plingnote.DialogInfoPreference
+        	android:title="Send feedback" 
+        	android:summary="Send comments, request, or error reports to Plingnote"   	
+            android:dialogIcon="@android:drawable/ic_dialog_info" />
+        <com.plingnote.DialogInfoPreference
+        	android:title="Terms of Use" 
+            android:summary="Know your rights"
+            android:dialogIcon="@android:drawable/ic_dialog_info" />
+    	<com.plingnote.DialogInfoPreference
+        	android:title="Open Source Licenses" 
+            android:summary="Modules used by Plingnote"
+            android:dialogIcon="@android:drawable/ic_dialog_info" />
+    </PreferenceCategory>                               
+</PreferenceScreen>

@@ -6,11 +6,13 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.SearchView;
 
 public class ActivityMain extends FragmentActivity{
@@ -51,6 +53,16 @@ public class ActivityMain extends FragmentActivity{
 		    
 		return true;
 	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_settings: 
+			   startActivity(new Intent(this, ActivityAppPreference.class));
+		}
+		return true;
+	}
+
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
