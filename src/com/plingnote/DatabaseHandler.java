@@ -160,7 +160,27 @@ public class DatabaseHandler {
 		this.close();
 		return b;
 	}
-
+	
+	/**
+	 * 
+	 * @param rowId id of the row to retrieve data from, with 1 as the first index
+	 * @return a Note object containting all data from the selected row
+	 */
+	public Note getNote(int rowId){
+		this.open();
+		Cursor c = this.getAllNotes();
+		c.move(rowId);
+		String title = c.getString(1);
+		String text = c.getString(2);
+		Double longitude = Double.parseDouble(c.getString(3));
+		Double latitude = Double.parseDouble(c.getString(4));
+		String imagePath = c.getString(5);
+		String alarm = c.getString(6);
+		Note n = new Note(rowId, title, text, new Location(longitude, latitude), imagePath, alarm);
+		this.close();
+		return n;
+	}
+	
 	private DatabaseHandler open() throws SQLException{
 		this.db = this.dbHelp.getWritableDatabase();
 		return this;
