@@ -15,7 +15,7 @@
 					android:layout_height="0dip" android:layout_weight="1" />
 				<TextView android:id="@+id/empty" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:gravity="center"
-					android:text="Loading" />
+					android:text="@string/loading" />
 			</LinearLayout>
 			<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 				android:id="@+id/mainlayout" android:orientation="vertical"

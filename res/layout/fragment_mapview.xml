@@ -11,4 +11,10 @@
 	    android:layout_height="fill_parent"
 	    android:clickable="true"
 	    android:apiKey="0DjJH-LkGjLUC7TicZmZF0JV3MTRl2zJN7uv2hw"/>
+   
+   <ImageView
+       android:id="@+id/imageViewMap"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:src="@drawable/ic_launcher"/>
 </LinearLayout>
