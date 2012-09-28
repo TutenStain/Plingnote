@@ -42,7 +42,7 @@ public class DatabaseHandler {
 	 * @return the singleton instance
 	 */
 	public static DatabaseHandler getInstance(Context con){
-		if(instance == null)
+		//if(instance == null)
 			instance = new DatabaseHandler(con);
 		return instance;
 	}
