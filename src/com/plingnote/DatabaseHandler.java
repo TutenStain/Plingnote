@@ -145,7 +145,7 @@ public class DatabaseHandler {
 	 * @param text the text to update to
 	 * @return true if database was updated, false otherwise
 	 */
-	public boolean updateNote(long rowId, String title, String text, Location l, String path, String alarm){
+	public boolean updateNote(int rowId, String title, String text, Location l, String path, String alarm){
 		if(l == null)
 			l = new Location(0.0, 0.0);
 		this.open();
@@ -160,7 +160,7 @@ public class DatabaseHandler {
 		this.close();
 		return b;
 	}
-	
+
 	/**
 	 * 
 	 * @param rowId id of the row to retrieve data from, with 1 as the first index
@@ -180,7 +180,7 @@ public class DatabaseHandler {
 		this.close();
 		return n;
 	}
-	
+
 	private DatabaseHandler open() throws SQLException{
 		this.db = this.dbHelp.getWritableDatabase();
 		return this;
