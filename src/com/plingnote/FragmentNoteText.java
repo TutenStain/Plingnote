@@ -62,8 +62,8 @@ public class FragmentNoteText extends Fragment {
 		//If this class was opened with an intent or saved instances, the notetext will get the text from the database
 		if(isExisting){
 			noteText = (EditText) view.findViewById(R.id.notetext);
-			String txt = (DatabaseHandler.getInstance(getActivity()).getNoteList().get(rowId-1).getTitle());
-			txt = txt +(DatabaseHandler.getInstance(getActivity()).getNoteList().get(rowId-1).getText());	
+			String txt = (DatabaseHandler.getInstance(getActivity()).getNote(rowId).getTitle());
+			txt = txt +(DatabaseHandler.getInstance(getActivity()).getNote(rowId).getText());	
 			//The cursor position will be saved even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
 			noteText.setText(""); 
 			noteText.append(txt);
@@ -79,14 +79,15 @@ public class FragmentNoteText extends Fragment {
 		super.onPause();
 		//If this class was opened with an intent or saved instance we are updating that note.
 		if(isExisting){
-			DatabaseHandler.getInstance(getActivity()).updateNote(rowId,getTitleofNoteText(), getTextofNoteText(), new Location(0.0, 0.0));
+			DatabaseHandler.getInstance(getActivity()).updateNote(rowId,getTitleofNoteText(), getTextofNoteText(), null,null,null);
 		}
 		//If this class not was opened with an intent o saved instance we are inserting the note in database.
 		else{
-			if(getTitleofNoteText().length() >0)
-			DatabaseHandler.getInstance(getActivity().getBaseContext()).insertNote(getTitleofNoteText(), getTextofNoteText(), new Location(0.0, 0.0));
+			if(getTitleofNoteText().length() >0 || getTextofNoteText().length() > 0){
+			DatabaseHandler.getInstance(getActivity()).insertNote(getTitleofNoteText(), getTextofNoteText(), null,null,null);
 			rowId = DatabaseHandler.getInstance(getActivity()).getNoteList().get(DatabaseHandler.getInstance(getActivity()).getNoteList().size()-1).getRowId();
 			isExisting=true;
+			}
 		}
 	}
 
