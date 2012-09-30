@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 
 /**
@@ -59,7 +60,7 @@ public class FragmentNoteText extends Fragment {
 			int h = height/15;
 			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h*11));
 		}	
-		//If this class was opened with an intent or saved instances, the notetext will get the text from the database
+		//If this class was opened with an intent or saved instances, the note text will get the text from the database
 		if(isExisting){
 			noteText = (EditText) view.findViewById(R.id.notetext);
 			String txt = (DatabaseHandler.getInstance(this.getActivity()).getNote(this.rowId).getTitle());
@@ -78,16 +79,18 @@ public class FragmentNoteText extends Fragment {
 	public void onPause (){
 		super.onPause();
 		//If this class was opened with an intent or saved instance we are updating that note.
-		if(isExisting){
+		if(isExisting && (getTitleofNoteText().length() >0 || getTextofNoteText().length() > 0)){
 			DatabaseHandler.getInstance(this.getActivity()).updateNote(this.rowId,this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null);
 		}
 		//If this class not was opened with an intent o saved instance we are inserting the note in database.
-		else{
+		else if(!isExisting){
 			if(getTitleofNoteText().length() >0 || getTextofNoteText().length() > 0){
 			DatabaseHandler.getInstance(this.getActivity()).insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null);
 			rowId = DatabaseHandler.getInstance(this.getActivity()).getNoteList().get(DatabaseHandler.getInstance(this.getActivity()).getNoteList().size()-1).getRowId();
 			isExisting=true;
 			}
+		}else{
+			DatabaseHandler.getInstance(this.getActivity()).deleteNote(rowId);
 		}
 	}
 
@@ -128,11 +131,11 @@ public class FragmentNoteText extends Fragment {
 		Bundle bundle = getArguments();
 		this.isExisting = true;
 		try{
-			this.rowId = bundle.getInt("rowId");
+			this.rowId = bundle.getInt(IntentExtra.rowId.toString());
 			return;
 		}catch(Exception e){ 
 			try{
-				this.rowId = savedInstanceState.getInt("rowId");
+				this.rowId = savedInstanceState.getInt(IntentExtra.rowId.toString());
 			}catch(Exception el){
 				this.isExisting = false;
 			}
@@ -145,6 +148,6 @@ public class FragmentNoteText extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
-		savedInstanceState.putInt("rowId", rowId);
+		savedInstanceState.putInt(IntentExtra.rowId.toString(), rowId);
 	}	
 }
