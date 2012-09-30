@@ -180,6 +180,20 @@ public class DatabaseHandler {
 		this.close();
 		return n;
 	}
+	
+	/**
+	 * 
+	 * @return row id of the latest inserted Note
+	 */
+	public Integer getLastRowId(){
+		this.open();
+		Cursor c = this.db.rawQuery("select " + KEY_HIDDEN_ROWID + " from " 
+				+ TABLE_NOTE + " order by " + KEY_HIDDEN_ROWID + " desc limit 1", null);
+		c.move(1);
+		Integer id = Integer.parseInt(c.getString(0));
+		this.close();
+		return id;
+	}
 
 	private DatabaseHandler open() throws SQLException{
 		this.db = this.dbHelp.getWritableDatabase();
