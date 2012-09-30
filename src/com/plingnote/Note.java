@@ -1,12 +1,14 @@
 package com.plingnote;
 
 
-public class Note {
+
+public class Note  {
 	private Integer rowId;
 	private String title;
 	private String text;
 	private Location location;
 	private String imagePath;
+	private String alarm;
 
 	/**
 	 * 
@@ -15,12 +17,14 @@ public class Note {
 	 * @param txt text of this Note
 	 * @param l location of this Note
 	 */
-	public Note(Integer id, String ti, String txt, Location l, String path){
+	public Note(Integer id, String ti, String txt, Location l, String path, String alarm){
 		this.rowId = id;
 		this.title = ti;
 		this.text = txt;
 		this.location = l;
 		this.imagePath = path;
+		this.alarm = alarm;
+
 	}
 	
 	/**
@@ -53,6 +57,11 @@ public class Note {
 	public Location getLocation(){
 		return this.location;
 	}
+
+	@Override
+	public String toString(){
+		return this.rowId + " " + this.text + this.title;
+	}
 	
 	/**
 	 * 
@@ -62,4 +71,13 @@ public class Note {
 		return this.imagePath;
 	}
 	
+	/**
+	 * 
+	 * @return date and time when the alarm of this Note will trigger
+	 */
+	public String getAlarm(){
+		return this.alarm;
+	}
+	
+
 }

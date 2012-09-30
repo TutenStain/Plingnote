@@ -6,11 +6,14 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.SearchView;
 
 public class ActivityMain extends FragmentActivity{
@@ -21,11 +24,10 @@ public class ActivityMain extends FragmentActivity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+	
 		this.viewPager = new ScrollableViewPager(this);
 		this.viewPager.setId(R.id.viewPager);
 		setContentView(viewPager);
-		
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
@@ -33,7 +35,7 @@ public class ActivityMain extends FragmentActivity{
 		tabsAdapter = new TabsAdapter(this, viewPager);
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_mapmode), FragmentMapView.class, null);
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_sort_by_size), FragmentListView.class, null);
-
+		Log.d("CREATE", 3 +"");
 		if (savedInstanceState != null) {
 			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 		}
@@ -46,6 +48,7 @@ public class ActivityMain extends FragmentActivity{
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		searchView.setQueryHint(getString(R.string.search_hint));
 		searchView.setIconifiedByDefault(true);
 		    
 		return true;
@@ -56,9 +59,17 @@ public class ActivityMain extends FragmentActivity{
 		super.onSaveInstanceState(outState);
 		outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
 	}
+	
+	/**
+	 * Menu item add new note is pressed.
+	 * @param newNote
+	 */
+	public void addNewNote(MenuItem newNote){
+		Intent intent = new Intent(this, ActivityNote.class);
+		startActivity(intent);
+	}
 
 	public static class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ScrollableViewPager.OnPageChangeListener {
-
 		private final Context context;
 		private final ActionBar actionBar;
 		private final ScrollableViewPager viewPager;

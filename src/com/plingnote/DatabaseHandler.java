@@ -19,19 +19,19 @@ public class DatabaseHandler {
 	private static final String TABLE_NOTE = "Note";
 
 	/* Columns */
-	private static final String KEY_ROWID = "_id";
+	private static final String KEY_HIDDEN_ROWID = "rowid"; //created automatically
 	private static final String KEY_TEXT = "Text";
 	private static final String KEY_TITLE = "Title";
 	private static final String KEY_LONGITUDE = "Longitude";
 	private static final String KEY_LATITUDE = "Latitude";
 	private static final String KEY_IMAGEPATH = "ImagePath";
-	
-	/* SQL statement to create Note table */
-	private static final String CREATE_TABLE_NOTE =
-			"create table " + TABLE_NOTE + " (" + KEY_ROWID + " integer primary key autoincrement, "
-					+ KEY_TITLE + " String, " + KEY_TEXT + " String, " 
-					+ KEY_LONGITUDE +" Double not null, "+ KEY_LATITUDE +" Double not null, " 
-					+ KEY_IMAGEPATH + " String);";
+	private static final String KEY_ALARM = "Alarm";
+
+	/* SQL statement to create Note table using fts3 */
+	private static final String CREATE_FTS_TABLE = "create virtual table " + TABLE_NOTE + " using fts3("
+			+ KEY_TITLE + " String, " + KEY_TEXT + " String, " 
+			+ KEY_LONGITUDE +" Double not null, "+ KEY_LATITUDE +" Double not null, " 
+			+ KEY_IMAGEPATH + " String, " + KEY_ALARM + " String);";
 
 	private Context context;
 	private DBHelper dbHelp;
@@ -44,7 +44,7 @@ public class DatabaseHandler {
 	 * @return the singleton instance
 	 */
 	public static DatabaseHandler getInstance(Context con){
-		if(instance == null)
+		//if(instance == null)
 			instance = new DatabaseHandler(con);
 		return instance;
 	}
@@ -62,7 +62,7 @@ public class DatabaseHandler {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			try {
-				db.execSQL(CREATE_TABLE_NOTE);;
+				db.execSQL(CREATE_FTS_TABLE);
 			} catch (SQLException e) {
 				Log.e("SQLException", "while creating database");
 			}
@@ -80,7 +80,7 @@ public class DatabaseHandler {
 	 * @param text text of the note to insert
 	 * @return row id or -1 if an error occurred
 	 */
-	public long insertNote(String title, String text, Location l, String path){
+	public long insertNote(String title, String text, Location l, String path, String alarm){
 		if(l == null)
 			l = new Location(0.0, 0.0);
 		this.open();
@@ -90,6 +90,7 @@ public class DatabaseHandler {
 		cv.put(KEY_LONGITUDE, l.getLongitude());
 		cv.put(KEY_LATITUDE, l.getLatitude());
 		cv.put(KEY_IMAGEPATH, path);
+		cv.put(KEY_ALARM, alarm);
 		long tmp = this.db.insert(TABLE_NOTE, null, cv);
 		this.close();
 		return tmp;
@@ -97,12 +98,12 @@ public class DatabaseHandler {
 
 	/**
 	 * 
-	 * @param  rowId row id of the note to delete
+	 * @param  rowId row id of the note to delete, with 1 as the first index
 	 * @return true if the whereclause is passed in, false otherwise
 	 */
 	public boolean deleteNote(long rowId){
 		this.open();
-		boolean b = this.db.delete(TABLE_NOTE, KEY_ROWID + "=" + rowId, null) > 0;
+		boolean b = this.db.delete(TABLE_NOTE, KEY_HIDDEN_ROWID + "=" + rowId, null) > 0;
 		this.close();
 		return b;
 	}
@@ -123,7 +124,8 @@ public class DatabaseHandler {
 				Double longitude = Double.parseDouble(c.getString(3));
 				Double latitude = Double.parseDouble(c.getString(4));
 				String imagePath = c.getString(5);
-				l.add(new Note(rowId, title, text, new Location(longitude, latitude), imagePath));
+				String alarm = c.getString(6);
+				l.add(new Note(rowId, title, text, new Location(longitude, latitude), imagePath, alarm));
 			}while(c.moveToNext());
 		}
 		this.close();
@@ -131,8 +133,8 @@ public class DatabaseHandler {
 	}
 
 	private Cursor getAllNotes(){
-		return this.db.query(TABLE_NOTE, new String[]{ KEY_ROWID, KEY_TITLE, KEY_TEXT,
-				KEY_LONGITUDE, KEY_LATITUDE, KEY_IMAGEPATH },
+		return this.db.query(TABLE_NOTE, new String[]{ KEY_HIDDEN_ROWID, KEY_TITLE, KEY_TEXT,
+				KEY_LONGITUDE, KEY_LATITUDE, KEY_IMAGEPATH, KEY_ALARM },
 				null, null,null, null, null);
 	}
 
@@ -143,7 +145,7 @@ public class DatabaseHandler {
 	 * @param text the text to update to
 	 * @return true if database was updated, false otherwise
 	 */
-	public boolean updateNote(long rowId, String title, String text, Location l, String path){
+	public boolean updateNote(long rowId, String title, String text, Location l, String path, String alarm){
 		if(l == null)
 			l = new Location(0.0, 0.0);
 		this.open();
@@ -153,11 +155,32 @@ public class DatabaseHandler {
 		cv.put(KEY_LONGITUDE, l.getLongitude());
 		cv.put(KEY_LONGITUDE, l.getLatitude());
 		cv.put(KEY_IMAGEPATH, path);
-		boolean b = this.db.update(TABLE_NOTE, cv, KEY_ROWID + "=" + rowId, null) > 0;
+		cv.put(KEY_ALARM, alarm);
+		boolean b = this.db.update(TABLE_NOTE, cv, KEY_HIDDEN_ROWID + "=" + rowId, null) > 0;
 		this.close();
 		return b;
 	}
-
+	
+	/**
+	 * 
+	 * @param rowId id of the row to retrieve data from, with 1 as the first index
+	 * @return a Note object containting all data from the selected row
+	 */
+	public Note getNote(int rowId){
+		this.open();
+		Cursor c = this.getAllNotes();
+		c.move(rowId);
+		String title = c.getString(1);
+		String text = c.getString(2);
+		Double longitude = Double.parseDouble(c.getString(3));
+		Double latitude = Double.parseDouble(c.getString(4));
+		String imagePath = c.getString(5);
+		String alarm = c.getString(6);
+		Note n = new Note(rowId, title, text, new Location(longitude, latitude), imagePath, alarm);
+		this.close();
+		return n;
+	}
+	
 	private DatabaseHandler open() throws SQLException{
 		this.db = this.dbHelp.getWritableDatabase();
 		return this;

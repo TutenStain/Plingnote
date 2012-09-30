@@ -8,6 +8,7 @@
     <item
         android:id="@+id/add_new_note"
         android:icon="@android:drawable/ic_menu_add"
+        android:onClick="addNewNote"
         android:showAsAction="always"/>
     <item
         android:id="@+id/search"
