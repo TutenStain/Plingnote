@@ -189,5 +189,15 @@ public class FragmentListView extends ListFragment {
 					"This is the actual text of the note", null, "img", null);
 		}
 	}
+	
+	/**
+	 * Refresh notes when returning to the list view.
+	 */
+	@Override
+	public void onResume() {
+		super.onResume();
+		refreshNotes();
+		noteAdapter.notifyDataSetChanged();
+	}
 
 }
