@@ -2,6 +2,7 @@ package com.plingnote;
 
 
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -9,9 +10,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 
 /**
@@ -60,15 +61,21 @@ public class FragmentNoteText extends Fragment {
 			int h = height/15;
 			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h*11));
 		}	
+		noteText = (EditText) view.findViewById(R.id.notetext);
 		//If this class was opened with an intent or saved instances, the note text will get the text from the database
 		if(isExisting){
-			noteText = (EditText) view.findViewById(R.id.notetext);
+			
 			String txt = (DatabaseHandler.getInstance(this.getActivity()).getNote(this.rowId).getTitle());
 			txt = txt +(DatabaseHandler.getInstance(this.getActivity()).getNote(this.rowId).getText());	
 			//The cursor position will be saved even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
 			noteText.setText(""); 
 			noteText.append(txt);
 			noteText.invalidate(); 
+		}else{
+		//	noteText.setFocusable(true);
+			InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+			//noteText.setPressed(true);
 		}
 	}
 
