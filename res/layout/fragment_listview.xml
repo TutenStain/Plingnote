@@ -11,9 +11,7 @@
         android:layout_height="0dip"
         android:layout_weight="1"
         android:divider="#dedede"
-        android:drawSelectorOnTop="false"
-        android:listSelector="@drawable/selector"
-        android:state_focused="true" />
+        android:drawSelectorOnTop="false" />
 
     <TextView
         android:id="@android:id/empty"

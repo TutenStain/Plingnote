@@ -29,6 +29,7 @@ public class FragmentListView extends ListFragment {
 	private DatabaseHandler db;
 	private NoteAdapter noteAdapter;
 	private List<Note> notes = new ArrayList<Note>();
+	private ActionMode actionBar;
 
 	@Override
 	public void onActivityCreated(Bundle savedState) {
@@ -64,7 +65,7 @@ public class FragmentListView extends ListFragment {
 		// Get the row ID of the clicked note.
 		int rowID = notes.get(position).getRowId();
 		editNote.putExtra(Utils.QUERY_NOTE, rowID);
-		
+
 		// Start edit view.
 		startActivity(editNote);
 	}
@@ -91,6 +92,7 @@ public class FragmentListView extends ListFragment {
 		}
 
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			actionBar = mode;
 
 			// Make the mobile vibrate on long click
 			((Vibrator) getActivity()
@@ -189,7 +191,7 @@ public class FragmentListView extends ListFragment {
 					"This is the actual text of the note", null, "img", null);
 		}
 	}
-	
+
 	/**
 	 * Refresh notes when returning to the list view.
 	 */
@@ -197,7 +199,25 @@ public class FragmentListView extends ListFragment {
 	public void onResume() {
 		super.onResume();
 		refreshNotes();
+
+		// Update the adapter after loading new notes.
 		noteAdapter.notifyDataSetChanged();
+	}
+
+	/**
+	 * Close the contextual action bar (top menu) when changing to map view.
+	 */
+	@Override
+	public void setUserVisibleHint(boolean isActive) {
+		super.setUserVisibleHint(isActive);
+
+		// Check if current view
+		if (isVisible()) {
+			if (!isActive) {
+				// If user leaves the list view, close the top menu.
+				actionBar.finish();
+			}
+		}
 	}
 
 }
