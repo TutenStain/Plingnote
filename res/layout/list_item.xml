@@ -12,37 +12,37 @@
 
     <TextView
         android:id="@+id/title"
-        android:textColor="#000000"
-        android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/category"
         android:layout_toRightOf="@+id/category"
+        android:textColor="@color/list_item_title_color"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/text"
-        android:textColor="#666666"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
+        android:layout_toRightOf="@+id/category"
+        android:ellipsize="end"
         android:lines="2"
-        android:paddingRight="20sp"
-        android:textSize="14sp"
-        android:layout_toRightOf="@+id/category" 
         android:paddingBottom="4sp"
-    	android:ellipsize="end" /> 
+        android:paddingRight="20sp"
+        android:textColor="@color/list_item_text_color"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/date"
-        android:textColor="#4a7dff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/title"
+        android:gravity="right"
         android:paddingRight="4sp"
         android:paddingTop="1sp"
-        android:gravity="right"
-        android:text="i går" />
+        android:text="i går"
+        android:textColor="@color/list_item_date_color" />
 
 </RelativeLayout>

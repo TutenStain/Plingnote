@@ -34,15 +34,15 @@ public class FragmentListView extends ListFragment {
 		super.onActivityCreated(savedState);
 
 		db = DatabaseHandler.getInstance(getActivity());
-
 		refreshNotes();
-		noteAdapter = new NoteAdapter(getActivity(),
-				android.R.layout.simple_list_item_activated_1, notes);
-		setListAdapter(noteAdapter);
 
 		// Make it possible for the user to select multiple items.
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setMultiChoiceModeListener(new LongPress());
+		
+		noteAdapter = new NoteAdapter(getActivity(),
+				android.R.layout.simple_list_item_activated_1, notes);
+		setListAdapter(noteAdapter);
 	}
 
 	@Override
@@ -82,6 +82,7 @@ public class FragmentListView extends ListFragment {
 		}
 
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			
 			// Make the mobile vibrate on long click
 			((Vibrator) getActivity()
 					.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(50);
@@ -93,11 +94,11 @@ public class FragmentListView extends ListFragment {
 			return true;
 		}
 
-		public void onDestroyActionMode(ActionMode arg0) {
-			// Nothing to do here.
+		public void onDestroyActionMode(ActionMode mode) {
+			// Nothing to do here
 		}
 
-		public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
 			return true;
 		}
 
@@ -107,6 +108,7 @@ public class FragmentListView extends ListFragment {
 		 */
 		public void onItemCheckedStateChanged(ActionMode mode, int position,
 				long id, boolean checked) {
+
 			switch (getListView().getCheckedItemCount()) {
 			case (0):
 				// If no note is selected, don't set any subtitle.
@@ -171,5 +173,5 @@ public class FragmentListView extends ListFragment {
 		// Update the adapter.
 		noteAdapter.notifyDataSetChanged();
 	}
-	
+
 }

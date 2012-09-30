@@ -92,7 +92,8 @@ public class ActivityMain extends FragmentActivity{
 			notifyDataSetChanged();
 		}
 
-		public void onPageScrollStateChanged(int state) { }
+		public void onPageScrollStateChanged(int state) { 
+		}
 
 		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
 
@@ -123,5 +124,7 @@ public class ActivityMain extends FragmentActivity{
 		public int getCount() {
 			return this.tabs.size();
 		}
+		
+		
 	}
 }
