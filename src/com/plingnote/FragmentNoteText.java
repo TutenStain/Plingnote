@@ -72,15 +72,14 @@ public class FragmentNoteText extends Fragment {
 			noteText.append(txt);
 			noteText.invalidate(); 
 		}else{
-		//	noteText.setFocusable(true);
-			InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
-			//noteText.setPressed(true);
+			InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+			inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 		}
 	}
 
 	/**
-	 * Get the text from the view noteText. If it's during editing the note's value will be updated in the database. If not the note will be inserted in the database and the rowId will be saved. 
+	 * Get the text from the view noteText. If it's during editing and is containing a title and/or a text the note's value will be updated in the database, if it's no title or text the note will be deleted in database. 
+	 * If not the note will be inserted in the database and the rowId will be saved. 
 	 */
 	@Override
 	public void onPause (){
