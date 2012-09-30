@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.ListFragment;
@@ -34,12 +35,13 @@ public class FragmentListView extends ListFragment {
 		super.onActivityCreated(savedState);
 
 		db = DatabaseHandler.getInstance(getActivity());
+		// addNotes();
 		refreshNotes();
 
 		// Make it possible for the user to select multiple items.
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setMultiChoiceModeListener(new LongPress());
-		
+
 		noteAdapter = new NoteAdapter(getActivity(),
 				android.R.layout.simple_list_item_activated_1, notes);
 		setListAdapter(noteAdapter);
@@ -57,7 +59,14 @@ public class FragmentListView extends ListFragment {
 	 */
 	@Override
 	public void onListItemClick(ListView parent, View v, int position, long id) {
-		// Open the note in edit view.
+		Intent editNote = new Intent(getActivity(), ActivityNote.class);
+
+		// Get the row ID of the clicked note.
+		int rowID = notes.get(position).getRowId();
+		editNote.putExtra(Utils.QUERY_NOTE, rowID);
+		
+		// Start edit view.
+		startActivity(editNote);
 	}
 
 	/**
@@ -82,7 +91,7 @@ public class FragmentListView extends ListFragment {
 		}
 
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			
+
 			// Make the mobile vibrate on long click
 			((Vibrator) getActivity()
 					.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(50);
@@ -172,6 +181,13 @@ public class FragmentListView extends ListFragment {
 
 		// Update the adapter.
 		noteAdapter.notifyDataSetChanged();
+	}
+
+	public void addNotes() {
+		for (int i = 1; i <= 15; i++) {
+			db.insertNote("Note nr." + i,
+					"This is the actual text of the note", null, "img", null);
+		}
 	}
 
 }

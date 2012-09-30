@@ -34,7 +34,10 @@
         </activity>
         <activity
             android:name=".ActivityNote"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_note" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.plingnote.ActivityMain" />
         </activity>
     </application>
 

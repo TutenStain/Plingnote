@@ -128,11 +128,11 @@ public class FragmentNoteText extends Fragment {
 		Bundle bundle = getArguments();
 		this.isExisting = true;
 		try{
-			this.rowId = bundle.getInt("rowId");
+			this.rowId = bundle.getInt(Utils.QUERY_NOTE);
 			return;
 		}catch(Exception e){ 
 			try{
-				this.rowId = savedInstanceState.getInt("rowId");
+				this.rowId = savedInstanceState.getInt(Utils.QUERY_NOTE);
 			}catch(Exception el){
 				this.isExisting = false;
 			}
@@ -145,6 +145,6 @@ public class FragmentNoteText extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
-		savedInstanceState.putInt("rowId", rowId);
+		savedInstanceState.putInt(Utils.QUERY_NOTE, rowId);
 	}	
 }
