@@ -214,8 +214,10 @@ public class FragmentListView extends ListFragment {
 		// Check if current view
 		if (isVisible()) {
 			if (!isActive) {
-				// If user leaves the list view, close the top menu.
-				actionBar.finish();
+				// If user leaves the list view, a close the top menu.
+				if(actionBar != null) {
+					actionBar.finish();
+				}
 			}
 		}
 	}
