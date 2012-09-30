@@ -4,9 +4,9 @@ import android.preference.DialogPreference;
 import android.util.AttributeSet;
 
 
-public class OptionDialogPreference extends DialogPreference {
+public class PreferenceDialogOption extends DialogPreference {
 
-    public OptionDialogPreference(Context context, AttributeSet attrs) {
+    public PreferenceDialogOption(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
