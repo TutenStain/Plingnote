@@ -3,7 +3,10 @@ import android.content.Context;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 
-
+/**
+ * A custom dialog that displays a confirmation message
+ * before the value is persisted.
+ */
 public class PreferenceDialogOption extends DialogPreference {
 
     public PreferenceDialogOption(Context context, AttributeSet attrs) {
