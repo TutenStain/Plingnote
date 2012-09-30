@@ -15,18 +15,22 @@
         <com.plingnote.DialogInfoPreference
         	android:title="Plingnote" 
             android:summary="Plingnote Android version 0.1"
+            android:dialogMessage="Placeholder"  
             android:dialogIcon="@android:drawable/ic_dialog_info" />
         <com.plingnote.DialogInfoPreference
         	android:title="Send feedback" 
-        	android:summary="Send comments, request, or error reports to Plingnote"   	
+        	android:summary="Send comments, request, or error reports to Plingnote"
+        	android:dialogMessage="Placeholder"     	
             android:dialogIcon="@android:drawable/ic_dialog_info" />
         <com.plingnote.DialogInfoPreference
         	android:title="Terms of Use" 
             android:summary="Know your rights"
+            android:dialogMessage="Placeholder"  
             android:dialogIcon="@android:drawable/ic_dialog_info" />
     	<com.plingnote.DialogInfoPreference
         	android:title="Open Source Licenses" 
             android:summary="Modules used by Plingnote"
+            android:dialogMessage="Placeholder"         
             android:dialogIcon="@android:drawable/ic_dialog_info" />
     </PreferenceCategory>                               
 </PreferenceScreen>

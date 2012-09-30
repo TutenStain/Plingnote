@@ -7,11 +7,14 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class DialogInfoPreference extends DialogPreference{
-
+	private String dialogeMessage;
+	
 	public DialogInfoPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		this.dialogeMessage = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "dialogMessage");
 		setPersistent(false);
 		setDialogLayoutResource(R.layout.info_dialog);
 	}
@@ -31,6 +34,9 @@ public class DialogInfoPreference extends DialogPreference{
 				getDialog().dismiss();
 			}
 		});
+		
+		TextView textView = (TextView)view.findViewById(R.id.info_textview);
+		textView.setText(dialogeMessage);
 
 		super.onBindDialogView(view);
 	}
