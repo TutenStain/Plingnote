@@ -35,7 +35,6 @@ public class ActivityMain extends FragmentActivity{
 		tabsAdapter = new TabsAdapter(this, viewPager);
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_mapmode), FragmentMapView.class, null);
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_sort_by_size), FragmentListView.class, null);
-		Log.d("CREATE", 3 +"");
 		if (savedInstanceState != null) {
 			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 		}

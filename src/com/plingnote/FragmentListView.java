@@ -30,7 +30,7 @@ public class FragmentListView extends ListFragment {
 	private NoteAdapter noteAdapter;
 	private List<Note> notes = new ArrayList<Note>();
 	private ActionMode actionBar;
-
+	
 	@Override
 	public void onActivityCreated(Bundle savedState) {
 		super.onActivityCreated(savedState);
@@ -41,6 +41,7 @@ public class FragmentListView extends ListFragment {
 
 		// Make it possible for the user to select multiple items.
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		getListView().setItemsCanFocus(false);
 		getListView().setMultiChoiceModeListener(new LongPress());
 
 		noteAdapter = new NoteAdapter(getActivity(),
