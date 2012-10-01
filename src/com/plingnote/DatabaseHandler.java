@@ -115,19 +115,7 @@ public class DatabaseHandler {
 	public List<Note> getNoteList(){
 		this.open();
 		Cursor c = this.getAllNotes();
-		List<Note> l = new ArrayList<Note>();
-		if(c.moveToFirst()){
-			do{
-				Integer rowId = Integer.parseInt(c.getString(0));
-				String title = c.getString(1);
-				String text = c.getString(2);
-				Double longitude = Double.parseDouble(c.getString(3));
-				Double latitude = Double.parseDouble(c.getString(4));
-				String imagePath = c.getString(5);
-				String alarm = c.getString(6);
-				l.add(new Note(rowId, title, text, new Location(longitude, latitude), imagePath, alarm));
-			}while(c.moveToNext());
-		}
+		List<Note> l = this.createNoteList(c);
 		this.close();
 		return l;
 	}
@@ -145,7 +133,7 @@ public class DatabaseHandler {
 	 * @param text the text to update to
 	 * @return true if database was updated, false otherwise
 	 */
-	public boolean updateNote(long rowId, String title, String text, Location l, String path, String alarm){
+	public boolean updateNote(int rowId, String title, String text, Location l, String path, String alarm){
 		if(l == null)
 			l = new Location(0.0, 0.0);
 		this.open();
@@ -160,7 +148,7 @@ public class DatabaseHandler {
 		this.close();
 		return b;
 	}
-	
+
 	/**
 	 * 
 	 * @param rowId id of the row to retrieve data from, with 1 as the first index
@@ -180,7 +168,52 @@ public class DatabaseHandler {
 		this.close();
 		return n;
 	}
+
+	/**
+	 * 
+	 * @return row id of the latest inserted Note
+	 */
+	public Integer getLastRowId(){
+		this.open();
+		Cursor c = this.db.rawQuery("select " + KEY_HIDDEN_ROWID + " from " 
+				+ TABLE_NOTE + " order by " + KEY_HIDDEN_ROWID + " desc limit 1", null);
+		c.move(1);
+		Integer id = Integer.parseInt(c.getString(0));
+		this.close();
+		return id;
+	}
 	
+	/**
+	 * 
+	 * @param s the string to search the database with
+	 * @return a list of Note objects with at least one field matching the search
+	 */
+	public List<Note> search(String s){
+		this.open();
+		Cursor c = this.db.rawQuery("select " + KEY_HIDDEN_ROWID + ", * from " 
+				+ TABLE_NOTE + " where " + TABLE_NOTE + " match '*" + s + "*'", null);
+		List<Note> l = this.createNoteList(c);
+		this.close();
+		return l;
+	}
+
+	private List<Note> createNoteList(Cursor c){
+		List<Note> l = new ArrayList<Note>();
+		if(c.moveToFirst()){
+			do{
+				Integer rowId = Integer.parseInt(c.getString(0));
+				String title = c.getString(1);
+				String text = c.getString(2);
+				Double longitude = Double.parseDouble(c.getString(3));
+				Double latitude = Double.parseDouble(c.getString(4));
+				String imagePath = c.getString(5);
+				String alarm = c.getString(6);
+				l.add(new Note(rowId, title, text, new Location(longitude, latitude), imagePath, alarm));
+			}while(c.moveToNext());
+		}
+		return l;
+	}
+
 	private DatabaseHandler open() throws SQLException{
 		this.db = this.dbHelp.getWritableDatabase();
 		return this;

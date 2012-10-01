@@ -2,6 +2,7 @@ package com.plingnote;
 
 
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -59,35 +61,42 @@ public class FragmentNoteText extends Fragment {
 			int h = height/15;
 			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h*11));
 		}	
-		//If this class was opened with an intent or saved instances, the notetext will get the text from the database
+		noteText = (EditText) view.findViewById(R.id.notetext);
+		//If this class was opened with an intent or saved instances, the note text will get the text from the database
 		if(isExisting){
-			noteText = (EditText) view.findViewById(R.id.notetext);
+			
 			String txt = (DatabaseHandler.getInstance(this.getActivity()).getNote(this.rowId).getTitle());
 			txt = txt +(DatabaseHandler.getInstance(this.getActivity()).getNote(this.rowId).getText());	
 			//The cursor position will be saved even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
 			noteText.setText(""); 
 			noteText.append(txt);
 			noteText.invalidate(); 
+		}else{
+			InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+			inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 		}
 	}
 
 	/**
-	 * Get the text from the view noteText. If it's during editing the note's value will be updated in the database. If not the note will be inserted in the database and the rowId will be saved. 
+	 * Get the text from the view noteText. If it's during editing and is containing a title and/or a text the note's value will be updated in the database, if it's no title or text the note will be deleted in database. 
+	 * If not the note will be inserted in the database and the rowId will be saved. 
 	 */
 	@Override
 	public void onPause (){
 		super.onPause();
 		//If this class was opened with an intent or saved instance we are updating that note.
-		if(isExisting){
+		if(isExisting && (getTitleofNoteText().length() >0 || getTextofNoteText().length() > 0)){
 			DatabaseHandler.getInstance(this.getActivity()).updateNote(this.rowId,this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null);
 		}
 		//If this class not was opened with an intent o saved instance we are inserting the note in database.
-		else{
+		else if(!isExisting){
 			if(getTitleofNoteText().length() >0 || getTextofNoteText().length() > 0){
 			DatabaseHandler.getInstance(this.getActivity()).insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null);
-			rowId = DatabaseHandler.getInstance(this.getActivity()).getNoteList().get(DatabaseHandler.getInstance(this.getActivity()).getNoteList().size()-1).getRowId();
+			rowId = DatabaseHandler.getInstance(this.getActivity()).getLastRowId();
 			isExisting=true;
 			}
+		}else{
+			DatabaseHandler.getInstance(this.getActivity()).deleteNote(rowId);
 		}
 	}
 
@@ -128,11 +137,13 @@ public class FragmentNoteText extends Fragment {
 		Bundle bundle = getArguments();
 		this.isExisting = true;
 		try{
-			this.rowId = bundle.getInt(Utils.QUERY_NOTE);
+
+			this.rowId = bundle.getInt(IntentExtra.rowId.toString());
 			return;
 		}catch(Exception e){ 
 			try{
-				this.rowId = savedInstanceState.getInt(Utils.QUERY_NOTE);
+				this.rowId = savedInstanceState.getInt(IntentExtra.rowId.toString());
+
 			}catch(Exception el){
 				this.isExisting = false;
 			}
@@ -145,6 +156,7 @@ public class FragmentNoteText extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
-		savedInstanceState.putInt(Utils.QUERY_NOTE, rowId);
+
+		savedInstanceState.putInt(IntentExtra.rowId.toString(), rowId);
 	}	
 }

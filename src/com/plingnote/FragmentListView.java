@@ -36,7 +36,7 @@ public class FragmentListView extends ListFragment {
 		super.onActivityCreated(savedState);
 
 		db = DatabaseHandler.getInstance(getActivity());
-		// addNotes();
+//		addNotes();
 		refreshNotes();
 
 		// Make it possible for the user to select multiple items.
@@ -65,7 +65,7 @@ public class FragmentListView extends ListFragment {
 
 		// Get the row ID of the clicked note.
 		int rowID = notes.get(position).getRowId();
-		editNote.putExtra(Utils.QUERY_NOTE, rowID);
+		editNote.putExtra(IntentExtra.rowId.toString(), rowID);
 
 		// Start edit view.
 		startActivity(editNote);
