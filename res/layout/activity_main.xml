@@ -1,30 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@android:id/tabhost" android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
-	<LinearLayout android:orientation="vertical"
-		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		<TabWidget android:id="@android:id/tabs"
-			android:layout_width="fill_parent" android:layout_height="wrap_content" />
-		<FrameLayout android:id="@android:id/tabcontent"
-			android:layout_width="fill_parent" android:layout_height="fill_parent">
-			<LinearLayout android:orientation="vertical"
-				android:layout_width="fill_parent" android:layout_height="fill_parent"
-				android:id="@+id/main">
-				<ListView android:id="@+id/list" android:layout_width="fill_parent"
-					android:layout_height="0dip" android:layout_weight="1" />
-				<TextView android:id="@+id/empty" android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:gravity="center"
-					android:text="@string/loading" />
-			</LinearLayout>
-			<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-				android:id="@+id/mainlayout" android:orientation="vertical"
-				android:layout_width="fill_parent" android:layout_height="fill_parent">
-				<com.google.android.maps.MapView
-					android:id="@+id/mapview" android:layout_width="fill_parent"
-					android:layout_height="fill_parent" android:clickable="true"
-					android:apiKey="0DjJH-LkGjLUC7TicZmZF0JV3MTRl2zJN7uv2hw" />
-			</RelativeLayout>
-		</FrameLayout>
-	</LinearLayout>
-</TabHost>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/main">
+    <!-- We must dynamically add the fragment or FragmentTransaction#replace(...) won't remove the fragment being replaced -->
+    <!-- See http://stackoverflow.com/questions/5293850/fragment-duplication-on-fragment-transaction for more info -->
+    <!-- Doesn't work:
+        <fragment class="com.example.android.apis.app.FragmentLayout$TitlesFragment"
+            android:id="@+id/titles"
+            android:layout_width="fill_parent" android:layout_height="fill_parent" />-->
+</FrameLayout>
