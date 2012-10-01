@@ -92,7 +92,7 @@ public class FragmentNoteText extends Fragment {
 		else if(!isExisting){
 			if(getTitleofNoteText().length() >0 || getTextofNoteText().length() > 0){
 			DatabaseHandler.getInstance(this.getActivity()).insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null);
-			rowId = DatabaseHandler.getInstance(this.getActivity()).getNoteList().get(DatabaseHandler.getInstance(this.getActivity()).getNoteList().size()-1).getRowId();
+			rowId = DatabaseHandler.getInstance(this.getActivity()).getLastRowId();
 			isExisting=true;
 			}
 		}else{
