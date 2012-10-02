@@ -13,7 +13,7 @@ public class ActivityAppPreference extends PreferenceActivity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		setTitle(R.string.menu_settings);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		PreferenceManager prefManager = getPreferenceManager();
