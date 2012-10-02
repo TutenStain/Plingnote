@@ -9,6 +9,5 @@ public class ThumbnailSelection extends ListFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.id.)
 	}
 }
