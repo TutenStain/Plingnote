@@ -3,7 +3,6 @@ package com.plingnote;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 
 /**

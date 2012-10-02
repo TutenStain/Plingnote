@@ -2,8 +2,6 @@ package com.plingnote;
 
 import java.util.ArrayList;
 
-import com.google.android.maps.MapView;
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.SearchManager;
@@ -12,10 +10,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.SearchView;
+
+import com.google.android.maps.MapView;
 
 public class ActivityMain extends FragmentActivity{
 
@@ -39,10 +38,7 @@ public class ActivityMain extends FragmentActivity{
 		tabsAdapter = new TabsAdapter(this, viewPager);
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_mapmode), FragmentMapView.class, null);
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_sort_by_size), FragmentListView.class, null);
-
-		mMapViewContainer = LayoutInflater.from( this ).inflate( R.layout.fragment_mapview, null );
-		mMapView = (MapView)mMapViewContainer.findViewById( R.id.mapview );
-		
+	
 		if (savedInstanceState != null) {
 			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 		}

@@ -13,7 +13,7 @@ public class ItemOverlay extends ItemizedOverlay{
 
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	Context mContext = null;
-	
+
 	public ItemOverlay(Drawable defaultMarker, Context context) {
 		super(boundCenterBottom(defaultMarker));
 		mContext = context;
@@ -28,12 +28,12 @@ public class ItemOverlay extends ItemizedOverlay{
 	public int size() {
 		return mOverlays.size();
 	}
-	
+
 	public void addOverlay(OverlayItem overlay) {
 	    mOverlays.add(overlay);
 	    populate();
 	}
-	
+
 	@Override
 	protected boolean onTap(int index) {
 	  OverlayItem item = mOverlays.get(index);
