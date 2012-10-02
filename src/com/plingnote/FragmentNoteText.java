@@ -92,7 +92,7 @@ public class FragmentNoteText extends Fragment {
 		else if(!isExisting){
 			if(getTitleofNoteText().length() >0 || getTextofNoteText().length() > 0){
 			DatabaseHandler.getInstance(this.getActivity()).insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null);
-			rowId = DatabaseHandler.getInstance(this.getActivity()).getLastRowId();
+			rowId = DatabaseHandler.getInstance(this.getActivity()).getLastId();
 			isExisting=true;
 			}
 		}else{
@@ -137,11 +137,13 @@ public class FragmentNoteText extends Fragment {
 		Bundle bundle = getArguments();
 		this.isExisting = true;
 		try{
+
 			this.rowId = bundle.getInt(IntentExtra.rowId.toString());
 			return;
 		}catch(Exception e){ 
 			try{
 				this.rowId = savedInstanceState.getInt(IntentExtra.rowId.toString());
+
 			}catch(Exception el){
 				this.isExisting = false;
 			}
@@ -154,6 +156,7 @@ public class FragmentNoteText extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
+
 		savedInstanceState.putInt(IntentExtra.rowId.toString(), rowId);
 	}	
 }

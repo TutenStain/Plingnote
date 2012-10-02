@@ -28,7 +28,7 @@ public class ActivityNote extends FragmentActivity {
 		if(savedInstanceState == null){
 			FragmentNoteText newFragment = new FragmentNoteText();
 			try{
-				if(getIntent().getExtras().getInt("rowId") != -1){ //Maybe not necessary
+				if(getIntent().getExtras().getInt(Utils.QUERY_NOTE) != -1){ //Maybe not necessary
 					newFragment.setArguments(getIntent().getExtras());
 				}
 			} catch(Exception e){		        	
