@@ -19,7 +19,7 @@ public class DatabaseHandler {
 	private static final String TABLE_NOTE = "Note";
 
 	/* Columns */
-	private static final String KEY_HIDDEN_ROWID = "rowid"; //created automatically
+	private static final String ID = "docid"; //created automatically
 	private static final String KEY_TEXT = "Text";
 	private static final String KEY_TITLE = "Title";
 	private static final String KEY_LONGITUDE = "Longitude";
@@ -78,7 +78,7 @@ public class DatabaseHandler {
 	 * 
 	 * @param title title of the note to insert
 	 * @param text text of the note to insert
-	 * @return row id or -1 if an error occurred
+	 * @return id or -1 if an error occurred
 	 */
 	public long insertNote(String title, String text, Location l, String path, String alarm){
 		if(l == null)
@@ -98,12 +98,12 @@ public class DatabaseHandler {
 
 	/**
 	 * 
-	 * @param  rowId row id of the note to delete, with 1 as the first index
+	 * @param  id id of the Note to delete
 	 * @return true if the whereclause is passed in, false otherwise
 	 */
-	public boolean deleteNote(long rowId){
+	public boolean deleteNote(int id){
 		this.open();
-		boolean b = this.db.delete(TABLE_NOTE, KEY_HIDDEN_ROWID + "=" + rowId, null) > 0;
+		boolean b = this.db.delete(TABLE_NOTE, ID + "=" + id, null) > 0;
 		this.close();
 		return b;
 	}
@@ -121,19 +121,19 @@ public class DatabaseHandler {
 	}
 
 	private Cursor getAllNotes(){
-		return this.db.query(TABLE_NOTE, new String[]{ KEY_HIDDEN_ROWID, KEY_TITLE, KEY_TEXT,
+		return this.db.query(TABLE_NOTE, new String[]{ ID, KEY_TITLE, KEY_TEXT,
 				KEY_LONGITUDE, KEY_LATITUDE, KEY_IMAGEPATH, KEY_ALARM },
 				null, null,null, null, null);
 	}
 
 	/**
 	 * 
-	 * @param rowId row id of the note to update
+	 * @param id id of the note to update
 	 * @param title the title to update to
 	 * @param text the text to update to
 	 * @return true if database was updated, false otherwise
 	 */
-	public boolean updateNote(int rowId, String title, String text, Location l, String path, String alarm){
+	public boolean updateNote(int id, String title, String text, Location l, String path, String alarm){
 		if(l == null)
 			l = new Location(0.0, 0.0);
 		this.open();
@@ -144,45 +144,50 @@ public class DatabaseHandler {
 		cv.put(KEY_LONGITUDE, l.getLatitude());
 		cv.put(KEY_IMAGEPATH, path);
 		cv.put(KEY_ALARM, alarm);
-		boolean b = this.db.update(TABLE_NOTE, cv, KEY_HIDDEN_ROWID + "=" + rowId, null) > 0;
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		return b;
 	}
 
 	/**
 	 * 
-	 * @param rowId id of the row to retrieve data from, with 1 as the first index
+	 * @param id id of the row to retrieve data from
 	 * @return a Note object containting all data from the selected row
 	 */
-	public Note getNote(int rowId){
+	public Note getNote(int id){
 		this.open();
-		Cursor c = this.getAllNotes();
-		c.move(rowId);
+		Cursor c = this.findNoteById(id);
+		c.move(1);
 		String title = c.getString(1);
 		String text = c.getString(2);
 		Double longitude = Double.parseDouble(c.getString(3));
 		Double latitude = Double.parseDouble(c.getString(4));
 		String imagePath = c.getString(5);
 		String alarm = c.getString(6);
-		Note n = new Note(rowId, title, text, new Location(longitude, latitude), imagePath, alarm);
+		Note n = new Note(id, title, text, new Location(longitude, latitude), imagePath, alarm);
 		this.close();
 		return n;
 	}
 
+	private Cursor findNoteById(int id){
+		return this.db.rawQuery("select " + ID + ", * from " 
+				+ TABLE_NOTE + " where " + ID + "='" + id + "'", null);
+	}
+
 	/**
 	 * 
-	 * @return row id of the latest inserted Note
+	 * @return id of the latest inserted Note
 	 */
-	public Integer getLastRowId(){
+	public int getLastId(){
 		this.open();
-		Cursor c = this.db.rawQuery("select " + KEY_HIDDEN_ROWID + " from " 
-				+ TABLE_NOTE + " order by " + KEY_HIDDEN_ROWID + " desc limit 1", null);
+		Cursor c = this.db.rawQuery("select " + ID + " from " 
+				+ TABLE_NOTE + " order by " + ID + " desc limit 1", null);
 		c.move(1);
-		Integer id = Integer.parseInt(c.getString(0));
+		int id = Integer.parseInt(c.getString(0));
 		this.close();
 		return id;
 	}
-	
+
 	/**
 	 * 
 	 * @param s the string to search the database with
@@ -190,7 +195,7 @@ public class DatabaseHandler {
 	 */
 	public List<Note> search(String s){
 		this.open();
-		Cursor c = this.db.rawQuery("select " + KEY_HIDDEN_ROWID + ", * from " 
+		Cursor c = this.db.rawQuery("select " + ID + ", * from " 
 				+ TABLE_NOTE + " where " + TABLE_NOTE + " match '*" + s + "*'", null);
 		List<Note> l = this.createNoteList(c);
 		this.close();
@@ -201,14 +206,14 @@ public class DatabaseHandler {
 		List<Note> l = new ArrayList<Note>();
 		if(c.moveToFirst()){
 			do{
-				Integer rowId = Integer.parseInt(c.getString(0));
+				int id = Integer.parseInt(c.getString(0));
 				String title = c.getString(1);
 				String text = c.getString(2);
 				Double longitude = Double.parseDouble(c.getString(3));
 				Double latitude = Double.parseDouble(c.getString(4));
 				String imagePath = c.getString(5);
 				String alarm = c.getString(6);
-				l.add(new Note(rowId, title, text, new Location(longitude, latitude), imagePath, alarm));
+				l.add(new Note(id, title, text, new Location(longitude, latitude), imagePath, alarm));
 			}while(c.moveToNext());
 		}
 		return l;

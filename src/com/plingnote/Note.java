@@ -1,9 +1,7 @@
 package com.plingnote;
 
-
-
-public class Note  {
-	private Integer rowId;
+public class Note {
+	private int id;
 	private String title;
 	private String text;
 	private Location location;
@@ -12,13 +10,13 @@ public class Note  {
 
 	/**
 	 * 
-	 * @param id row id of this Note
+	 * @param id id of this Note
 	 * @param ti title of this Note
 	 * @param txt text of this Note
 	 * @param l location of this Note
 	 */
-	public Note(Integer id, String ti, String txt, Location l, String path, String alarm){
-		this.rowId = id;
+	public Note(int id, String ti, String txt, Location l, String path, String alarm){
+		this.id = id;
 		this.title = ti;
 		this.text = txt;
 		this.location = l;
@@ -29,10 +27,10 @@ public class Note  {
 	
 	/**
 	 * 
-	 * @return row id of this Note
+	 * @return id of this Note
 	 */
-	public Integer getRowId(){
-		return this.rowId;
+	public int getId(){
+		return this.id;
 	}
 	/**
 	 * 
@@ -56,11 +54,6 @@ public class Note  {
 	 */
 	public Location getLocation(){
 		return this.location;
-	}
-
-	@Override
-	public String toString(){
-		return this.rowId + " " + this.text + this.title;
 	}
 	
 	/**

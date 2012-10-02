@@ -64,7 +64,7 @@ public class FragmentListView extends ListFragment {
 		Intent editNote = new Intent(getActivity(), ActivityNote.class);
 
 		// Get the row ID of the clicked note.
-		int rowID = notes.get(position).getRowId();
+		int rowID = notes.get(position).getId();
 		editNote.putExtra(IntentExtra.rowId.toString(), rowID);
 
 		// Start edit view.
@@ -175,7 +175,7 @@ public class FragmentListView extends ListFragment {
 		// Walk through the notes and delete the checked ones.
 		for (int i = getListView().getCount() - 1; i >= 0; i--) {
 			if (checkedItemPositions.get(i)) {
-				db.deleteNote(notes.get(i).getRowId());
+				db.deleteNote(notes.get(i).getId());
 			}
 		}
 
