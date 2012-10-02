@@ -64,8 +64,8 @@ public class FragmentListView extends ListFragment {
 		Intent editNote = new Intent(getActivity(), ActivityNote.class);
 
 		// Get the row ID of the clicked note.
-		int rowID = notes.get(position).getId();
-		editNote.putExtra(IntentExtra.rowId.toString(), rowID);
+		int noteId = notes.get(position).getId();
+		editNote.putExtra(IntentExtra.id.toString(), noteId);
 
 		// Start edit view.
 		startActivity(editNote);

@@ -2,7 +2,7 @@ package com.plingnote;
 
 public enum IntentExtra {
 
-	rowId("rowId"),
+	id("id"),
 	;
 
 	private final String text;

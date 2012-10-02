@@ -23,9 +23,10 @@ import android.widget.LinearLayout;
  */
 public class FragmentNoteText extends Fragment {
 
+	
 	private View view;
 	private boolean isExisting = false;
-	private int rowId;
+	private int id;
 
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -65,8 +66,8 @@ public class FragmentNoteText extends Fragment {
 		//If this class was opened with an intent or saved instances, the note text will get the text from the database
 		if(isExisting){
 			
-			String txt = (DatabaseHandler.getInstance(this.getActivity()).getNote(this.rowId).getTitle());
-			txt = txt +(DatabaseHandler.getInstance(this.getActivity()).getNote(this.rowId).getText());	
+			String txt = (DatabaseHandler.getInstance(this.getActivity()).getNote(this.id).getTitle());
+			txt = txt +(DatabaseHandler.getInstance(this.getActivity()).getNote(this.id).getText());	
 			//The cursor position will be saved even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
 			noteText.setText(""); 
 			noteText.append(txt);
@@ -86,17 +87,17 @@ public class FragmentNoteText extends Fragment {
 		super.onPause();
 		//If this class was opened with an intent or saved instance we are updating that note.
 		if(isExisting && (getTitleofNoteText().length() >0 || getTextofNoteText().length() > 0)){
-			DatabaseHandler.getInstance(this.getActivity()).updateNote(this.rowId,this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null);
+			DatabaseHandler.getInstance(this.getActivity()).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null);
 		}
 		//If this class not was opened with an intent o saved instance we are inserting the note in database.
 		else if(!isExisting){
 			if(getTitleofNoteText().length() >0 || getTextofNoteText().length() > 0){
 			DatabaseHandler.getInstance(this.getActivity()).insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null);
-			rowId = DatabaseHandler.getInstance(this.getActivity()).getLastId();
+			id = DatabaseHandler.getInstance(this.getActivity()).getLastId();
 			isExisting=true;
 			}
 		}else{
-			DatabaseHandler.getInstance(this.getActivity()).deleteNote(rowId);
+			DatabaseHandler.getInstance(this.getActivity()).deleteNote(id);
 		}
 	}
 
@@ -138,11 +139,11 @@ public class FragmentNoteText extends Fragment {
 		this.isExisting = true;
 		try{
 
-			this.rowId = bundle.getInt(IntentExtra.rowId.toString());
+			this.id = bundle.getInt(IntentExtra.id.toString());
 			return;
 		}catch(Exception e){ 
 			try{
-				this.rowId = savedInstanceState.getInt(IntentExtra.rowId.toString());
+				this.id = savedInstanceState.getInt(IntentExtra.id.toString());
 
 			}catch(Exception el){
 				this.isExisting = false;
@@ -157,6 +158,6 @@ public class FragmentNoteText extends Fragment {
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
 
-		savedInstanceState.putInt(IntentExtra.rowId.toString(), rowId);
+		savedInstanceState.putInt(IntentExtra.id.toString(), id);
 	}	
 }
