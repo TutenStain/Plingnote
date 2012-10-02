@@ -17,7 +17,7 @@
             android:summary="Plingnote Android version 0.1"
             android:dialogMessage="Placeholder"  
             android:dialogIcon="@android:drawable/ic_dialog_info" />
-        <com.plingnote.PreferenceDialogInfo
+        <com.plingnote.PreferenceDialogEmail
         	android:title="Send feedback" 
         	android:summary="Send comments, request, or error reports to Plingnote"
         	android:dialogMessage="Placeholder"     	

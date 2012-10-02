@@ -16,7 +16,7 @@ public class PreferenceDialogInfo extends DialogPreference{
 		super(context, attrs);
 		this.dialogeMessage = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "dialogMessage");
 		setPersistent(false);
-		setDialogLayoutResource(R.layout.dialog_info);
+		setDialogLayoutResource(R.layout.preference_dialog_info);
 	}
 	
 	@Override
