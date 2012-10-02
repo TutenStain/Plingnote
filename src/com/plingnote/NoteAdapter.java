@@ -15,7 +15,6 @@ import android.widget.TextView;
  *
  */
 public class NoteAdapter extends ArrayAdapter<Note> {
-
 	private List<Note> notes;
 	
 	public NoteAdapter(Context context, int textViewResourceId, List<Note> notes) {

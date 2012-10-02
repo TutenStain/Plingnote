@@ -22,7 +22,6 @@ public class Note {
 		this.location = l;
 		this.imagePath = path;
 		this.alarm = alarm;
-
 	}
 	
 	/**
@@ -32,6 +31,7 @@ public class Note {
 	public int getId(){
 		return this.id;
 	}
+	
 	/**
 	 * 
 	 * @return title of this Note

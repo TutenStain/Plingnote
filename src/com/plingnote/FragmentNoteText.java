@@ -23,7 +23,7 @@ import android.widget.LinearLayout;
  */
 public class FragmentNoteText extends Fragment {
 
-	
+
 	private View view;
 	private boolean isExisting = false;
 	private int id;
@@ -41,7 +41,7 @@ public class FragmentNoteText extends Fragment {
 		view = inflater.inflate(R.layout.fragment_notetext, container, false);
 		return view;
 	}
-	
+
 	/**
 	 *Set the view noteText text to the latest inserted note's text if is during editing.
 	 *Sets the curser of the view noteText to the bottom of the text.
@@ -50,8 +50,8 @@ public class FragmentNoteText extends Fragment {
 	public void onStart(){
 		super.onStart();
 		EditText noteText = (EditText)view.findViewById(R.id.notetext);
-		Rect rec  =Utils.getScreenPixels(getActivity());
-		int height =rec.height();
+		Rect rec = Utils.getScreenPixels(getActivity());
+		int height = rec.height();
 		int widht = rec.width();	
 		getResources().getConfiguration();
 		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
@@ -65,7 +65,7 @@ public class FragmentNoteText extends Fragment {
 		noteText = (EditText) view.findViewById(R.id.notetext);
 		//If this class was opened with an intent or saved instances, the note text will get the text from the database
 		if(isExisting){
-			
+
 			String txt = (DatabaseHandler.getInstance(this.getActivity()).getNote(this.id).getTitle());
 			txt = txt +(DatabaseHandler.getInstance(this.getActivity()).getNote(this.id).getText());	
 			//The cursor position will be saved even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
@@ -92,9 +92,9 @@ public class FragmentNoteText extends Fragment {
 		//If this class not was opened with an intent o saved instance we are inserting the note in database.
 		else if(!isExisting){
 			if(getTitleofNoteText().length() >0 || getTextofNoteText().length() > 0){
-			DatabaseHandler.getInstance(this.getActivity()).insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null);
-			id = DatabaseHandler.getInstance(this.getActivity()).getLastId();
-			isExisting=true;
+				DatabaseHandler.getInstance(this.getActivity()).insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null);
+				id = DatabaseHandler.getInstance(this.getActivity()).getLastId();
+				isExisting=true;
 			}
 		}else{
 			DatabaseHandler.getInstance(this.getActivity()).deleteNote(id);
@@ -114,7 +114,7 @@ public class FragmentNoteText extends Fragment {
 		}else
 			return "";
 	}
-	
+
 	/**
 	 * Find the text(without the title) in notetext in the layout  as a string
 	 * @return
@@ -128,7 +128,7 @@ public class FragmentNoteText extends Fragment {
 		}else
 			return "";
 	}
-	
+
 	/**
 	 * If savedInstanceState isn't null the method will set isEditing an rowId to new values 
 	 */
