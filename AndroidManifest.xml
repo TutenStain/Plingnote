@@ -3,6 +3,8 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="15" />
@@ -15,21 +17,29 @@
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        
+        </activity>        
         <activity 
             android:name=".ActivitySearh" 
             android:exported="false" 
             android:launchMode="singleTop" >
-	        <intent-filter>
-	            <action android:name="android.intent.action.SEARCH" />
-	        </intent-filter>
-	        <meta-data 
-	            android:name="android.app.searchable"
-	            android:resource="@xml/searchable" />
-	    </activity>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".ActivityNote"
+            android:label="@string/title_activity_note" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.plingnote.ActivityMain" />
+        </activity>
     </application>
 
 </manifest>
