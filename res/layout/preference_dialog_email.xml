@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:gravity="center_vertical|top"
+        android:hint="@string/send_feedback_hint"
         android:inputType="textMultiLine"
         android:minLines="6" >
 

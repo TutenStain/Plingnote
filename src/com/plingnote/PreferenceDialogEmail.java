@@ -3,8 +3,6 @@ package com.plingnote;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
