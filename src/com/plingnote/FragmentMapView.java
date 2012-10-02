@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 public class FragmentMapView extends Fragment {
 		private View mMapViewContainer;
-		private MapView mMapView;
 
 		private MapController mMapController;
 
@@ -56,7 +55,7 @@ public class FragmentMapView extends Fragment {
 			 */
 			ActivityMain mapActivity = (ActivityMain) getActivity();
 			mMapViewContainer = mapActivity.mMapViewContainer;
-			mMapView = mapActivity.mMapView;
+			MapView mMapView = mapActivity.mMapView;
 			if( null != mMapView ) {
 				int index = getArguments().getInt( "index" );
 				Entry e = Locations.ENTRIES[index];

@@ -20,8 +20,8 @@ public class ActivityMain extends FragmentActivity{
 
 	private ScrollableViewPager viewPager;
 	private TabsAdapter tabsAdapter;
-	MapView mMapView;
-	View mMapViewContainer;
+	protected static MapView mMapView;
+	protected View mMapViewContainer;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
