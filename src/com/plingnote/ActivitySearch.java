@@ -5,6 +5,8 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
+import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 /**
@@ -16,6 +18,8 @@ public class ActivitySearch extends Activity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setTitle(R.string.search_activity);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		handleIntent(getIntent());
 	}
 
@@ -37,6 +41,17 @@ public class ActivitySearch extends Activity{
 			suggestions.saveRecentQuery(query, null);
 			Toast.makeText(this, query, Toast.LENGTH_SHORT).show();
 			//TODO Do search here
+		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+		return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 }

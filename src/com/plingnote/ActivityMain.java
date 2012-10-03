@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.SearchManager;
+import android.app.SearchManager.OnDismissListener;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
@@ -18,6 +20,7 @@ public class ActivityMain extends FragmentActivity{
 
 	private ScrollableViewPager viewPager;
 	private TabsAdapter tabsAdapter;
+	private SearchView searchView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,12 +46,18 @@ public class ActivityMain extends FragmentActivity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
-		
+		final Menu m = menu;
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+		searchView = (SearchView) menu.findItem(R.id.search).getActionView();
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		searchView.setIconifiedByDefault(true);
-		
+		searchManager.setOnDismissListener(new OnDismissListener() {
+			public void onDismiss() {
+				searchView.setIconified(true);
+				m.findItem(R.id.search).collapseActionView();
+			}
+		});
+
 		return true;
 	}
 	
@@ -66,6 +75,12 @@ public class ActivityMain extends FragmentActivity{
                 return false;
         }
     }
+	
+	@Override
+	public boolean onSearchRequested() {
+		
+		return super.onSearchRequested();
+	}
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
