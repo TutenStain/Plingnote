@@ -8,4 +8,9 @@ public class Utils {
 		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 		return new Rect(0, 0, metrics.widthPixels, metrics.heightPixels);
 	}
+	
+	/**
+	 * Key for query a note.
+	 */
+	public final static String QUERY_NOTE = "com.plingnote.QUERY_NOTE";
 }
