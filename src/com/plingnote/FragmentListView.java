@@ -36,7 +36,7 @@ public class FragmentListView extends ListFragment {
 		super.onActivityCreated(savedState);
 
 		db = DatabaseHandler.getInstance(getActivity());
-//		addNotes();
+
 		refreshNotes();
 
 		// Make it possible for the user to select multiple items.
@@ -142,15 +142,16 @@ public class FragmentListView extends ListFragment {
 	}
 
 	/**
-	 * Get notes from database and add them to a list.
+	 * Refresh the notes that will later be added to 
+	 * the view.
 	 */
 	public void refreshNotes() {
 
 		// Clear list from previous notes.
-		notes.clear();
+		clearNotes();
 
 		for (Note n : db.getNoteList()) {
-			this.notes.add(n);
+			this.addNote(n);
 		}
 	}
 
@@ -186,13 +187,6 @@ public class FragmentListView extends ListFragment {
 		noteAdapter.notifyDataSetChanged();
 	}
 
-	public void addNotes() {
-		for (int i = 1; i <= 15; i++) {
-			db.insertNote("Note nr." + i,
-					"This is the actual text of the note", null, "img", null);
-		}
-	}
-
 	/**
 	 * Refresh notes when returning to the list view.
 	 */
@@ -221,6 +215,22 @@ public class FragmentListView extends ListFragment {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Add a note to the listview
+	 * @param n the note to add
+	 */
+	public void addNote(Note n){
+		notes.add(n);
+	}
+	
+	/**
+	 * Clears the notes in the internal list
+	 * Should be used if refreshNotes is overridden
+	 */
+	public void clearNotes(){
+		notes.clear();
 	}
 
 }
