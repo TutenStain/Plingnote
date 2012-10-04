@@ -1,8 +1,18 @@
 package com.plingnote;
 
+/**
+ * The search list view fragment. This fragment is responsible
+ * of displaying the search results. Extends the
+ * FragmentListView class, so it is based heavily on it.
+ */
 public class FragmentListViewSearch extends FragmentListView {
 	private String searchQuery;
 	
+	/**
+	 * Refresh the notes in the view. This is where
+	 * the actually search query will be processed in
+	 * the database.
+	 */
 	@Override
 	public void refreshNotes(){
 		clearNotes();
@@ -12,6 +22,10 @@ public class FragmentListViewSearch extends FragmentListView {
 		}
 	}
 	
+	/**
+	 * Sets the search query
+	 * @param searchQuery the string to search for in the database
+	 */
 	public void setSearchQuery(String searchQuery) {
 		this.searchQuery = searchQuery;
 	}

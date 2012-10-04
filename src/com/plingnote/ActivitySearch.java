@@ -1,8 +1,5 @@
 package com.plingnote;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +17,9 @@ import android.widget.LinearLayout.LayoutParams;
 public class ActivitySearch extends FragmentActivity{
 	FragmentListViewSearch fragment;
 	
+	/**
+	 * Initiate the activity ONCE.
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,7 +34,13 @@ public class ActivitySearch extends FragmentActivity{
 		
 		handleIntent(getIntent());
 	}
-
+	
+	/**
+	 * If this search activity already have been created this
+	 * method will get called the other times if the user want
+	 * to initiate a search. This way we just instantiate the
+	 * activity once and just handle the intent the other times. 
+	 */
 	@Override
 	protected void onNewIntent(Intent intent) {
 		handleIntent(intent);
@@ -56,6 +62,10 @@ public class ActivitySearch extends FragmentActivity{
 		}
 	}
 
+	/**
+	 * Make sure that once the back button is pressed
+	 * that we finish this activity.
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
