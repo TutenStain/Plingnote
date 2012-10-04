@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.SearchManager;
+import android.app.SearchManager.OnDismissListener;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class ActivityMain extends FragmentActivity{
 
 	private ScrollableViewPager viewPager;
 	private TabsAdapter tabsAdapter;
+	private SearchView searchView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,16 +45,42 @@ public class ActivityMain extends FragmentActivity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
-		
+		final Menu m = menu;
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+		searchView = (SearchView) menu.findItem(R.id.search).getActionView();
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-		searchView.setQueryHint(getString(R.string.search_hint));
 		searchView.setIconifiedByDefault(true);
-		    
+		searchManager.setOnDismissListener(new OnDismissListener() {
+			public void onDismiss() {
+				searchView.setIconified(true);
+				m.findItem(R.id.search).collapseActionView();
+			}
+		});
+
 		return true;
 	}
-
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        	/*If there is no room to display the search widget it will
+        	 * be placed in the overflow menu. To display the widget
+        	 * once pressed we have to manually call it from here.
+        	 */
+            case R.id.search:
+                onSearchRequested();
+                return true;
+            default:
+                return false;
+        }
+    }
+	
+	@Override
+	public boolean onSearchRequested() {
+		
+		return super.onSearchRequested();
+	}
+	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
