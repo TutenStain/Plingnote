@@ -6,8 +6,13 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.provider.SearchRecentSuggestions;
-import android.util.Log;
 
+/**
+ * The application preference fragment that shows the settings view.
+ * This class listens to changes in the settings view so this
+ * class is also responsible for responding to the user requested
+ * new settings. 
+ */
 public class FragmentAppPreference extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -19,14 +24,14 @@ public class FragmentAppPreference extends PreferenceFragment implements OnShare
 	@Override
 	public void onResume() {
 	    super.onResume();
-	    // Set up a listener whenever a key changes
+	    //Set up a listener whenever a key changes
 	    getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	}
 	
 	@Override
 	public void onPause() {
 	    super.onPause();
-	    // Unregister the listener whenever a key changes
+	    //Unregister the listener whenever a key changes
 	    getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
 	}
 
@@ -40,6 +45,8 @@ public class FragmentAppPreference extends PreferenceFragment implements OnShare
 			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(getActivity(), 
 					SearchSuggestionsRecentProvider.AUTHORITY, SearchSuggestionsRecentProvider.MODE);
 			suggestions.clearHistory();
+			
+			//Set the setting to false once we have cleared the search
 			sharedPreferences.edit().putBoolean(key, false).commit();
 		}
 	}

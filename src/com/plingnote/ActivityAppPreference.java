@@ -5,7 +5,9 @@ import android.preference.PreferenceActivity;
 
 
 /**
- * The activity that handles the settings menu
+ * The activity that handles the settings menu.
+ * This just basically replaces the current view 
+ * with the preference fragment.
  */
 public class ActivityAppPreference extends PreferenceActivity {	
 
@@ -13,7 +15,7 @@ public class ActivityAppPreference extends PreferenceActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Display the fragment as the main content.
+        // Display the fragment as the main content
         getFragmentManager().beginTransaction().replace(android.R.id.content, new FragmentAppPreference()).commit();
     }
 }
