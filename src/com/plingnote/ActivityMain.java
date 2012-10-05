@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
@@ -70,6 +69,10 @@ public class ActivityMain extends FragmentActivity{
             case R.id.search:
                 onSearchRequested();
                 return true;
+            
+            case R.id.menu_settings: 
+ 			   startActivity(new Intent(this, ActivityAppPreference.class));
+ 			   
             default:
                 return false;
         }

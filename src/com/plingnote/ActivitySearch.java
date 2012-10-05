@@ -14,7 +14,7 @@ import android.widget.LinearLayout.LayoutParams;
  * called once the user have pressed
  * the search button.
  */
-public class ActivitySearch extends FragmentActivity{
+public class ActivitySearch extends FragmentActivity {
 	FragmentListViewSearch fragment;
 	
 	/**
