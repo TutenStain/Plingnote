@@ -19,18 +19,28 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 /**
- * Class displaying the saved notes as a list. The user can click on a note to
- * view or edit it.
+ * This file is part of Plingnote.
+ * Copyright (C) 2012 Linus Karlsson, Barnabas Sapan
  * 
- * @author Linus Karlsson
+ * Plingnote is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 public class FragmentListView extends ListFragment {
 	private DatabaseHandler db;
 	private NoteAdapter noteAdapter;
 	private List<Note> notes = new ArrayList<Note>();
 	private ActionMode actionBar;
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedState) {
 		super.onActivityCreated(savedState);
@@ -142,8 +152,7 @@ public class FragmentListView extends ListFragment {
 	}
 
 	/**
-	 * Refresh the notes that will later be added to 
-	 * the view.
+	 * Refresh the notes that will later be added to the view.
 	 */
 	public void refreshNotes() {
 
@@ -209,27 +218,29 @@ public class FragmentListView extends ListFragment {
 		// Check if current view
 		if (isVisible()) {
 			if (!isActive) {
-				// If user leaves the list view, a close the top menu.
-				if(actionBar != null) {
+				// If user leaves the list view, close the top menu.
+				if (actionBar != null) {
 					actionBar.finish();
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Add a note to the listview
-	 * @param n the note to add
+	 * 
+	 * @param n
+	 *            the note to add
 	 */
-	public void addNote(Note n){
+	public void addNote(Note n) {
 		notes.add(n);
 	}
-	
+
 	/**
-	 * Clears the notes in the internal list
-	 * Should be used if refreshNotes is overridden
+	 * Clears the notes in the internal list Should be used if refreshNotes is
+	 * overridden
 	 */
-	public void clearNotes(){
+	public void clearNotes() {
 		notes.clear();
 	}
 
