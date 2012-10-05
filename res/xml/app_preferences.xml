@@ -4,6 +4,7 @@
     <PreferenceCategory android:title="Search">
     	<com.plingnote.PreferenceDialogOption
        		android:key="resetSearchHistory"
+       		android:defaultValue="false"
             android:dialogIcon="@android:drawable/ic_dialog_alert"
             android:title="Clear Search History"
             android:summary="Clear recent search history"
