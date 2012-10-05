@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class PreferenceDialogEmail extends DialogPreference {
 	private Context context;
@@ -36,14 +37,16 @@ public class PreferenceDialogEmail extends DialogPreference {
 
 	@Override
 	public void onBindDialogView(View view){
+		final EditText editText = (EditText)view.findViewById(R.id.editText_email);
 		Button sendButton = (Button)view.findViewById(R.id.email_send_button);
 		sendButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				String userText = editText.getText().toString() + "\n\n";
 				Intent intent = new Intent(Intent.ACTION_SEND);
 				intent.setType("message/rfc822");
 				intent.putExtra(Intent.EXTRA_EMAIL,new String[] { "plingnote@plingnote.com" });
 				intent.putExtra(Intent.EXTRA_SUBJECT, appVersionName);
-				intent.putExtra(Intent.EXTRA_TEXT, deviceInfoString);
+				intent.putExtra(Intent.EXTRA_TEXT, userText + deviceInfoString);
 				context.startActivity(Intent.createChooser(intent, "Send with..."));
 			}
 		});
