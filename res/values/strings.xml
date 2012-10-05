@@ -12,7 +12,7 @@
     <string name="button_okey">Okey</string>
     <string name="button_send">Send</string>
     <string name="button_cancel">Cancel</string>
-    <string name="send_feedback_hint">Your feedback including comments, request, or error reports</string>
+    <string name="send_feedback_hint">Your feedback including comments, request or error reports</string>
     <string name="search_activity">Search</string>
     <string name="no_search_match">No match for your search!</string>
     
