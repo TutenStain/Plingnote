@@ -1,7 +1,5 @@
 package com.plingnote;
 
-
-
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
@@ -14,9 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-
-/**
- * 
+/** 
  * A note text fragment 
  * @author Julia Gustafsson
  *
@@ -56,12 +52,13 @@ public class FragmentNoteText extends Fragment {
 		getResources().getConfiguration();
 		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
 			int h = height/10;
-			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h*6));
+			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h*4));
 		}
 		else{
 			int h = height/15;
-			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h*11));
+			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h*9));
 		}	
+		
 		noteText = (EditText) view.findViewById(R.id.notetext);
 		//If this class was opened with an intent or saved instances, the note text will get the text from the database
 		if(isExisting){
