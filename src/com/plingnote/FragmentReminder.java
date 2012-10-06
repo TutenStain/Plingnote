@@ -20,16 +20,15 @@ import android.widget.TimePicker;
  * @author Julia Gustafsson
  *
  */
-
 public class FragmentReminder extends Fragment {
-private View view;
-private String value;
-private FragmentNoteText noteFragment;
+	private View view;
+	private String value;
+	private FragmentNoteText noteFragment;
 
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
-		 view = inflater.inflate(R.layout.fragment_alarm, container, false);		
-		 return view;		
+		view = inflater.inflate(R.layout.fragment_alarm, container, false);		
+		return view;		
 	}
 	/**
 	 * Set on click listers to the button
@@ -38,29 +37,29 @@ private FragmentNoteText noteFragment;
 		super.onStart();
 		Button okey = (Button) view.findViewById(R.id.ok);
 		Button cancel = (Button) view.findViewById(R.id.cancel);
-		
+
 		cancel.setOnClickListener(new View.OnClickListener() {
-		    public void onClick(View v) {	    
-		    	//To be implemented
-		    }
+			public void onClick(View v) {	    
+				//To be implemented
+			}
 		});	
 		okey.setOnClickListener(new View.OnClickListener() {
 			//Save the time and the the alarm in the method savetime
-			    public void onClick(View v) {
-			    	saveTime(v);	    
-			    }
-			});
-		}
-	 public void saveTime(View view){
-		  DatePicker datepicker = (DatePicker)this.view.findViewById(R.id.datePicker);
-	      TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);
-	        Intent intent = new Intent(getActivity(), NoteNotification.class);
-	        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,
-	        intent, PendingIntent.FLAG_ONE_SHOT);
-	        Calendar calendar =  Calendar.getInstance();
-	        calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
-	        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-	        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);        
+			public void onClick(View v) {
+				saveTime(v);	    
+			}
+		});
+	}
+	public void saveTime(View view){
+		DatePicker datepicker = (DatePicker)this.view.findViewById(R.id.datePicker);
+		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);
+		Intent intent = new Intent(getActivity(), NoteNotification.class);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,
+				intent, PendingIntent.FLAG_ONE_SHOT);
+		Calendar calendar =  Calendar.getInstance();
+		calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
+		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);        
 	}	 
 
 }
