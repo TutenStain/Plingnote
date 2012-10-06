@@ -17,8 +17,8 @@ import android.widget.LinearLayout.LayoutParams;
  *
  */
 public class ActivityNote extends FragmentActivity {
-	FragmentNoteText noteFragment;
-	
+	private int id = -1;
+	private FragmentNoteText noteFragment;
 	/**
 	 * Makes a new framelayout and set the framelayout id. Set activity's layout. If the saved instance is null, the class makes a new Fragmentnotetext.
 	 *  If an intent have put extras, the fragment gets those as arguments.
@@ -30,24 +30,40 @@ public class ActivityNote extends FragmentActivity {
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		FrameLayout fragmentContainer = new FrameLayout(this);
+		 noteFragment = new FragmentNoteText();
 		fragmentContainer.setId(R.id.fragmentContainer);
 		setContentView(fragmentContainer, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-		if(savedInstanceState == null){
-			FragmentNoteText newFragment = new FragmentNoteText();
-			try{
-				if(getIntent().getExtras().getInt(Utils.QUERY_NOTE) != -1){ //Maybe not necessary
-					newFragment.setArguments(getIntent().getExtras());
-				}
-			} catch(Exception e){		        	
+		try{
+			if(getIntent().getExtras().getInt(IntentExtra.id.toString()) != -1){ //Maybe not necessary
+				noteFragment.setArguments(getIntent().getExtras());
 			}
-			getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, newFragment).commit(); 
-		}   
-	}
+		} catch(Exception e){	
+			try{
+				if(savedInstanceState.getInt(IntentExtra.id.toString()) != -1){
+					Bundle args = new Bundle();
+					args.putInt(IntentExtra.id.toString(), this.id);
+					noteFragment.setArguments(args);
+					this.id = getIntent().getExtras().getInt(IntentExtra.id.toString());
+				}
+			}catch(Exception o)
+			{}	
+		}	getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, noteFragment).commit(); 
+	}  
+
+	
 	
 	@Override
 	public void onPause(){
 		super.onPause();
+		getSupportFragmentManager().beginTransaction().remove(noteFragment).commit(); 
 	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		savedInstanceState.putInt(IntentExtra.id.toString(), id);
+	}
+	
 	
 	/**
 	 * Makes the back button behave like the home button. Calling finish() if back button is pressed.
