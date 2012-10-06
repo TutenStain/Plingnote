@@ -26,13 +26,15 @@ import android.view.Window;
 
 /**
  * This is a fragment that will be used during transition from activities to fragments.
+ * @modifiedBy: Barnabas Sapan
  */
-public abstract class ActivityHostFragment extends LocalActivityManagerFragment {
+public abstract class ActivityHostFragment extends FragmentLocalActivityManager {
     
     protected abstract Class<? extends Activity> getActivityClass();
     private final static String ACTIVITY_TAG = "hosted";
     
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Intent intent = new Intent(getActivity(), getActivityClass());
         
@@ -58,7 +60,8 @@ public abstract class ActivityHostFragment extends LocalActivityManagerFragment 
     /**
      * For accessing public methods of the hosted activity
      */
-    public Activity getHostedActivity() {
+    @SuppressWarnings("deprecation")
+	public Activity getHostedActivity() {
 		return getLocalActivityManager().getActivity(ACTIVITY_TAG);
 	}
 }

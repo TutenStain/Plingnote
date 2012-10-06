@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
+/**
+ * @modifiedBy: Barnabas Sapan
+ */
 package com.plingnote;
 
-import android.app.Activity;
+import android.os.Bundle;
+import com.google.android.maps.MapActivity;
 
-public class MyMapFragment extends ActivityHostFragment {
+public class ActivityMap extends MapActivity {
     
     @Override
-    protected Class<? extends Activity> getActivityClass() {
-        return MyMapActivity.class;
+    protected void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+        setContentView(R.layout.my_map_activity);
+    }
+    
+    @Override
+    protected boolean isRouteDisplayed() {
+        return false;
     }
 }
