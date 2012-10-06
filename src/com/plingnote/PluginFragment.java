@@ -1,7 +1,5 @@
 package com.plingnote;
 
-import android.support.v4.app.Fragment;
-
 /**
  * An interface representing the 
  * @author Julia Gustafsson
