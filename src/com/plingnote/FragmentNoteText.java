@@ -1,7 +1,5 @@
 package com.plingnote;
 
-
-
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
@@ -129,7 +127,7 @@ public class FragmentNoteText extends Fragment {
 	}
 
 	/**
-	 * If savedInstanceState isn't null the method will set isEditing an rowId to new values 
+	 * If the id fecthing from getargument/savedInstanceState isn't null  or -1 the method will set isEditing an rowId to new values 
 	 */
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -137,16 +135,23 @@ public class FragmentNoteText extends Fragment {
 		Bundle bundle = getArguments();
 		this.isExisting = true;
 		try{
-
 			this.id = bundle.getInt(IntentExtra.id.toString());
 			return;
 		}catch(Exception e){ 
 			try{
 				this.id = savedInstanceState.getInt(IntentExtra.id.toString());
-
 			}catch(Exception el){
 				this.isExisting = false;
 			}
+		}
+		try{
+			if(this.id != -1){
+				Note note = DatabaseHandler.getInstance(getActivity()).getNote(this.id);
+				location= note.getLocation();
+				imagePath = note.getImagePath();
+				alarmString = note.getAlarm();	
+			}
+		} catch(Exception e){		        	
 		}
 	}
 
