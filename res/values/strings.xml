@@ -15,5 +15,6 @@
     <string name="send_feedback_hint">Your feedback including comments, request or error reports</string>
     <string name="search_activity">Search</string>
     <string name="no_search_match">No match for your search!</string>
+    <string name="maps_api_key">0m6fASDVYxkU-XY0GaRs58rDY0kFn6fNthQYI4w</string>
     
 </resources>
