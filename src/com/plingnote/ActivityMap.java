@@ -27,7 +27,7 @@ public class ActivityMap extends MapActivity {
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setContentView(R.layout.my_map_activity);
+        setContentView(R.layout.fragment_mapview);
     }
     
     @Override
