@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-    
-    <com.google.android.maps.MapView
-        android:id="@+id/mapview"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:clickable="true"
-        android:apiKey="@string/maps_api_key"
-    />
-    
-</LinearLayout>
+        android:orientation="vertical" >
+
+        <com.google.android.maps.MapView
+            android:id="@+id/mapview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:apiKey="@string/maps_api_key"
+            android:clickable="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/button_layout_mapoverlay"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp" >
+
+        <ImageButton
+            android:id="@+id/button_find_my_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/cont_descr_compass_button"
+            android:src="@android:drawable/ic_menu_compass" >
+        </ImageButton>
+    </LinearLayout>
+
+</RelativeLayout>

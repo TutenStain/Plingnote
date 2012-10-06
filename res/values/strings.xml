@@ -16,5 +16,6 @@
     <string name="search_activity">Search</string>
     <string name="no_search_match">No match for your search!</string>
     <string name="maps_api_key">08k-hwHihRITtA_Ma5YjPZ5tZVt4chwGHHUrdcA</string>
+    <string name="cont_descr_compass_button">Find my location button</string>
     
 </resources>
