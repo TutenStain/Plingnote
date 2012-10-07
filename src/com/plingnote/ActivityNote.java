@@ -20,7 +20,6 @@ import android.widget.LinearLayout.LayoutParams;
 
 /**
  * A note fragment activity with a layout holding a fragment. 
- *
  * @author Julia Gustafsson
  *
  */
@@ -176,6 +175,32 @@ public class ActivityNote extends FragmentActivity {
 	
 	public int getId() {
 		return id;
+	}
+	
+	public void deleteValue(NoteExtra noteExtra){
+		if(noteExtra.equals(NoteExtra.REMINDER)){
+			DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),location,this.imagePath,"");			
+			reminderString = "";
+		}
+		if(noteExtra.equals(NoteExtra.IMAGE)){
+			DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),location,"",this.reminderString);			
+			imagePath = "";
+		}
+		if(noteExtra.equals(NoteExtra.LOCATION)){
+			DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),null,this.imagePath,this.reminderString);		
+			location = null;
+		}	
+		saveToDatabase();
+		newFragment = new FragmentSnotebar();
+		try{
+			Bundle bundleToFrag = new Bundle();
+			bundleToFrag.putInt(IntentExtra.id.toString(), this.id);
+			newFragment.setArguments(bundleToFrag);
+		} catch(Exception e){		        	
+		}
+		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, newFragment).commit();
+		getSupportFragmentManager().beginTransaction().remove(anotherFragment);
+		anotherFragment = null;
 	}
 	
 	/**

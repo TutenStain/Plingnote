@@ -15,5 +15,5 @@
     <string name="send_feedback_hint">Your feedback including comments, request or error reports</string>
     <string name="search_activity">Search</string>
     <string name="no_search_match">No match for your search!</string>
-    
+    <string name="add_new_note">Add new note</string>
 </resources>

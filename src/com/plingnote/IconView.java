@@ -37,10 +37,10 @@ public class IconView extends View{
 		paint.setTextSize(30); 
 		Bitmap bit = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 		if(this.text.equals(""))
-			canvas.drawText(defaultText,0,defaultText.length(),0,100, paint);
+			canvas.drawText(defaultText,0,defaultText.length(),0,130, paint);
 		else
-			canvas.drawText(text,0,10,0,100,paint);
-		canvas.drawBitmap(bit, 0, -10, null);	          
+			canvas.drawText(text,0,10,0,130,paint);
+		canvas.drawBitmap(bit, 0, 10, null);	          
 	}
 	
 	/**

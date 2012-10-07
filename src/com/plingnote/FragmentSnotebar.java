@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -35,7 +36,7 @@ public class FragmentSnotebar extends Fragment {
 	}
 	/**
 	 * Passing parameter fragment to noteActivity method replace.
-	 * @param fragment
+	 * @param noteExtra
 	 */
 	public void replaceFragment(Fragment fragment){
 		Activity activityNote = getActivity();
@@ -80,11 +81,17 @@ public class FragmentSnotebar extends Fragment {
 				icons.add(new IconView(getActivity(),"", reminderString, new FragmentReminder()));
 			}
 		}
+		LinearLayout ll = (LinearLayout) view.findViewById(R.id.icon);
+		ll.setOrientation(LinearLayout.HORIZONTAL);
+		ll.setPadding(30, 30, 30, 30);
 		//Set icon on layout with onclicklistener.
 		for(IconView item : icons){	
-			LinearLayout ll = (LinearLayout) view.findViewById(R.id.icon);
+			
 			item.setOnClickListener(new PreviewListener());
+			item.setOnLongClickListener(new PreviewLongListner());
 			item.setClickable(true);
+			
+			//item.setPadding(30, 30, 30, 30);
 			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 					(LayoutParams.FILL_PARENT), (LayoutParams.FILL_PARENT));
 			item.setLayoutParams(lp);
@@ -104,23 +111,28 @@ public class FragmentSnotebar extends Fragment {
 		 * Cast view IconView and call the fragment snotebar method 'openNewFragment'
 		 */
 		public void onClick(View v) {		
-			IconView dv = (IconView)v;
-			FragmentSnotebar.this.replaceFragment(dv.getFragment());
+			IconView icon = (IconView)v;
+			FragmentSnotebar.this.replaceFragment(icon.getFragment());
+		}
+	}
+	private class PreviewLongListner implements OnLongClickListener {
+
+		public boolean onLongClick(View v) {
+			IconView icon = (IconView)v;
+			PluginFragment pf = (PluginFragment)icon.getFragment();
+			FragmentSnotebar.this.deleteFragmentValue(pf.getKind());
+			return true;
+		} 
+   
+
+    }
+	
+	public void deleteFragmentValue(NoteExtra noteExtra){
+		Activity activityNote = getActivity();
+		if(activityNote instanceof ActivityNote) { 
+			((ActivityNote) activityNote).deleteValue(noteExtra);
 		}
 	}
 
-	/**
-	 * If getArguments isn't null the method will set isEditing an rowId to new values 
-	 */
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		Bundle bundle = getArguments();
-		try{
-			this.id = bundle.getInt(IntentExtra.id.toString());
-			return;
-		}catch(Exception e){ 
-		}
-	}
 }
 
