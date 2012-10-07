@@ -69,7 +69,7 @@ public class ActivityMap extends MapActivity implements LocationListener {
 		
 		List<Overlay> list = map.getOverlays();
 		list.clear();
-		list.add(new MapPinOverlay(this, map, new GeoPoint((int)(location.getLatitude() * 1E6), (int)(location.getLongitude() * 1E6))));
+		list.add(new MapOverlayPin(this, map, new GeoPoint((int)(location.getLatitude() * 1E6), (int)(location.getLongitude() * 1E6))));
 		map.invalidate();
 		
 		mc.setZoom(19);
