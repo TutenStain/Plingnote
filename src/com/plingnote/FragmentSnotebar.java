@@ -10,6 +10,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+/**
+ * Fragment representing a fragment with clickable icons
+ * @author Julia Gustafsson
+ *
+ */
 
 public class FragmentSnotebar extends Fragment {
 	private View view;
@@ -20,25 +25,20 @@ public class FragmentSnotebar extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
-
 	}
-
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {		
 		view = inflater.inflate(R.layout.fragment_snotebar, container, false);
 		return view;
 	}
-
 	/**
 	 * Passing parameter fragment to noteActivity method replace.
-	 * @param another
+	 * @param fragment
 	 */
-	public void replaceFragment(Fragment another){
+	public void replaceFragment(Fragment fragment){
 		//to be implemented
 	}
-
 	/**
 	 * Call setIcons method
 	 */
@@ -46,8 +46,7 @@ public class FragmentSnotebar extends Fragment {
 	public void onStart(){
 		super.onStart();
 		setIcons();
-	}
-	
+	}	
 	/**
 	 * CLear list
 	 */
@@ -56,7 +55,6 @@ public class FragmentSnotebar extends Fragment {
 		super.onPause();
 		icons.clear();
 	}
-
 	/**
 	 * Setting icon depending if they got an id or not and if their is already information setted or not.
 	 */
