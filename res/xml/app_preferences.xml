@@ -31,7 +31,7 @@
     	<com.plingnote.PreferenceDialogInfo
         	android:title="Open Source Licenses" 
             android:summary="Modules used by Plingnote"
-            android:dialogMessage="Placeholder"         
+            android:dialogMessage="	Big thanks to:\n*Ievgenii Nazaruk for map-fragment. Allowed us to use the MapView in a fragment, for tabbed navigation."
             android:dialogIcon="@android:drawable/ic_dialog_info" />
     </PreferenceCategory>                               
 </PreferenceScreen>
