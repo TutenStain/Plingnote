@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
@@ -22,6 +23,9 @@ import android.widget.LinearLayout.LayoutParams;
  */
 public class ActivityNote extends FragmentActivity {
 	private int id = -1;
+	private Location location= new Location(0.0,0.0);
+	private String reminderString = "";
+	private String imagePath = "";
 	
 	/**
 	 * Makes a new framelayout and set the framelayout id. Set activity's layout. If the saved instance is null, the class makes a new Fragmentnotetext.
@@ -84,6 +88,20 @@ public class ActivityNote extends FragmentActivity {
 		super.onPause();
 	}
 	
+	/**
+	 * Get the text from the view noteText. If the id isn't -1the note's value will be updated in the database.
+	 * If not the note will be inserted in the database and the id will be saved. 
+	 */
+	public void saveToDatabase(){
+		if(this.id != -1){
+			DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(), this.location,this.imagePath,this.reminderString);
+		}
+		//If this class not was opened with an intent or saved instance, it'd id is set to -1 and we are inserting the note in database.
+		else if(this.id == -1){
+			DatabaseHandler.getInstance(this).insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), this.location,this.imagePath,this.reminderString);
+			id = DatabaseHandler.getInstance(this).getLastId();
+		}
+	}
 	/**
 	 * Find the first line of the text in notetext in the layout and returning it as a string
 	 * @return String
