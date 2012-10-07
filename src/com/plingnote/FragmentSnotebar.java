@@ -86,12 +86,9 @@ public class FragmentSnotebar extends Fragment {
 		ll.setPadding(30, 30, 30, 30);
 		//Set icon on layout with onclicklistener.
 		for(IconView item : icons){	
-			
 			item.setOnClickListener(new PreviewListener());
 			item.setOnLongClickListener(new PreviewLongListner());
-			item.setClickable(true);
-			
-			//item.setPadding(30, 30, 30, 30);
+			item.setClickable(true);		
 			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 					(LayoutParams.FILL_PARENT), (LayoutParams.FILL_PARENT));
 			item.setLayoutParams(lp);
@@ -100,7 +97,7 @@ public class FragmentSnotebar extends Fragment {
 		}
 	}
 	/**
-	 * An onclicklistener
+	 * An on click listener
 	 * @author Julia
 	 *
 	 */
@@ -115,6 +112,11 @@ public class FragmentSnotebar extends Fragment {
 			FragmentSnotebar.this.replaceFragment(icon.getFragment());
 		}
 	}
+	/**
+	 * An on long click listener
+	 * @author Julia
+	 *
+	 */
 	private class PreviewLongListner implements OnLongClickListener {
 
 		public boolean onLongClick(View v) {

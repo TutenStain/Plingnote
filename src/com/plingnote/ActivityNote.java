@@ -28,7 +28,7 @@ public class ActivityNote extends FragmentActivity {
 	private Location location= new Location(0.0,0.0);
 	private String reminderString = "";
 	private String imagePath = "";
-	private FragmentSnotebar newFragment = null;
+	private FragmentSnotebar snotebarFragment = null;
 	private Fragment anotherFragment = null;
 	
 	/**
@@ -51,7 +51,7 @@ public class ActivityNote extends FragmentActivity {
 		try {   
 			anotherFragment = getSupportFragmentManager().getFragment(savedInstanceState,"anotherFragment");
 		}catch(Exception e){
-			if(newFragment ==null){
+			if(snotebarFragment ==null){
 				try{
 					if(this.id == -1){
 					if(getIntent().getExtras().getInt(IntentExtra.id.toString()) != -1){ 
@@ -153,17 +153,7 @@ public class ActivityNote extends FragmentActivity {
 			DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),fragment.getLocation(),this.imagePath,this.reminderString);		
 			location = fragment.getLocation();
 		}	
-		saveToDatabase();
-		newFragment = new FragmentSnotebar();
-		try{
-			Bundle bundleToFrag = new Bundle();
-			bundleToFrag.putInt(IntentExtra.id.toString(), this.id);
-			newFragment.setArguments(bundleToFrag);
-		} catch(Exception e){		        	
-		}
-		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, newFragment).commit();
-		getSupportFragmentManager().beginTransaction().remove(anotherFragment);
-		anotherFragment = null;
+		changeToSnotebarFragment();
 
 	}	
 	
@@ -190,15 +180,21 @@ public class ActivityNote extends FragmentActivity {
 			DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),null,this.imagePath,this.reminderString);		
 			location = null;
 		}	
+		changeToSnotebarFragment();
+	}
+	/**
+	 * Save to database, remove anotherFragment and replace it with snotbarFragment
+	 */
+	private void changeToSnotebarFragment(){
 		saveToDatabase();
-		newFragment = new FragmentSnotebar();
+		snotebarFragment = new FragmentSnotebar();
 		try{
 			Bundle bundleToFrag = new Bundle();
 			bundleToFrag.putInt(IntentExtra.id.toString(), this.id);
-			newFragment.setArguments(bundleToFrag);
+			snotebarFragment.setArguments(bundleToFrag);
 		} catch(Exception e){		        	
 		}
-		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, newFragment).commit();
+		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, snotebarFragment).commit();
 		getSupportFragmentManager().beginTransaction().remove(anotherFragment);
 		anotherFragment = null;
 	}
