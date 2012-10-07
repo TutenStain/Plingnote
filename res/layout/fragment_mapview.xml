@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:onClick="click"
             android:contentDescription="@string/cont_descr_compass_button"
-            android:src="@android:drawable/ic_menu_compass" >
+            android:src="@android:drawable/ic_menu_mylocation" >
         </ImageButton>
     </LinearLayout>
 
