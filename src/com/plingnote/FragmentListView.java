@@ -45,7 +45,8 @@ public class FragmentListView extends ListFragment {
 		super.onActivityCreated(savedState);
 
 		db = DatabaseHandler.getInstance(getActivity());
-
+		
+		// Fill list with data from database
 		refreshNotes();
 
 		// Make it possible for the user to select multiple items.
