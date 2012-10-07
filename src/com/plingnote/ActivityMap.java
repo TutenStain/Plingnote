@@ -1,5 +1,7 @@
 package com.plingnote;
 
+import java.util.List;
+
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
@@ -12,6 +14,7 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
 
 public class ActivityMap extends MapActivity implements LocationListener {
 	private final int DISABLE_GPS_WITH_ACCURACY_HIGHER_THEN = 200;
@@ -63,6 +66,12 @@ public class ActivityMap extends MapActivity implements LocationListener {
 	
 	private void zoomToCurrentPosition(){
 		mc.animateTo(new GeoPoint((int)(location.getLatitude() * 1E6), (int)(location.getLongitude() * 1E6)));
+		
+		List<Overlay> list = map.getOverlays();
+		list.clear();
+		list.add(new MapPinOverlay(this, map, new GeoPoint((int)(location.getLatitude() * 1E6), (int)(location.getLongitude() * 1E6))));
+		map.invalidate();
+		
 		mc.setZoom(19);
 	}
 
@@ -84,7 +93,7 @@ public class ActivityMap extends MapActivity implements LocationListener {
 	public void onLocationChanged(Location location) {
 		this.location = location;
 		
-		//If we get a fix that is accurate enough, disable location updates
+		//If we get a fix that is accurate enough, remove subscription from location updates
 		if(location.getAccuracy() <= DISABLE_GPS_WITH_ACCURACY_HIGHER_THEN){
 			locationManager.removeUpdates(this);
 		}
