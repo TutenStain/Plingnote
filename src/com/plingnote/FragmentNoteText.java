@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +23,11 @@ public class FragmentNoteText extends Fragment {
 	private View view;
 	private boolean isExisting = false;
 	private int id = -1;
-
+	private FragmentSnotebar snotebarFragment = null;
+	private Fragment pluginableFragment = null;
+	private boolean pluginFragmentisActive= false;
 	private Location location= null;
-	private String alarmString = "";
+	private String reminderString = "";
 	private String imagePath = "";
 
 	public void onCreate(Bundle savedInstanceState){
@@ -75,7 +78,63 @@ public class FragmentNoteText extends Fragment {
 			InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 			inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 		}
+		snotebarFragment = new FragmentSnotebar();
+		try{
+		Bundle bundleToFrag = new Bundle();
+		bundleToFrag.putInt(IntentExtra.id.toString(), this.id);
+		snotebarFragment.setArguments(bundleToFrag);
+		}
+		catch(Exception e){
+		}
+		getFragmentManager().beginTransaction().add(R.id.fragmentcontainer, snotebarFragment).commit();
 	}
+	/**
+	 * Remove snotebarFragment and replace with the param fragment.
+	 * @param fragment
+	 */
+	public void replaceFragment(Fragment fragment){
+		saveToDatabase();
+		pluginFragmentisActive = true;		
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.remove(snotebarFragment);
+		transaction.commit();
+		pluginableFragment = fragment;
+		getFragmentManager().beginTransaction().add(R.id.fragmentcontainer, pluginableFragment).commit();
+	}
+	
+	/**
+	 * Update the database with the pluginfragment values by checking what kind of plguin it is.
+	 * Makes a new snotebar and set id as argument.
+	 * Remove the pluginfragment and the new one.
+	 * @param icon
+	 */
+	public void replaceFragmentBack(PluginFragment fragment){
+		if(fragment.getKind().equals(NoteExtra.REMINDER)){
+			DatabaseHandler.getInstance(this.getActivity()).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),location,this.imagePath,fragment.getValue());			
+			reminderString = fragment.getValue();
+		}
+		if(fragment.getKind().equals(NoteExtra.IMAGE)){
+			DatabaseHandler.getInstance(this.getActivity()).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),location,fragment.getValue(),this.reminderString);			
+			imagePath = fragment.getValue();
+		}
+		if(fragment.getKind().equals(NoteExtra.LOCATION)){
+			DatabaseHandler.getInstance(this.getActivity()).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),fragment.getLocation(),this.imagePath,this.reminderString);		
+			location = fragment.getLocation();
+		}	
+		snotebarFragment = new FragmentSnotebar();
+		try{
+			Bundle bundleToFrag = new Bundle();
+			bundleToFrag.putInt(IntentExtra.id.toString(), this.id);
+			snotebarFragment.setArguments(bundleToFrag);
+		} catch(Exception e){		        	
+		}
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.remove(pluginableFragment);
+		transaction.commit();
+		pluginFragmentisActive = false;
+		getFragmentManager().beginTransaction().add(R.id.fragmentcontainer, snotebarFragment).commit();
+	}
+
 
 	@Override
 	public void onPause (){
@@ -89,11 +148,11 @@ public class FragmentNoteText extends Fragment {
 	 */
 	public void saveToDatabase(){
 		if(isExisting){
-			DatabaseHandler.getInstance(this.getActivity()).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(), this.location,this.imagePath,this.alarmString);
+			DatabaseHandler.getInstance(this.getActivity()).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(), this.location,this.imagePath,this.reminderString);
 		}
 		//If this class not was opened with an intent o saved instance we are inserting the note in database.
 		else if(!isExisting){
-			DatabaseHandler.getInstance(this.getActivity()).insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), this.location,this.imagePath,this.alarmString);
+			DatabaseHandler.getInstance(this.getActivity()).insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), this.location,this.imagePath,this.reminderString);
 			id = DatabaseHandler.getInstance(this.getActivity()).getLastId();
 			isExisting=true;
 		}
@@ -149,7 +208,7 @@ public class FragmentNoteText extends Fragment {
 				Note note = DatabaseHandler.getInstance(getActivity()).getNote(this.id);
 				location= note.getLocation();
 				imagePath = note.getImagePath();
-				alarmString = note.getAlarm();	
+				reminderString = note.getAlarm();	
 			}
 		} catch(Exception e){		        	
 		}
