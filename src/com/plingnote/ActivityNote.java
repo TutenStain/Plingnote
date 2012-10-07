@@ -85,6 +85,33 @@ public class ActivityNote extends FragmentActivity {
 	}
 	
 	/**
+	 * Find the first line of the text in notetext in the layout and returning it as a string
+	 * @return String
+	 */
+	public String getTitleofNoteText(){
+		EditText noteText = (EditText) findViewById(R.id.notetext);
+		if(noteText.getText().toString().length()>0){
+			String txt = noteText.getText().toString();
+			String[] txtLines = txt.split("\n");
+			return txtLines[0]+"\n";
+		}else
+			return "";
+	}
+
+	/**
+	 * Find the text(without the title) in notetext in the layout  as a string
+	 * @return String
+	 */
+	public String getTextofNoteText(){
+		EditText noteText = (EditText) findViewById(R.id.notetext);
+		String txt = noteText.getText().toString();
+		if(txt.length()-this.getTitleofNoteText().length() >0){
+			String text =txt.substring(this.getTitleofNoteText().length(), txt.length());
+			return text;
+		}else
+			return "";
+	}
+	/**
 	 * Makes the back button behave like the home button. Calling finish() if back button is pressed.
 	 */
 	@Override
