@@ -2,6 +2,8 @@ package com.plingnote;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -37,7 +39,10 @@ public class FragmentSnotebar extends Fragment {
 	 * @param fragment
 	 */
 	public void replaceFragment(Fragment fragment){
-		//to be implemented
+		Activity a = getActivity();
+		if(a instanceof ActivityNote) { 
+			((ActivityNote) a).replaceFragment(fragment);
+		}
 	}
 	/**
 	 * Call setIcons method
