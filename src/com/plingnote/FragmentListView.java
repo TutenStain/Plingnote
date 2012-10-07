@@ -1,3 +1,20 @@
+/**
+ * This file is part of Plingnote.
+ * Copyright (C) 2012 Linus Karlsson
+ * 
+ * Plingnote is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.plingnote;
 
 import java.util.ArrayList;
@@ -19,20 +36,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 /**
- * This file is part of Plingnote.
- * Copyright (C) 2012 Linus Karlsson, Barnabas Sapan
+ * A class displaying a list of notes from a database to the user.
  * 
- * Plingnote is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or any later version.
+ * @author Linus Karlsson
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 public class FragmentListView extends ListFragment {
 	private DatabaseHandler db;
@@ -45,7 +52,7 @@ public class FragmentListView extends ListFragment {
 		super.onActivityCreated(savedState);
 
 		db = DatabaseHandler.getInstance(getActivity());
-		
+
 		// Fill list with data from database
 		refreshNotes();
 
