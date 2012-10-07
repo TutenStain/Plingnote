@@ -19,6 +19,7 @@ public class NoteNotification extends BroadcastReceiver  {
 		//Start activity with the right id.
 		Intent i = new Intent();
 		i.setClassName("com.plingnote", "com.plingnote.ActivityNote");
+		//Setaction is needed to be set to something to make the intent open the right note.
 		i.setAction(Long.toString(System.currentTimeMillis()));     
 		try{
 			i.putExtra(IntentExtra.id.toString(), intent.getExtras().getInt(IntentExtra.id.toString()));
