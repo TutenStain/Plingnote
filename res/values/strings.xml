@@ -16,4 +16,9 @@
     <string name="search_activity">Search</string>
     <string name="no_search_match">No match for your search!</string>
     <string name="add_new_note">Add new note</string>
+    <string name="deletenote">Delete this note</string>
+    <string name="resetsnotebar">Reset snotebar</string>
+    <string name="cleannotetext">Clean notetext</string>
+    <string name="cleannote">Clean note and snotebar</string>
+
 </resources>

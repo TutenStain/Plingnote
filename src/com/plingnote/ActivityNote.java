@@ -31,6 +31,7 @@ public class ActivityNote extends FragmentActivity {
 	private String imagePath = "";
 	private FragmentSnotebar snotebarFragment = null;
 	private Fragment anotherFragment = null;
+	private boolean deleteNote = false;
 	
 	/**
 	 * Set content view and try to fetch id from saved instance or intent,
@@ -161,6 +162,7 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public void onPause(){
 		super.onPause();
+		if(deleteNote == false)
 		saveToDatabase();
 	}
 	
@@ -268,11 +270,13 @@ public class ActivityNote extends FragmentActivity {
 	
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
+		if(deleteNote == false){
 		super.onSaveInstanceState(savedInstanceState);
 		savedInstanceState.putInt(IntentExtra.id.toString(), this.id);
 		//If anotherFragment isn't null is should be saved
 		if(anotherFragment != null){
 			getSupportFragmentManager().putFragment(savedInstanceState, "anotherFragment", anotherFragment);
+		}
 		}
 	}
 	
@@ -299,15 +303,55 @@ public class ActivityNote extends FragmentActivity {
 			inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
 			finish();
 			return true;
-			
+		case R.id.delete_note:
+			if(this.id!=-1)
+			DatabaseHandler.getInstance(this).deleteNote(this.id);
+			deleteNote = true;
+			this.finish();
+			return true;
+		case R.id.reset_snotebar:
+			deleteAllValues();
+			return true;
+		case R.id.clean_notetext:
+			deleteNoteText();
+			return true;
+		case R.id.clean_note:
+			deleteNoteText();
+			deleteAllValues();
+			return true;
 	
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	/*@Override
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_note, menu);
 		return true;
-	}*/
+	}
+	
+	public void deleteNoteText(){
+		EditText noteText = (EditText)findViewById(R.id.notetext);
+			noteText.setText(""); 
+			noteText.invalidate(); 
+			saveToDatabase();
+		}
+	
+public void deleteAllValues(){		
+		reminderString = "";		
+		imagePath = "";	
+		location = null;
+		DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),location,this.imagePath,this.reminderString);			
+	snotebarFragment = new FragmentSnotebar();
+	try{
+		Bundle bundleToFrag = new Bundle();
+		bundleToFrag.putInt(IntentExtra.id.toString(), this.id);
+		snotebarFragment.setArguments(bundleToFrag);
+	} catch(Exception e){		        	
+	}
+	getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, snotebarFragment).commit();
+}
+	/*"cleanNoteandExtra
+	"resetSnotebar"
+	"deleteNote"*/
 }
