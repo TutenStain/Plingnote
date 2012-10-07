@@ -79,6 +79,14 @@ public class FragmentSnotebar extends Fragment {
 			ll.invalidate();
 		}
 	}
+	/**
+	 * Passing parameter fragment to fragmentnotetext method replace.
+	 * @param another
+	 */
+	public void replaceFragment(Fragment another){
+		FragmentNoteText f = (FragmentNoteText)getFragmentManager().findFragmentById(R.id.fragmentContainer);
+		f.replaceFragment(new FragmentReminder());
+	}
 	
 	/**
 	 * An onclicklistener
@@ -93,6 +101,7 @@ public class FragmentSnotebar extends Fragment {
 		 */
 		public void onClick(View v) {		
 			IconView dv = (IconView)v;
+			FragmentSnotebar.this.replaceFragment(dv.getFragment());	
 		}
 	}
 
