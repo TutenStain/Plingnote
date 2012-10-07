@@ -15,8 +15,8 @@
     <PreferenceCategory android:title="About">
         <com.plingnote.PreferenceDialogInfo
         	android:title="Plingnote" 
-            android:summary="Plingnote Android version 0.1"
-            android:dialogMessage="Placeholder"  
+            android:summary="Plingnote Android Release 1"
+            android:dialogMessage="Plingnote Android Release 1\nThis is the first release of the Plingnote application."  
             android:dialogIcon="@android:drawable/ic_dialog_info" />
         <com.plingnote.PreferenceDialogEmail
         	android:title="Send feedback" 
