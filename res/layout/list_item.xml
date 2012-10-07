@@ -42,7 +42,6 @@
         android:gravity="right"
         android:paddingRight="4sp"
         android:paddingTop="1sp"
-        android:text="i går"
         android:textColor="@color/list_item_date_color" />
 
 </RelativeLayout>

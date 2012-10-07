@@ -17,6 +17,9 @@
 
 package com.plingnote;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -28,8 +31,9 @@ import android.widget.TextView;
 
 /**
  * A configured adapter for viewing note objects in a list.
+ * 
  * @author Linus Karlsson
- *
+ * 
  */
 public class NoteAdapter extends ArrayAdapter<Note> {
 	private List<Note> notes;
@@ -58,6 +62,7 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 			// Create textviews in defined XML files.
 			TextView title = (TextView) view.findViewById(R.id.title);
 			TextView text = (TextView) view.findViewById(R.id.text);
+			TextView date = (TextView) view.findViewById(R.id.date);
 
 			// If the views exists, assign text to it.
 			if (title != null) {
@@ -67,9 +72,126 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 			if (text != null) {
 				text.setText(n.getText());
 			}
+
+			if (date != null) {
+				String dateFormat = customDateFormat(n.getDate());
+				date.setText(dateFormat);
+			}
 		}
 
 		return view;
+	}
+
+	/**
+	 * Changes the way the date is displayed.
+	 * 
+	 * Written on the same day (hh:mm) Written in same week (monday, tuesday...)
+	 * Older notes are displayed as (yyyy-mm-dd)
+	 * 
+	 * @return the format of the date
+	 */
+	public String customDateFormat(String date) {
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss");
+
+		Date noteDate = new Date();
+		Date currentDate = new Date();
+
+		// Initiate the string with "null" if the try-catch statement fails
+		String dateText = null;
+
+		Calendar calendar = Calendar.getInstance();
+
+		try {
+			// Convert String to Date for easier manipulation.
+			noteDate = dateFormat.parse(date);
+			calendar.setTime(noteDate);
+
+			// If note is created on current date
+			if (isCreatedThisDay(currentDate, noteDate)) {
+				dateText = calendar.get(Calendar.HOUR_OF_DAY) + ":"
+						+ calendar.get(Calendar.MINUTE);
+			}
+
+			// If note is created this week
+			else if (isCreatedThisWeek(currentDate, noteDate)) {
+				dateText = getDayOfWeek(noteDate);
+			}
+
+			// If none of the previous statements were true.
+			else {
+				dateText = calendar.get(Calendar.YEAR)
+						+ calendar.get(Calendar.MONTH)
+						+ calendar.get(Calendar.SECOND) + "";
+			}
+
+		} catch (java.text.ParseException e) {
+			e.printStackTrace();
+		}
+
+		return dateText;
+	}
+
+	/**
+	 * Checks if note is created on current day
+	 * 
+	 * @param currentDate
+	 *            the current date
+	 * @param dateOfCreation
+	 *            the date of when a note was created
+	 * @param dateFormat
+	 *            the date format
+	 * @return true if the note is created on the current day.
+	 */
+	public boolean isCreatedThisDay(Date currentDate, Date noteDate) {
+
+		// Change date format to exclude time
+		SimpleDateFormat temp = new SimpleDateFormat("yyyyMMdd");
+		return temp.format(currentDate).equals(temp.format(noteDate));
+	}
+
+	/**
+	 * Checks if the note is created in current week
+	 * 
+	 * @param currentDate
+	 *            the current date
+	 * @param dateOfCreation
+	 *            the date of when a note was created
+	 * @return true if notes is created in the current week.
+	 */
+	public boolean isCreatedThisWeek(Date currentDate, Date noteDate) {
+		Calendar calendar = Calendar.getInstance();
+
+		// Get current week
+		calendar.setTime(currentDate);
+		int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+
+		// Get week when note was created
+		calendar.setTime(noteDate);
+		int weekOfCreation = calendar.get(Calendar.WEEK_OF_YEAR);
+
+		return currentWeek == weekOfCreation;
+	}
+
+	/**
+	 * Checks which day of the week a note was created.
+	 * 
+	 * @param dateOfCreation
+	 *            the date of when a note was created
+	 * @return which weekday the note was created.
+	 */
+	public String getDayOfWeek(Date noteDate) {
+		// Array containing weekdays
+		String[] weekdays = new String[] { "monday", "tuesday", "wednesday",
+				"thursday", "friday", "saturday", "sunday" };
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(noteDate);
+
+		// Since week starts on 1 and array on 0, we have to subtract 1.
+		return weekdays[calendar.get(Calendar.DAY_OF_WEEK) - 1];
+
 	}
 
 }
