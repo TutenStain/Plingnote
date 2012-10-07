@@ -2,12 +2,16 @@ package com.plingnote;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
 /**
@@ -17,7 +21,7 @@ import android.widget.LinearLayout.LayoutParams;
  *
  */
 public class ActivityNote extends FragmentActivity {
-	FragmentNoteText noteFragment;
+	private int id = -1;
 	
 	/**
 	 * Makes a new framelayout and set the framelayout id. Set activity's layout. If the saved instance is null, the class makes a new Fragmentnotetext.
@@ -42,6 +46,37 @@ public class ActivityNote extends FragmentActivity {
 			}
 			getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, newFragment).commit(); 
 		}   
+	}
+	
+	/**
+	 *Set the view noteText text to the latest inserted note's text if is during editing.
+	 *Sets the curser of the view noteText to the bottom of the text.
+	 */
+	@Override
+	public void onStart(){
+		super.onStart();
+		EditText noteText = (EditText)findViewById(R.id.notetext);
+		Rect rec = Utils.getScreenPixels(this);
+		int height = rec.height();
+		int widht = rec.width();	
+		getResources().getConfiguration();
+		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+			int h = height/10;
+			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h*4));
+		}
+		else{
+			int h = height/15;
+			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h*9));
+		}	
+		//If this class was opened with an intent or saved instances, the note text will get the text from the database
+		if(this.id != -1){
+			String txt = (DatabaseHandler.getInstance(this).getNote(this.id).getTitle());
+			txt = txt +(DatabaseHandler.getInstance(this).getNote(this.id).getText());
+			//The cursor position will be saved even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
+			noteText.setText(""); 
+			noteText.append(txt);
+			noteText.invalidate(); 
+		}
 	}
 	
 	@Override
