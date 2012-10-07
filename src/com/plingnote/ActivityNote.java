@@ -123,10 +123,58 @@ public class ActivityNote extends FragmentActivity {
 			noteText.invalidate(); 
 		}
 	}
+	/**
+	 * Remove snotebarFragment and replace with the param fragment.
+	 * @param fragment
+	 */
+	public void replaceFragment(Fragment fragment){
+		Log.d("replace", this.id +"");
+		saveToDatabase();
+		anotherFragment= fragment;
+		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, anotherFragment).commit();
+	}	
+	/**
+	 * Update the database with the pluginfragment values by checking what kind of plguin it is.
+	 * Makes a new snotebar and set id as argument.
+	 * Remove the pluginfragment and the new one.
+	 * @param fragment
+	 */
+	public void replaceFragmentBack(PluginFragment fragment){
+		if(fragment.getKind().equals(NoteExtra.REMINDER)){
+			DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),location,this.imagePath,fragment.getValue());			
+			reminderString = fragment.getValue();
+		}
+		if(fragment.getKind().equals(NoteExtra.IMAGE)){
+			DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),location,fragment.getValue(),this.reminderString);			
+			imagePath = fragment.getValue();
+		}
+		if(fragment.getKind().equals(NoteExtra.LOCATION)){
+			DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),fragment.getLocation(),this.imagePath,this.reminderString);		
+			location = fragment.getLocation();
+		}	
+		saveToDatabase();
+		newFragment = new FragmentSnotebar();
+		try{
+			Bundle bundleToFrag = new Bundle();
+			bundleToFrag.putInt(IntentExtra.id.toString(), this.id);
+			newFragment.setArguments(bundleToFrag);
+		} catch(Exception e){		        	
+		}
+		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, newFragment).commit();
+		getSupportFragmentManager().beginTransaction().remove(anotherFragment);
+		anotherFragment = null;
+
+	}
+	
 	
 	@Override
 	public void onPause(){
 		super.onPause();
+		saveToDatabase();
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	/**
