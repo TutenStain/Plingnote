@@ -53,10 +53,13 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		DatePicker datepicker = (DatePicker)this.view.findViewById(R.id.datePicker);
 		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);
 		Intent intent = new Intent(getActivity(), NoteNotification.class);
+		ActivityNote activityNote = (ActivityNote)getActivity();
+		intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,
 				intent, PendingIntent.FLAG_ONE_SHOT);
-		Calendar calendar =  Calendar.getInstance();
+		Calendar calendar =  Calendar.getInstance();	
 		calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
+		value = calendar.getTime()+"";
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);        
 	}
@@ -86,7 +89,8 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 	 * Call replacebackfragment in the activity/fragment that host this fragment
 	 */
 	public void replaceBackFragment() {
-		//To be implemented
+		ActivityNote f = (ActivityNote)getActivity();
+		f.replaceFragmentBack(this);
 	}	 
 
 }

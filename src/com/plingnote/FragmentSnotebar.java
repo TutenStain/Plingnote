@@ -17,7 +17,6 @@ import android.widget.LinearLayout.LayoutParams;
  * @author Julia Gustafsson
  *
  */
-
 public class FragmentSnotebar extends Fragment {
 	private View view;
 	private int id = -1;
