@@ -7,6 +7,7 @@ public class Note {
 	private Location location;
 	private String imagePath;
 	private String alarm;
+	private String date;
 
 	/**
 	 * 
@@ -15,13 +16,14 @@ public class Note {
 	 * @param txt text of this Note
 	 * @param l location of this Note
 	 */
-	public Note(int id, String ti, String txt, Location l, String path, String alarm){
+	public Note(int id, String ti, String txt, Location l, String path, String alarm, String date){
 		this.id = id;
 		this.title = ti;
 		this.text = txt;
 		this.location = l;
 		this.imagePath = path;
 		this.alarm = alarm;
+		this.date = date;
 	}
 	
 	/**
@@ -72,5 +74,12 @@ public class Note {
 		return this.alarm;
 	}
 	
-
+	/**
+	 * 
+	 * @return date and time of which this Note was created
+	 */
+	public String getDate(){
+		return this.date;
+	}
+	
 }

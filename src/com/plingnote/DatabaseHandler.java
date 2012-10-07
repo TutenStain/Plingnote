@@ -1,6 +1,8 @@
 package com.plingnote;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -26,12 +28,13 @@ public class DatabaseHandler {
 	private static final String KEY_LATITUDE = "Latitude";
 	private static final String KEY_IMAGEPATH = "ImagePath";
 	private static final String KEY_ALARM = "Alarm";
+	private static final String KEY_DATE = "Date";
 
 	/* SQL statement to create Note table using fts3 */
 	private static final String CREATE_FTS_TABLE = "create virtual table " + TABLE_NOTE + " using fts3("
 			+ KEY_TITLE + " String, " + KEY_TEXT + " String, " 
 			+ KEY_LONGITUDE +" Double not null, "+ KEY_LATITUDE +" Double not null, " 
-			+ KEY_IMAGEPATH + " String, " + KEY_ALARM + " String);";
+			+ KEY_IMAGEPATH + " String, " + KEY_ALARM + " String, " + KEY_DATE + " String);";
 
 	private Context context;
 	private DBHelper dbHelp;
@@ -91,6 +94,9 @@ public class DatabaseHandler {
 		cv.put(KEY_LATITUDE, l.getLatitude());
 		cv.put(KEY_IMAGEPATH, path);
 		cv.put(KEY_ALARM, alarm);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date date = new Date();
+		cv.put(KEY_DATE, dateFormat.format(date));
 		long tmp = this.db.insert(TABLE_NOTE, null, cv);
 		this.close();
 		return tmp;
@@ -122,7 +128,7 @@ public class DatabaseHandler {
 
 	private Cursor getAllNotes(){
 		return this.db.query(TABLE_NOTE, new String[]{ ID, KEY_TITLE, KEY_TEXT,
-				KEY_LONGITUDE, KEY_LATITUDE, KEY_IMAGEPATH, KEY_ALARM },
+				KEY_LONGITUDE, KEY_LATITUDE, KEY_IMAGEPATH, KEY_ALARM, KEY_DATE },
 				null, null,null, null, null);
 	}
 
@@ -164,7 +170,8 @@ public class DatabaseHandler {
 		Double latitude = Double.parseDouble(c.getString(4));
 		String imagePath = c.getString(5);
 		String alarm = c.getString(6);
-		Note n = new Note(id, title, text, new Location(longitude, latitude), imagePath, alarm);
+		String date = c.getString(7);
+		Note n = new Note(id, title, text, new Location(longitude, latitude), imagePath, alarm, date);
 		this.close();
 		return n;
 	}
@@ -213,7 +220,8 @@ public class DatabaseHandler {
 				Double latitude = Double.parseDouble(c.getString(4));
 				String imagePath = c.getString(5);
 				String alarm = c.getString(6);
-				l.add(new Note(id, title, text, new Location(longitude, latitude), imagePath, alarm));
+				String date = c.getString(7);
+				l.add(new Note(id, title, text, new Location(longitude, latitude), imagePath, alarm, date));
 			}while(c.moveToNext());
 		}
 		return l;
