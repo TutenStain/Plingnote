@@ -19,8 +19,9 @@ import android.widget.TimePicker;
  * @author Julia Gustafsson
  *
  */
-public class FragmentReminder extends Fragment {
+public class FragmentReminder extends Fragment implements PluginFragment{
 	private View view;
+	private String value;
 
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
@@ -37,13 +38,14 @@ public class FragmentReminder extends Fragment {
 
 		cancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {	    
-				//To be implemented
+				replaceBackFragment();
 			}
 		});	
 		okey.setOnClickListener(new View.OnClickListener() {
 			//Save the time and the the alarm in the method savetime
 			public void onClick(View v) {
-				saveTime(v);	    
+				saveTime(v);
+				replaceBackFragment();
 			}
 		});
 	}
@@ -57,6 +59,34 @@ public class FragmentReminder extends Fragment {
 		calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);        
+	}
+	
+	/**
+	 * Return the value of this appliation
+	 */
+	public String getValue() {
+		return value;
+	}
+	
+	/**
+	 * Return a location if this fragment is containing one
+	 */
+	public Location getLocation() {
+		return null;
+	}
+	
+	/**
+	 * Return which kind of note extra this fragment is
+	 */
+	public NoteExtra getKind() {
+		return NoteExtra.REMINDER;
+	}
+	
+	/**
+	 * Call replacebackfragment in the activity/fragment that host this fragment
+	 */
+	public void replaceBackFragment() {
+		//To be implemented
 	}	 
 
 }
