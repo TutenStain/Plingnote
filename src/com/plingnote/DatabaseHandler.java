@@ -230,6 +230,23 @@ public class DatabaseHandler {
 		this.close();
 		return b;
 	}
+	
+	/**
+	 * 
+	 * @param id id of the note which date will be refreshed
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean refreshDate(int id){
+		this.open();
+		ContentValues cv = new ContentValues();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date date = new Date();
+		cv.put(KEY_DATE, dateFormat.format(date));
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		return b;
+		
+	}
 
 	/**
 	 * 
