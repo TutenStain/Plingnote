@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearlayout"
+    android:id="@+id/activitynote"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:tag="@string/search_activity" >
+    android:orientation="vertical" >
 
     <EditText
         android:id="@+id/notetext"
@@ -15,5 +14,12 @@
         android:gravity="top"
         android:hint="@string/notetexthint"
         android:singleLine="false" />
+
+    <LinearLayout
+        android:id="@+id/fragmentcontainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+    </LinearLayout>
 
 </LinearLayout>

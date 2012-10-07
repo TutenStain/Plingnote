@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -26,6 +29,8 @@ public class ActivityNote extends FragmentActivity {
 	private Location location= new Location(0.0,0.0);
 	private String reminderString = "";
 	private String imagePath = "";
+	private FragmentSnotebar newFragment = null;
+	private Fragment anotherFragment = null;
 	
 	/**
 	 * Makes a new framelayout and set the framelayout id. Set activity's layout. If the saved instance is null, the class makes a new Fragmentnotetext.
@@ -35,22 +40,58 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.fragment_notetext);
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		FrameLayout fragmentContainer = new FrameLayout(this);
-		fragmentContainer.setId(R.id.fragmentContainer);
-		setContentView(fragmentContainer, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-		if(savedInstanceState == null){
-			FragmentNoteText newFragment = new FragmentNoteText();
-			try{
-				if(getIntent().getExtras().getInt(Utils.QUERY_NOTE) != -1){ //Maybe not necessary
-					newFragment.setArguments(getIntent().getExtras());
+		try{
+			id =savedInstanceState.getInt(IntentExtra.id.toString());
+		}
+		catch(Exception eka)
+		{
+		}
+		try {   
+			anotherFragment = getSupportFragmentManager().getFragment(savedInstanceState,"anotherFragment");
+		}catch(Exception e){
+			if(newFragment ==null){
+				try{
+					if(this.id == -1){
+					if(getIntent().getExtras().getInt(IntentExtra.id.toString()) != -1){ 
+						id = getIntent().getExtras().getInt(IntentExtra.id.toString());
+					}
+					}
+				}catch(Exception ek)
+				{
 				}
-			} catch(Exception e){		        	
+				FragmentSnotebar newFragment = new FragmentSnotebar();
+				newFragment.setRetainInstance(true);
+				if(this.id != -1){
+					Bundle args = new Bundle();
+					args.putInt(IntentExtra.id.toString(), this.id);
+					newFragment.setArguments(args);
+				}
+				FragmentManager fragmentManager = getSupportFragmentManager();
+				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+				fragmentTransaction.attach(newFragment);
+				fragmentTransaction.add(R.id.fragmentcontainer, newFragment);
+				fragmentTransaction.commit();
 			}
-			getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, newFragment).commit(); 
-		}   
-	}
+		}
+		
+		//Fetching values from database
+		try{
+			reminderString = DatabaseHandler.getInstance(this).getNote(this.id).getAlarm();
+		}catch(Exception e){	
+		}
+		try{
+			imagePath = DatabaseHandler.getInstance(this).getNote(this.id).getImagePath();
+		}catch(Exception e){	
+		}
+		try{
+			location = DatabaseHandler.getInstance(this).getNote(this.id).getLocation();
+		}catch(Exception e){	
+		}
+	}	   
+	
 	
 	/**
 	 *Set the view noteText text to the latest inserted note's text if is during editing.
