@@ -18,6 +18,7 @@
 package com.plingnote;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
@@ -166,9 +167,13 @@ public class FragmentListView extends ListFragment {
 		// Clear list from previous notes.
 		clearNotes();
 
+		// Fill the list with info from database.
 		for (Note n : db.getNoteList()) {
 			this.addNote(n);
 		}
+
+		// Order notes after when they last were edited.
+		Collections.sort(notes, new NoteComparator());
 	}
 
 	/**
@@ -234,7 +239,7 @@ public class FragmentListView extends ListFragment {
 	}
 
 	/**
-	 * Add a note to the listview
+	 * Add a note to the listview.
 	 * 
 	 * @param n
 	 *            the note to add
