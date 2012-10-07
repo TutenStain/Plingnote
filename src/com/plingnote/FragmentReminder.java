@@ -25,7 +25,7 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.fragment_alarm, container, false);		
+		view = inflater.inflate(R.layout.fragment_reminder, container, false);		
 		return view;		
 	}
 	/**
@@ -49,19 +49,22 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 			}
 		});
 	}
+	/**
+	 * Make an intent to broadcastreciever notenotification and save the time in datepicker and timepicker and set alarm by alarmmanager.
+	 * @param view
+	 */
 	public void saveTime(View view){
 		DatePicker datepicker = (DatePicker)this.view.findViewById(R.id.datePicker);
-		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);
+		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);	    	
 		Intent intent = new Intent(getActivity(), NoteNotification.class);
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,
-				intent, PendingIntent.FLAG_ONE_SHOT);
-		Calendar calendar =  Calendar.getInstance();	
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
+		Calendar calendar =  Calendar.getInstance();
 		calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
 		value = calendar.getTime()+"";
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);        
+		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);       
 	}
 	
 	/**
