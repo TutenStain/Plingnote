@@ -137,6 +137,51 @@ public class DatabaseHandler {
 		this.close();
 		return b;
 	}
+	
+	/**
+	 * 
+	 * @param id id of the note to delete the title from
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean deleteTitle(int id){
+		return this.updateTitle(id, null);
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to delete the text from
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean deleteText(int id){
+		return this.updateTitle(id, null);
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to delete the location from
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean deleteLocation(int id){
+		return this.updateLocation(id, null);
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to delete the image path from
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean deleteImagePath(int id){
+		return this.updateImagePath(id, null);
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to delete the alarm from
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean deleteAlarm(int id){
+		return this.updateAlarm(id, null);
+	}
 
 	/**
 	 * 
