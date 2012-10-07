@@ -293,21 +293,21 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		
-		
+		switch (item.getItemId()) {	
 		case android.R.id.home:
 			InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 			inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
 			finish();
 			return true;
+			
+	
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	@Override
+	/*@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+		getMenuInflater().inflate(R.menu.activity_note, menu);
 		return true;
-	}
+	}*/
 }

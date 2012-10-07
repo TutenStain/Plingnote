@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 /**
@@ -152,6 +153,11 @@ public class FragmentSnotebar extends Fragment {
 			@Override
 			public Dialog onCreateDialog(Bundle savedInstanceState) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				
+				//FragmentSnotebar.this.getActivity().getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,android.R.drawable.ic_dialog_alert); 
+				
+				builder.setTitle("Reset");
+				builder.setIcon(android.R.drawable.ic_dialog_alert);
 				builder.setMessage("Do you want to reset the " + icon.getDefaultText() + " ?");
 				builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 					//Call methods that will delete the data
