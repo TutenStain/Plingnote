@@ -55,9 +55,8 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);	    	
 		Intent intent = new Intent(getActivity(), NoteNotification.class);
 		noteFragment = (FragmentNoteText)getFragmentManager().findFragmentById(R.id.fragmentContainer);
-		intent.putExtra(IntentExtra.id.toString(),noteFragment.getId()); // Måste spara note innan...
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,
-				intent, PendingIntent.FLAG_ONE_SHOT);
+		intent.putExtra(IntentExtra.id.toString(),noteFragment.getId()); 
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
 		Calendar calendar =  Calendar.getInstance();
 		calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
 		value = calendar.getTime()+"";

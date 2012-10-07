@@ -24,7 +24,7 @@ public class NoteNotification extends BroadcastReceiver  {
 			i.putExtra(IntentExtra.id.toString(), intent.getExtras().getInt(IntentExtra.id.toString()));
 		}catch(Exception e){  	
 		}
-		//context.startActivity(i);
+		
 		notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		//Set the from which application the notifcation is
 		CharSequence from = "Plingnote";
