@@ -1,14 +1,3 @@
-package com.plingnote;
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.preference.DialogPreference;
-import android.util.AttributeSet;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
-
 /**
  * This file is part of Plingnote.
  * Copyright (C) 2012 Barnabas Sapan
@@ -25,6 +14,17 @@ import android.widget.TextView;
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+package com.plingnote;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.preference.DialogPreference;
+import android.util.AttributeSet;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class PreferenceDialogInfo extends DialogPreference{
 	private String dialogeMessage;
