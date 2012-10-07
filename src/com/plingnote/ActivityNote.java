@@ -15,9 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 
 /**
  * A note fragment activity with a layout holding a fragment. 
@@ -32,7 +30,7 @@ public class ActivityNote extends FragmentActivity {
 	private FragmentSnotebar snotebarFragment = null;
 	private Fragment anotherFragment = null;
 	private boolean deleteNote = false;
-	
+
 	/**
 	 * Set content view and try to fetch id from saved instance or intent,
 	 * Decide which fragment to be shown 'anotherFragment' or new fragment and if new fragment should be instanced and added again. 
@@ -56,9 +54,9 @@ public class ActivityNote extends FragmentActivity {
 			if(snotebarFragment ==null){
 				try{
 					if(this.id == -1){
-					if(getIntent().getExtras().getInt(IntentExtra.id.toString()) != -1){ 
-						id = getIntent().getExtras().getInt(IntentExtra.id.toString());
-					}
+						if(getIntent().getExtras().getInt(IntentExtra.id.toString()) != -1){ 
+							id = getIntent().getExtras().getInt(IntentExtra.id.toString());
+						}
 					}
 				}catch(Exception ek)
 				{
@@ -77,7 +75,7 @@ public class ActivityNote extends FragmentActivity {
 				fragmentTransaction.commit();
 			}
 		}
-		
+
 		//Fetching values from database
 		try{
 			reminderString = DatabaseHandler.getInstance(this).getNote(this.id).getAlarm();
@@ -92,8 +90,8 @@ public class ActivityNote extends FragmentActivity {
 		}catch(Exception e){	
 		}
 	}	   
-	
-	
+
+
 	/**
 	 *Set the view noteText text to the latest inserted note's text if is during editing.
 	 *Sets the curser of the view noteText to the bottom of the text.
@@ -124,7 +122,7 @@ public class ActivityNote extends FragmentActivity {
 			noteText.invalidate(); 
 		}
 	}
-	
+
 	/**
 	 * Remove snotebarFragment and replace with the param fragment.
 	 * @param fragment
@@ -135,7 +133,7 @@ public class ActivityNote extends FragmentActivity {
 		anotherFragment= fragment;
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, anotherFragment).commit();
 	}	
-	
+
 	/**
 	 * Update the database with the pluginfragment values by checking what kind of plguin it is.
 	 * Makes a new snotebar and set id as argument.
@@ -158,38 +156,43 @@ public class ActivityNote extends FragmentActivity {
 		changeToSnotebarFragment();
 
 	}	
-	
+	/**
+	 * if the boolean deletenote is false the information will be saved to the database.
+	 */
 	@Override
 	public void onPause(){
 		super.onPause();
 		if(deleteNote == false)
-		saveToDatabase();
+			saveToDatabase();
 	}
-	
+	/**
+	 * Return the id 
+	 * @return id
+	 */
 	public int getId() {
 		return id;
 	}
 	public boolean checkIfValueIsSetted(NoteExtra noteExtra){
 		if(this.id != -1){
-		if(noteExtra.equals(NoteExtra.REMINDER)){
-			if(!(this.reminderString.equals(""))){
-				return true;
+			if(noteExtra.equals(NoteExtra.REMINDER)){
+				if(!(this.reminderString.equals(""))){
+					return true;
+				}
 			}
-		}
-		if(noteExtra.equals(NoteExtra.IMAGE)){
-			if(!(this.imagePath.equals(""))){
-				return true;
+			if(noteExtra.equals(NoteExtra.IMAGE)){
+				if(!(this.imagePath.equals(""))){
+					return true;
+				}
 			}
-		}
-		if(noteExtra.equals(NoteExtra.LOCATION)){
-			if(!(this.location == null)){
-				return true;
-			}
-		}	
+			if(noteExtra.equals(NoteExtra.LOCATION)){
+				if(!(this.location == null)){
+					return true;
+				}
+			}	
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Delete value from database
 	 * @param noteExtra
@@ -225,7 +228,7 @@ public class ActivityNote extends FragmentActivity {
 		getSupportFragmentManager().beginTransaction().remove(anotherFragment);
 		anotherFragment = null;
 	}
-	
+
 	/**
 	 * Get the text from the view noteText. If the id isn't -1the note's value will be updated in the database.
 	 * If not the note will be inserted in the database and the id will be saved. 
@@ -268,18 +271,21 @@ public class ActivityNote extends FragmentActivity {
 			return "";
 	}
 	
+	/**
+	 * If the boolean 'deletenote' is false,thismethod will save the id and 'anotherFragment' if it isn't null.
+	 */
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		if(deleteNote == false){
-		super.onSaveInstanceState(savedInstanceState);
-		savedInstanceState.putInt(IntentExtra.id.toString(), this.id);
-		//If anotherFragment isn't null is should be saved
-		if(anotherFragment != null){
-			getSupportFragmentManager().putFragment(savedInstanceState, "anotherFragment", anotherFragment);
-		}
+			super.onSaveInstanceState(savedInstanceState);
+			savedInstanceState.putInt(IntentExtra.id.toString(), this.id);
+			//If anotherFragment isn't null is should be saved
+			if(anotherFragment != null){
+				getSupportFragmentManager().putFragment(savedInstanceState, "anotherFragment", anotherFragment);
+			}
 		}
 	}
-	
+
 	/**
 	 * Makes the back button behave like the home button. Calling finish() if back button is pressed.
 	 */
@@ -291,9 +297,10 @@ public class ActivityNote extends FragmentActivity {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 	/**
 	 * If choosing to go back to home, the keyboard will be hided and call finish.
+	 * If choosing to delete note, the current note will be deleted and the note activity will be deleted
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -305,7 +312,7 @@ public class ActivityNote extends FragmentActivity {
 			return true;
 		case R.id.delete_note:
 			if(this.id!=-1)
-			DatabaseHandler.getInstance(this).deleteNote(this.id);
+				DatabaseHandler.getInstance(this).deleteNote(this.id);
 			deleteNote = true;
 			this.finish();
 			return true;
@@ -319,39 +326,43 @@ public class ActivityNote extends FragmentActivity {
 			deleteNoteText();
 			deleteAllValues();
 			return true;
-	
+
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_note, menu);
 		return true;
 	}
-	
+
+	/*
+	 * Delete the note's text and title
+	 */
 	public void deleteNoteText(){
 		EditText noteText = (EditText)findViewById(R.id.notetext);
-			noteText.setText(""); 
-			noteText.invalidate(); 
-			saveToDatabase();
-		}
+		noteText.setText(""); 
+		noteText.invalidate(); 
+		saveToDatabase();
+	}
 	
-public void deleteAllValues(){		
+	/**
+	 * Delete all note extra values location,imagepath,reminder.
+	 */
+	public void deleteAllValues(){		
 		reminderString = "";		
 		imagePath = "";	
 		location = null;
 		DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),location,this.imagePath,this.reminderString);			
-	snotebarFragment = new FragmentSnotebar();
-	try{
-		Bundle bundleToFrag = new Bundle();
-		bundleToFrag.putInt(IntentExtra.id.toString(), this.id);
-		snotebarFragment.setArguments(bundleToFrag);
-	} catch(Exception e){		        	
+		snotebarFragment = new FragmentSnotebar();
+		try{
+			Bundle bundleToFrag = new Bundle();
+			bundleToFrag.putInt(IntentExtra.id.toString(), this.id);
+			snotebarFragment.setArguments(bundleToFrag);
+		} catch(Exception e){		        	
+		}
+		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, snotebarFragment).commit();
 	}
-	getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, snotebarFragment).commit();
-}
-	/*"cleanNoteandExtra
-	"resetSnotebar"
-	"deleteNote"*/
 }
