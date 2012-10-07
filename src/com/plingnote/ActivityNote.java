@@ -33,14 +33,13 @@ public class ActivityNote extends FragmentActivity {
 	private Fragment anotherFragment = null;
 	
 	/**
-	 * Makes a new framelayout and set the framelayout id. Set activity's layout. If the saved instance is null, the class makes a new Fragmentnotetext.
-	 *  If an intent have put extras, the fragment gets those as arguments.
-	 *  The fragment will be added to the framelayout.
+	 * Set content view and try to fetch id from saved instance or intent,
+	 * Decide which fragment to be shown 'anotherFragment' or new fragment and if new fragment should be instanieted added again. 
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fragment_notetext);
+		setContentView(R.layout.activity_note);
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		try{
@@ -218,6 +217,8 @@ public class ActivityNote extends FragmentActivity {
 		}else
 			return "";
 	}
+	
+	
 	/**
 	 * Makes the back button behave like the home button. Calling finish() if back button is pressed.
 	 */
