@@ -14,13 +14,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DatabaseHandler {
-	/* Name of database file */
+	// Name of database file
 	private static final String DB_NAME = "notedb";
 
-	/* Table */
+	// Table
 	private static final String TABLE_NOTE = "Note";
 
-	/* Columns */
+	// Columns
 	private static final String ID = "docid"; //created automatically
 	private static final String KEY_TEXT = "Text";
 	private static final String KEY_TITLE = "Title";
@@ -30,7 +30,7 @@ public class DatabaseHandler {
 	private static final String KEY_ALARM = "Alarm";
 	private static final String KEY_DATE = "Date";
 
-	/* SQL statement to create Note table using fts3 */
+	// SQL statement to create Note table using fts3
 	private static final String CREATE_FTS_TABLE = "create virtual table " + TABLE_NOTE + " using fts3("
 			+ KEY_TITLE + " String, " + KEY_TEXT + " String, " 
 			+ KEY_LONGITUDE +" Double not null, "+ KEY_LATITUDE +" Double not null, " 
@@ -149,6 +149,82 @@ public class DatabaseHandler {
 		cv.put(KEY_LONGITUDE, l.getLongitude());
 		cv.put(KEY_LONGITUDE, l.getLatitude());
 		cv.put(KEY_IMAGEPATH, path);
+		cv.put(KEY_ALARM, alarm);
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		return b;
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to update
+	 * @param title the title to update to
+	 * @return true if database was updated, false otherwise 
+	 */
+	public boolean updateTitle(int id, String title){
+		this.open();
+		ContentValues cv = new ContentValues();
+		cv.put(KEY_TITLE, title);
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		return b;
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to update
+	 * @param text the text to update to
+	 * @return true if database was updated, false otherwise 
+	 */
+	public boolean updateText(int id, String text){
+		this.open();
+		ContentValues cv = new ContentValues();
+		cv.put(KEY_TEXT, text);
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		return b;
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to update
+	 * @param l the Location object with the longitude and latitude to update to
+	 * @return true if database was updated, false otherwise 
+	 */
+	public boolean updateLocation(int id, Location l){
+		this.open();
+		ContentValues cv = new ContentValues();
+		cv.put(KEY_LONGITUDE, l.getLongitude());
+		cv.put(KEY_LATITUDE, l.getLatitude());
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		return b;
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to update
+	 * @param path the image path to update to
+	 * @return true if database was updated, false otherwise 
+	 */
+	public boolean updateImagePath(int id, String path){
+		this.open();
+		ContentValues cv = new ContentValues();
+		cv.put(KEY_IMAGEPATH, path);
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		return b;
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to update
+	 * @param alarm the alarm date to update to
+	 * @return true if database was updated, false otherwise 
+	 */
+	public boolean updateAlarm(int id, String alarm){
+		this.open();
+		ContentValues cv = new ContentValues();
 		cv.put(KEY_ALARM, alarm);
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
