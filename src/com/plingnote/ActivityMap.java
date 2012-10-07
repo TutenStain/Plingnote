@@ -14,6 +14,7 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 
 public class ActivityMap extends MapActivity implements LocationListener {
+	private final int DISABLE_GPS_WITH_ACCURACY_HIGHER_THEN = 200;
 	private MapController mc;
 	private MapView map;
 	private LocationManager locationManager;
@@ -83,7 +84,8 @@ public class ActivityMap extends MapActivity implements LocationListener {
 	public void onLocationChanged(Location location) {
 		this.location = location;
 		
-		if(location.getAccuracy() >= 300){
+		//If we get a fix that is accurate enough, disable location updates
+		if(location.getAccuracy() <= DISABLE_GPS_WITH_ACCURACY_HIGHER_THEN){
 			locationManager.removeUpdates(this);
 		}
 	}
