@@ -1,7 +1,6 @@
 package com.plingnote;
 
 import java.util.Calendar;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -40,7 +39,7 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 
 		cancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {	    
-				//To be implemented
+				replaceBackFragment();
 			}
 		});	
 		okey.setOnClickListener(new View.OnClickListener() {
@@ -53,14 +52,17 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 	}
 	public void saveTime(View view){
 		DatePicker datepicker = (DatePicker)this.view.findViewById(R.id.datePicker);
-		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);
+		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);	    	
 		Intent intent = new Intent(getActivity(), NoteNotification.class);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
+		noteFragment = (FragmentNoteText)getFragmentManager().findFragmentById(R.id.fragmentContainer);
+		intent.putExtra(IntentExtra.id.toString(),noteFragment.getId()); // Måste spara note innan...
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,
+				intent, PendingIntent.FLAG_ONE_SHOT);
 		Calendar calendar =  Calendar.getInstance();
-		value = calendar.getTime()+"";
 		calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
+		value = calendar.getTime()+"";
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);        
+		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 	}	 
 	public NoteExtra getKind() {
 		return (NoteExtra.REMINDER);
@@ -75,6 +77,6 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 	public String getValue() {
 		return value;
 	}
-	
+
 
 }

@@ -121,6 +121,7 @@ public class FragmentNoteText extends Fragment {
 			DatabaseHandler.getInstance(this.getActivity()).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),fragment.getLocation(),this.imagePath,this.reminderString);		
 			location = fragment.getLocation();
 		}	
+		saveToDatabase();
 		snotebarFragment = new FragmentSnotebar();
 		try{
 			Bundle bundleToFrag = new Bundle();
