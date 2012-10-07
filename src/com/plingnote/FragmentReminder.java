@@ -46,7 +46,8 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		okey.setOnClickListener(new View.OnClickListener() {
 			//Save the time and the the alarm in the method savetime
 			public void onClick(View v) {
-				saveTime(v);	    
+				saveTime(v);
+				replaceBackFragment();
 			}
 		});
 	}
