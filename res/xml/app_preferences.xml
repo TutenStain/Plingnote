@@ -26,7 +26,7 @@
         <com.plingnote.PreferenceDialogInfo
         	android:title="Terms of Use" 
             android:summary="Know your rights"
-            android:dialogMessage="Placeholder"  
+            android:dialogMessage="We take no responsibility for your important notes in case of data loss or corruption."  
             android:dialogIcon="@android:drawable/ic_dialog_info" />
     	<com.plingnote.PreferenceDialogInfo
         	android:title="Open Source Licenses" 
