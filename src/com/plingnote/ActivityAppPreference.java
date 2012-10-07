@@ -19,6 +19,7 @@ package com.plingnote;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.view.MenuItem;
 
 /**
  * The activity that handles the settings menu.
@@ -30,8 +31,25 @@ public class ActivityAppPreference extends PreferenceActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Display the fragment as the main content
         getFragmentManager().beginTransaction().replace(android.R.id.content, new FragmentAppPreference()).commit();
     }
+	
+	/**
+	 * Make sure that once the back button is pressed
+	 * that we finish this activity.
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+		return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 }
