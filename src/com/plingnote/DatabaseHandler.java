@@ -1,3 +1,20 @@
+/**
+* This file is part of Plingnote.
+* Copyright (C) 2012 David Grankvist
+*
+* Plingnote is free software: you can redistribute it and/or modify it under
+* the terms of the GNU General Public License as published by the Free Software
+* Foundation, either version 3 of the License, or any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License along with
+* this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package com.plingnote;
 
 import java.text.SimpleDateFormat;
@@ -13,6 +30,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * This class is used for creating, filling and updating the database.
+ * It also includes full text search.
+ * 
+ * @author David Grankvist
+ *
+ */
 public class DatabaseHandler {
 	// Name of database file
 	private static final String DB_NAME = "notedb";
