@@ -29,6 +29,7 @@
             android:id="@+id/button_find_my_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="click"
             android:contentDescription="@string/cont_descr_compass_button"
             android:src="@android:drawable/ic_menu_compass" >
         </ImageButton>
