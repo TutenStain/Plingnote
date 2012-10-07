@@ -34,7 +34,8 @@ public class ActivityNote extends FragmentActivity {
 	
 	/**
 	 * Set content view and try to fetch id from saved instance or intent,
-	 * Decide which fragment to be shown 'anotherFragment' or new fragment and if new fragment should be instanieted added again. 
+	 * Decide which fragment to be shown 'anotherFragment' or new fragment and if new fragment should be instanced and added again. 
+	 * Fetching values from database.
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -122,6 +123,7 @@ public class ActivityNote extends FragmentActivity {
 			noteText.invalidate(); 
 		}
 	}
+	
 	/**
 	 * Remove snotebarFragment and replace with the param fragment.
 	 * @param fragment
@@ -132,6 +134,7 @@ public class ActivityNote extends FragmentActivity {
 		anotherFragment= fragment;
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, anotherFragment).commit();
 	}	
+	
 	/**
 	 * Update the database with the pluginfragment values by checking what kind of plguin it is.
 	 * Makes a new snotebar and set id as argument.
@@ -163,8 +166,7 @@ public class ActivityNote extends FragmentActivity {
 		getSupportFragmentManager().beginTransaction().remove(anotherFragment);
 		anotherFragment = null;
 
-	}
-	
+	}	
 	
 	@Override
 	public void onPause(){
@@ -218,6 +220,15 @@ public class ActivityNote extends FragmentActivity {
 			return "";
 	}
 	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		savedInstanceState.putInt(IntentExtra.id.toString(), this.id);
+		//If anotherFragment isn't null is should be saved
+		if(anotherFragment != null){
+			getSupportFragmentManager().putFragment(savedInstanceState, "anotherFragment", anotherFragment);
+		}
+	}
 	
 	/**
 	 * Makes the back button behave like the home button. Calling finish() if back button is pressed.
