@@ -1,6 +1,7 @@
 package com.plingnote;
 
 import java.util.Calendar;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -19,8 +20,10 @@ import android.widget.TimePicker;
  * @author Julia Gustafsson
  *
  */
-public class FragmentReminder extends Fragment {
+public class FragmentReminder extends Fragment implements PluginFragment{
 	private View view;
+	private String value;
+	private FragmentNoteText noteFragment;
 
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
@@ -51,12 +54,26 @@ public class FragmentReminder extends Fragment {
 		DatePicker datepicker = (DatePicker)this.view.findViewById(R.id.datePicker);
 		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);
 		Intent intent = new Intent(getActivity(), NoteNotification.class);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,
-				intent, PendingIntent.FLAG_ONE_SHOT);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
 		Calendar calendar =  Calendar.getInstance();
+		value = calendar.getTime()+"";
 		calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);        
 	}	 
+	public NoteExtra getKind() {
+		return (NoteExtra.REMINDER);
+	}
+	public Location getLocation() {
+		return null;
+	}
+	public void replaceBackFragment() {
+		noteFragment = (FragmentNoteText)getFragmentManager().findFragmentById(R.id.fragmentContainer);
+		noteFragment.replaceFragmentBack(this);		
+	}
+	public String getValue() {
+		return value;
+	}
+	
 
 }

@@ -220,7 +220,6 @@ public class FragmentNoteText extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
-
 		savedInstanceState.putInt(IntentExtra.id.toString(), id);
 	}	
 }

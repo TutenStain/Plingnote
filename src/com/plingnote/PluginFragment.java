@@ -13,6 +13,6 @@ public interface PluginFragment {
 	
 	public NoteExtra getKind();
 	
-	public void sendthisFragment();
+	public void replaceBackFragment();
 	
 }
