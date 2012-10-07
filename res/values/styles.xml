@@ -1,5 +1,10 @@
 <resources>
 
     <style name="AppTheme" parent="android:Theme.Light" />
+    <color name="list_background_color">#FFFFFF</color>
+    <color name="list_item_title_color">#000000</color>
+    <color name="list_item_text_color">#666666</color>
+    <color name="list_item_date_color">#4a7dff</color>
+    <color name="selected_color">#80cce8</color>
 
 </resources>

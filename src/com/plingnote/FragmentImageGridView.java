@@ -1,32 +1,45 @@
 package com.plingnote;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
+import android.support.v4.view.ViewPager.LayoutParams;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 
-public class FragmentImageGridView extends Fragment{
-
-	public final static int[] imageResIds = new int[]{
-		R.drawable.category_banking, R.drawable.category_chat, R.drawable.category_fun,
-		R.drawable.category_lunch, R.drawable.category_meeting, R.drawable.category_shop,
-		R.drawable.category_write
-	};
-
-
+public class FragmentImageGridView extends Fragment implements AdapterView.OnItemClickListener {
 
 	public FragmentImageGridView(){}
 	
+	private ImageAdapter imgA = new ImageAdapter(getActivity());
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_imageview, container, false);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	public View onCreateView(
+			LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		final View v = inflater.inflate(R.layout.fragment_imageview, container, false);
+		final GridView mGridView = (GridView) v.findViewById(R.id.gridview);
+		return v;
 	}
 	
-
+    public void onItemClick(AdapterView parent, View v, int position, long id) {
+        final Intent i = new Intent(getActivity(), ActivityNote.class);
+        i.putExtra("resId", position);
+        startActivity(i);
+    }
 
 	/**
 	 * Taken from following page, top answer.
@@ -66,5 +79,5 @@ public class FragmentImageGridView extends Fragment{
 
 		return bitmap;
 	}
-	
+
 }
