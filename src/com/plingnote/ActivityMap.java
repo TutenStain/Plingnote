@@ -48,29 +48,45 @@ public class ActivityMap extends MapActivity implements LocationListener {
 	private Location location;
 	private boolean isWantingAFix = false;
 	private Criteria criteria;
+	private List<Overlay> overlayList;
+	private UpdatableOverlay mapOverlayPin;
+	private UpdatableOverlay mapOverlayGPSAccuracy;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fragment_mapview);
-		map = (MapView) findViewById(R.id.mapview);
-		mc = map.getController();
-
-		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		this.setContentView(R.layout.fragment_mapview);
+		this.map = (MapView) findViewById(R.id.mapview);
+		this.mc = map.getController();
+		this.overlayList =  map.getOverlays();
+		this.overlayList.clear();
+				
+		this.locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 		//Get the last known location from the network so we 
 		//quickly can zoom to the users position 
-		location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		this.location = this.locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-		//Zoom as soon as possible
-		zoomToCurrentPosition();		
+		//Generate a GeoPoint from the last know location
+		GeoPoint point = new GeoPoint((int)(this.location.getLatitude() * 1E6), (int)(this.location.getLongitude() * 1E6));
+		
+		//Instantiate the overlays for the map
+		this.mapOverlayPin = new MapOverlayPin(this, this.map, point);
+		this.mapOverlayGPSAccuracy = new MapOverlayGPSAccuracy(point, this.location);
+		
+		//Add the overlays to the list
+		this.overlayList.add((Overlay) this.mapOverlayPin);
+		this.overlayList.add((Overlay) this.mapOverlayGPSAccuracy);
+		
+		//Zoom to the last know position
+		this.zoomToLastKnownPosition();
 
 		//Criteria for an accurate fix, presumably GPS
-		criteria = new Criteria();
-		criteria.setCostAllowed(true);
-		criteria.setAltitudeRequired(false);
-		criteria.setBearingRequired(false);
-		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+		this.criteria = new Criteria();
+		this.criteria.setCostAllowed(true);
+		this.criteria.setAltitudeRequired(false);
+		this.criteria.setBearingRequired(false);
+		this.criteria.setAccuracy(Criteria.ACCURACY_FINE);
 	}
 
 	@Override
@@ -79,47 +95,63 @@ public class ActivityMap extends MapActivity implements LocationListener {
 	}
 
 	public void click(View view) {
-		isWantingAFix = true;
+		//Indicate that we want a GPS fix
+		this.isWantingAFix = true;
 
-		provider = locationManager.getBestProvider(criteria, false);
-		locationManager.requestLocationUpdates(provider, 400, 1, this);
+		//Select the best provider for our criteria, presumably GPS 
+		this.provider = this.locationManager.getBestProvider(this.criteria, false);
+		this.locationManager.requestLocationUpdates(this.provider, 400, 1, this);
 
-		zoomToCurrentPosition();
+		//Update our overlays as they might have changes
+		//since we are searching for fix more intensively
+		this.updateOverlays();
+		
+		//Zoom in on the new or last know position
+		this.zoomToLastKnownPosition();
+		
 	}
 
-	private void zoomToCurrentPosition(){
-		GeoPoint point = new GeoPoint((int)(location.getLatitude() * 1E6), (int)(location.getLongitude() * 1E6));
-		mc.animateTo(point);
+	/**
+	 * Updates the overlays and refresh the map
+	 * sometime in the future
+	 */
+	private void updateOverlays(){
+		this.mapOverlayPin.update(this.location);
+		this.mapOverlayGPSAccuracy.update(this.location);
 
-		List<Overlay> list = map.getOverlays();
-		list.clear();
-		list.add(new MapOverlayPin(this, map, point));
-		list.add(new MapOverlayGPSAccuracy(point, location));
-
-		map.invalidate();
-
-		mc.setZoom(19);
+		this.map.invalidate();
+	}
+	
+	/**
+	 * Zoom to the last know approximated position
+	 */
+	private void zoomToLastKnownPosition() {
+		GeoPoint point = new GeoPoint((int)(this.location.getLatitude() * 1E6), (int)(this.location.getLongitude() * 1E6));
+		
+		this.mc.animateTo(point);
+		this.mc.setZoom(19);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if(isWantingAFix)
-			locationManager.requestLocationUpdates(provider, 400, 1, this);
+		if(this.isWantingAFix)
+			this.locationManager.requestLocationUpdates(this.provider, 400, 1, this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		if(isWantingAFix)
-			locationManager.removeUpdates(this);
+		if(this.isWantingAFix)
+			this.locationManager.removeUpdates(this);
 	}
 
 
 	public void onLocationChanged(Location location) {
+		//Update our overlays if we have gotten a better location data
 		if (isBetterLocation(this.location, location)) {
 			this.location = location;
-			zoomToCurrentPosition();
+			updateOverlays();
 		}
 
 		//If we get a fix that is accurate enough, remove subscription from location updates

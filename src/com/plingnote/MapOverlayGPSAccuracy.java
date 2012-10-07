@@ -29,14 +29,16 @@ import com.google.android.maps.Overlay;
  * Displays an accuracy circle as an overlay in a map.
  * @author Barnabas Sapan
  */
-public class MapOverlayGPSAccuracy extends Overlay {
+public class MapOverlayGPSAccuracy extends Overlay implements UpdatableOverlay {
 	private GeoPoint point;
 	private Paint outerCircle, innerCircle;
-	private float radius;
+	private float radius = 0;
 
 	public MapOverlayGPSAccuracy(GeoPoint point, android.location.Location location) {
 		this.point = point;
-		this.radius = location.getAccuracy();
+		if(location != null)
+			this.radius = location.getAccuracy();
+	
 
 		this.outerCircle = new Paint();
 		this.outerCircle.setARGB(20, 0, 0, 255);
@@ -50,16 +52,18 @@ public class MapOverlayGPSAccuracy extends Overlay {
 		this.innerCircle.setARGB(5, 0, 0, 255);  
 	}
 	
-	public void setAccuracy(android.location.Location location){
-		this.radius = location.getAccuracy();
-	}
-
 	@Override
 	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-		Point pt = mapView.getProjection().toPixels(this.point, null);
-		float projectedRadius = mapView.getProjection().metersToEquatorPixels(this.radius);
+		if(radius != 0) {
+			Point pt = mapView.getProjection().toPixels(this.point, null);
+			float projectedRadius = mapView.getProjection().metersToEquatorPixels(this.radius);
+	
+			canvas.drawCircle(pt.x, pt.y, projectedRadius, this.innerCircle);
+			canvas.drawCircle(pt.x, pt.y, projectedRadius, this.outerCircle);
+		}
+	}
 
-		canvas.drawCircle(pt.x, pt.y, projectedRadius, this.innerCircle);
-		canvas.drawCircle(pt.x, pt.y, projectedRadius, this.outerCircle);
+	public void update(android.location.Location location) {
+		this.radius = location.getAccuracy();
 	}
 }

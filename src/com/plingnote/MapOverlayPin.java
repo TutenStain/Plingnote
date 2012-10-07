@@ -35,7 +35,7 @@ import com.google.android.maps.Projection;
  * @author Barnabas Sapan
  */
 
-public class MapOverlayPin extends Overlay {
+public class MapOverlayPin extends Overlay implements UpdatableOverlay {
 	private Drawable marker;
 	private MapView map;
 	private int level;
@@ -68,5 +68,10 @@ public class MapOverlayPin extends Overlay {
 		this.marker.setLevel(level);
 		this.marker.setBounds(center.x - width / 2, center.y - height / 2, center.x + width / 2, center.y + height / 2);
 		this.marker.draw(canvas);
+	}
+
+
+	public void update(android.location.Location location) {
+		this.geoPoint = new GeoPoint((int)(location.getLatitude() * 1E6), (int)(location.getLongitude() * 1E6));
 	}
 }
