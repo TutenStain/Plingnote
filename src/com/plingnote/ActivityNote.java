@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -166,7 +167,31 @@ public class ActivityNote extends FragmentActivity {
 	public int getId() {
 		return id;
 	}
+	public boolean checkIfValueIsSetted(NoteExtra noteExtra){
+		if(this.id != -1){
+		if(noteExtra.equals(NoteExtra.REMINDER)){
+			if(!(this.reminderString.equals(""))){
+				return true;
+			}
+		}
+		if(noteExtra.equals(NoteExtra.IMAGE)){
+			if(!(this.imagePath.equals(""))){
+				return true;
+			}
+		}
+		if(noteExtra.equals(NoteExtra.LOCATION)){
+			if(!(this.location == null)){
+				return true;
+			}
+		}	
+		}
+		return false;
+	}
 	
+	/**
+	 * Delete value from database
+	 * @param noteExtra
+	 */
 	public void deleteValue(NoteExtra noteExtra){
 		if(noteExtra.equals(NoteExtra.REMINDER)){
 			DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),location,this.imagePath,"");			
@@ -269,6 +294,8 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		
+		
 		case android.R.id.home:
 			InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 			inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
@@ -277,5 +304,10 @@ public class ActivityNote extends FragmentActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
 	}
 }

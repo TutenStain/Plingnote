@@ -43,6 +43,26 @@ public class IconView extends View{
 		canvas.drawBitmap(bit, 0, 10, null);	          
 	}
 	
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public String getDefaultText() {
+		return defaultText;
+	}
+
+	public void setDefaultText(String defaultText) {
+		this.defaultText = defaultText;
+	}
+
+	public void setFragment(Fragment fragment) {
+		this.fragment = fragment;
+	}
+
 	/**
 	 * Return fragment
 	 * @return

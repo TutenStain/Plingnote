@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +58,7 @@ public class FragmentSnotebar extends Fragment {
 		if(activityNote instanceof ActivityNote) { 
 			this.id = ((ActivityNote) activityNote).getId();
 		}
-	
+
 		setIcons();
 	}	
 	/**
@@ -96,6 +100,15 @@ public class FragmentSnotebar extends Fragment {
 			ll.invalidate();
 		}
 	}
+	
+	
+	public boolean checkIfValueIsSetted(NoteExtra noteExtra){
+		Activity activityNote = getActivity();
+		if(activityNote instanceof ActivityNote) { 
+			return ((ActivityNote) activityNote).checkIfValueIsSetted(noteExtra);
+		}
+		return false;
+	}
 	/**
 	 * An on click listener
 	 * @author Julia
@@ -118,17 +131,44 @@ public class FragmentSnotebar extends Fragment {
 	 *
 	 */
 	private class PreviewLongListner implements OnLongClickListener {
-
+		IconView icon;
 		public boolean onLongClick(View v) {
-			IconView icon = (IconView)v;
-			PluginFragment pf = (PluginFragment)icon.getFragment();
-			FragmentSnotebar.this.deleteFragmentValue(pf.getKind());
+			icon = (IconView)v;
+			PluginFragment pluginFrag = (PluginFragment)icon.getFragment();
+			if(FragmentSnotebar.this.checkIfValueIsSetted(pluginFrag.getKind())){
+			DialogFragment newFragment = new AskIfReset();
+			newFragment.show(getFragmentManager(), "missiles");
 			return true;
+			}else
+				return false;
 		} 
-   
 
-    }
-	
+		/**
+		 * A dialogfragment that ask if the user wants to reset the data of the icon from the note
+		 * @author Julia
+		 *
+		 */
+		private class AskIfReset extends DialogFragment {
+			@Override
+			public Dialog onCreateDialog(Bundle savedInstanceState) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				builder.setMessage("Do you want to reset the " + icon.getDefaultText() + " ?");
+				builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					//Call methods that will delete the data
+					public void onClick(DialogInterface dialog, int id) {
+						PluginFragment pluginFrag = (PluginFragment)icon.getFragment();
+						FragmentSnotebar.this.deleteFragmentValue(pluginFrag.getKind());
+					}
+				});
+				builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						// User cancelled the dialog
+					}
+				});
+				return builder.create();
+			}
+		}
+	}
 	public void deleteFragmentValue(NoteExtra noteExtra){
 		Activity activityNote = getActivity();
 		if(activityNote instanceof ActivityNote) { 
