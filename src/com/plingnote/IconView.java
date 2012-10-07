@@ -39,7 +39,7 @@ public class IconView extends View{
 		if(this.text.equals(""))
 			canvas.drawText(defaultText,0,defaultText.length(),0,100, paint);
 		else
-			canvas.drawText(text,0,7,10,500, paint);
+			canvas.drawText(text,0,10,0,100,paint);
 		canvas.drawBitmap(bit, 0, -10, null);	          
 	}
 	

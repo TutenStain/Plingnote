@@ -38,9 +38,9 @@ public class FragmentSnotebar extends Fragment {
 	 * @param fragment
 	 */
 	public void replaceFragment(Fragment fragment){
-		Activity a = getActivity();
-		if(a instanceof ActivityNote) { 
-			((ActivityNote) a).replaceFragment(fragment);
+		Activity activityNote = getActivity();
+		if(activityNote instanceof ActivityNote) { 
+			((ActivityNote) activityNote).replaceFragment(fragment);
 		}
 	}
 	/**
@@ -49,6 +49,11 @@ public class FragmentSnotebar extends Fragment {
 	@Override 
 	public void onStart(){
 		super.onStart();
+		Activity activityNote = getActivity();
+		if(activityNote instanceof ActivityNote) { 
+			this.id = ((ActivityNote) activityNote).getId();
+		}
+	
 		setIcons();
 	}	
 	/**

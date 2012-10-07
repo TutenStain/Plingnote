@@ -89,8 +89,8 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 	 * Call replacebackfragment in the activity/fragment that host this fragment
 	 */
 	public void replaceBackFragment() {
-		ActivityNote f = (ActivityNote)getActivity();
-		f.replaceFragmentBack(this);
+		ActivityNote activityNote = (ActivityNote)getActivity();
+		activityNote.replaceFragmentBack(this);
 	}	 
 
 }
