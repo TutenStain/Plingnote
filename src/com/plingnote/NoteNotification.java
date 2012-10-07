@@ -19,19 +19,18 @@ public class NoteNotification extends BroadcastReceiver  {
 		//Start activity with the right id.
 		Intent i = new Intent();
 		i.setClassName("com.plingnote", "com.plingnote.ActivityNote");
-		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);       
+		i.setAction(Long.toString(System.currentTimeMillis()));     
 		try{
 			i.putExtra(IntentExtra.id.toString(), intent.getExtras().getInt(IntentExtra.id.toString()));
 		}catch(Exception e){  	
 		}
-		//context.startActivity(i);
 		notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		//Set the from which application the notifcation is
 		CharSequence from = "Plingnote";
 		//Sets the message by by the title of the note the notification open
-		CharSequence message = "Open your note : " + DatabaseHandler.getInstance(context).getNote(1).getTitle() + " !";
+		CharSequence message = "Open your note : " + DatabaseHandler.getInstance(context).getNote(intent.getExtras().getInt(IntentExtra.id.toString())).getTitle() + " !";
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, i, 0);
-		Notification notification = new Notification(R.drawable.ic_launcher,"ut text", PendingIntent.FLAG_UPDATE_CURRENT);
+		Notification notification = new Notification(R.drawable.ic_launcher,"Check your note!", PendingIntent.FLAG_ONE_SHOT);
 		notification.setLatestEventInfo(context, from, message, contentIntent);
 		//Sets sound and led settings
 		notification.defaults |= Notification.DEFAULT_SOUND; 
