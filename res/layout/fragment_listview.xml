@@ -9,5 +9,6 @@
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:scaleType="center"
-       android:src="@drawable/ic_launcher"/>
+       android:src="@drawable/ic_launcher"
+	   android:background="@drawable/map_note"/>
 </LinearLayout>

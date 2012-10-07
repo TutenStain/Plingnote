@@ -9,34 +9,57 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.Menu;
 import android.view.View;
 import android.widget.SearchView;
 
+import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
+/**
+ * This file is part of Plingnote.
+ * Copyright (C) 2012 Barnabas Sapan, Magnus Huttu
+ * 
+ * Plingnote is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
-public class ActivityMain extends FragmentActivity{
+/**
+ * The map that shows all the notes.
+ * @author Magnus Huttu	
+ */
+
+public class ActivityMain extends MapActivity{
 
 	private ScrollableViewPager viewPager;
 	private TabsAdapter tabsAdapter;
-	protected static MapView mMapView;
-	protected View mMapViewContainer;
+	protected MapView mapView;
+	private Bundle savedInstanceState;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		this.savedInstanceState = savedInstanceState;
 		this.viewPager = new ScrollableViewPager(this);
 		this.viewPager.setId(R.id.viewPager);
-		setContentView(viewPager);
+		setContentView(R.layout.fragment_mapview);
 
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
 
 		tabsAdapter = new TabsAdapter(this, viewPager);
-		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_mapmode), FragmentMapView.class, null);
+		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_mapmode), ActivityMain.class, savedInstanceState);
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_sort_by_size), FragmentListView.class, null);
 	
 		if (savedInstanceState != null) {
@@ -79,10 +102,10 @@ public class ActivityMain extends FragmentActivity{
 			}
 		}
 
-		public TabsAdapter(FragmentActivity activity, ScrollableViewPager pager) {
-			super(activity.getSupportFragmentManager());
-			this.context = activity;
-			this.actionBar = activity.getActionBar();
+		public TabsAdapter(ActivityMain activityMain, ScrollableViewPager pager) {
+			super(activityMain.getSupportFragmentManager());
+			this.context = activityMain;
+			this.actionBar = activityMain.getActionBar();
 			this.viewPager = pager;
 			this.viewPager.setAdapter(this);
 			this.viewPager.setOnPageChangeListener(this);
@@ -128,5 +151,16 @@ public class ActivityMain extends FragmentActivity{
 		public int getCount() {
 			return this.tabs.size();
 		}
+	}
+
+	@Override
+	protected boolean isRouteDisplayed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public FragmentManager getSupportFragmentManager() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
