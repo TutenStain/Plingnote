@@ -1,6 +1,25 @@
+/**
+* This file is part of Plingnote.
+* Copyright (C) 2012 David Grankvist
+*
+* Plingnote is free software: you can redistribute it and/or modify it under
+* the terms of the GNU General Public License as published by the Free Software
+* Foundation, either version 3 of the License, or any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License along with
+* this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package com.plingnote;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -11,14 +30,21 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * This class is used for creating, filling and updating the database.
+ * It also includes full text search.
+ * 
+ * @author David Grankvist
+ *
+ */
 public class DatabaseHandler {
-	/* Name of database file */
+	// Name of database file
 	private static final String DB_NAME = "notedb";
 
-	/* Table */
+	// Table
 	private static final String TABLE_NOTE = "Note";
 
-	/* Columns */
+	// Columns
 	private static final String ID = "docid"; //created automatically
 	private static final String KEY_TEXT = "Text";
 	private static final String KEY_TITLE = "Title";
@@ -26,12 +52,13 @@ public class DatabaseHandler {
 	private static final String KEY_LATITUDE = "Latitude";
 	private static final String KEY_IMAGEPATH = "ImagePath";
 	private static final String KEY_ALARM = "Alarm";
+	private static final String KEY_DATE = "Date";
 
-	/* SQL statement to create Note table using fts3 */
+	// SQL statement to create Note table using fts3
 	private static final String CREATE_FTS_TABLE = "create virtual table " + TABLE_NOTE + " using fts3("
 			+ KEY_TITLE + " String, " + KEY_TEXT + " String, " 
 			+ KEY_LONGITUDE +" Double not null, "+ KEY_LATITUDE +" Double not null, " 
-			+ KEY_IMAGEPATH + " String, " + KEY_ALARM + " String);";
+			+ KEY_IMAGEPATH + " String, " + KEY_ALARM + " String, " + KEY_DATE + " String);";
 
 	private Context context;
 	private DBHelper dbHelp;
@@ -91,6 +118,9 @@ public class DatabaseHandler {
 		cv.put(KEY_LATITUDE, l.getLatitude());
 		cv.put(KEY_IMAGEPATH, path);
 		cv.put(KEY_ALARM, alarm);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date date = new Date();
+		cv.put(KEY_DATE, dateFormat.format(date));
 		long tmp = this.db.insert(TABLE_NOTE, null, cv);
 		this.close();
 		return tmp;
@@ -107,6 +137,51 @@ public class DatabaseHandler {
 		this.close();
 		return b;
 	}
+	
+	/**
+	 * 
+	 * @param id id of the note to delete the title from
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean deleteTitle(int id){
+		return this.updateTitle(id, null);
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to delete the text from
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean deleteText(int id){
+		return this.updateTitle(id, null);
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to delete the location from
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean deleteLocation(int id){
+		return this.updateLocation(id, null);
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to delete the image path from
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean deleteImagePath(int id){
+		return this.updateImagePath(id, null);
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to delete the alarm from
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean deleteAlarm(int id){
+		return this.updateAlarm(id, null);
+	}
 
 	/**
 	 * 
@@ -122,7 +197,7 @@ public class DatabaseHandler {
 
 	private Cursor getAllNotes(){
 		return this.db.query(TABLE_NOTE, new String[]{ ID, KEY_TITLE, KEY_TEXT,
-				KEY_LONGITUDE, KEY_LATITUDE, KEY_IMAGEPATH, KEY_ALARM },
+				KEY_LONGITUDE, KEY_LATITUDE, KEY_IMAGEPATH, KEY_ALARM, KEY_DATE },
 				null, null,null, null, null);
 	}
 
@@ -141,12 +216,105 @@ public class DatabaseHandler {
 		cv.put(KEY_TITLE, title);
 		cv.put(KEY_TEXT, text);
 		cv.put(KEY_LONGITUDE, l.getLongitude());
-		cv.put(KEY_LONGITUDE, l.getLatitude());
+		cv.put(KEY_LATITUDE, l.getLatitude());
 		cv.put(KEY_IMAGEPATH, path);
 		cv.put(KEY_ALARM, alarm);
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		return b;
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to update
+	 * @param title the title to update to
+	 * @return true if database was updated, false otherwise 
+	 */
+	public boolean updateTitle(int id, String title){
+		this.open();
+		ContentValues cv = new ContentValues();
+		cv.put(KEY_TITLE, title);
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		return b;
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to update
+	 * @param text the text to update to
+	 * @return true if database was updated, false otherwise 
+	 */
+	public boolean updateText(int id, String text){
+		this.open();
+		ContentValues cv = new ContentValues();
+		cv.put(KEY_TEXT, text);
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		return b;
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to update
+	 * @param l the Location object with the longitude and latitude to update to
+	 * @return true if database was updated, false otherwise 
+	 */
+	public boolean updateLocation(int id, Location l){
+		this.open();
+		ContentValues cv = new ContentValues();
+		cv.put(KEY_LONGITUDE, l.getLongitude());
+		cv.put(KEY_LATITUDE, l.getLatitude());
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		return b;
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to update
+	 * @param path the image path to update to
+	 * @return true if database was updated, false otherwise 
+	 */
+	public boolean updateImagePath(int id, String path){
+		this.open();
+		ContentValues cv = new ContentValues();
+		cv.put(KEY_IMAGEPATH, path);
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		return b;
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note to update
+	 * @param alarm the alarm date to update to
+	 * @return true if database was updated, false otherwise 
+	 */
+	public boolean updateAlarm(int id, String alarm){
+		this.open();
+		ContentValues cv = new ContentValues();
+		cv.put(KEY_ALARM, alarm);
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		return b;
+	}
+	
+	/**
+	 * 
+	 * @param id id of the note which date will be refreshed
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean refreshDate(int id){
+		this.open();
+		ContentValues cv = new ContentValues();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		Date date = new Date();
+		cv.put(KEY_DATE, dateFormat.format(date));
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		return b;
+		
 	}
 
 	/**
@@ -164,7 +332,8 @@ public class DatabaseHandler {
 		Double latitude = Double.parseDouble(c.getString(4));
 		String imagePath = c.getString(5);
 		String alarm = c.getString(6);
-		Note n = new Note(id, title, text, new Location(longitude, latitude), imagePath, alarm);
+		String date = c.getString(7);
+		Note n = new Note(id, title, text, new Location(longitude, latitude), imagePath, alarm, date);
 		this.close();
 		return n;
 	}
@@ -213,7 +382,8 @@ public class DatabaseHandler {
 				Double latitude = Double.parseDouble(c.getString(4));
 				String imagePath = c.getString(5);
 				String alarm = c.getString(6);
-				l.add(new Note(id, title, text, new Location(longitude, latitude), imagePath, alarm));
+				String date = c.getString(7);
+				l.add(new Note(id, title, text, new Location(longitude, latitude), imagePath, alarm, date));
 			}while(c.moveToNext());
 		}
 		return l;
