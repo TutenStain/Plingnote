@@ -41,6 +41,7 @@ public class ListDateHandler {
 	 */
 	public static String customDateFormat(String date) {
 
+		// The supposed format of the incoming string
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
 				"yyyy-MM-dd HH:mm:ss");
 
@@ -59,8 +60,7 @@ public class ListDateHandler {
 
 			// If note is created on current date
 			if (isCreatedThisDay(currentDate, noteDate)) {
-				dateText = calendar.get(Calendar.HOUR_OF_DAY) + ":"
-						+ calendar.get(Calendar.MINUTE);
+				dateText = new SimpleDateFormat("HH:mm").format(noteDate);
 			}
 
 			// If note is created this week
@@ -70,9 +70,7 @@ public class ListDateHandler {
 
 			// If none of the previous statements were true.
 			else {
-				dateText = calendar.get(Calendar.YEAR) + "-"
-						+ calendar.get(Calendar.MONTH) + "-"
-						+ calendar.get(Calendar.DAY_OF_MONTH);
+				dateText = new SimpleDateFormat("yyyy-MM-dd").format(noteDate);
 			}
 
 		} catch (java.text.ParseException e) {
