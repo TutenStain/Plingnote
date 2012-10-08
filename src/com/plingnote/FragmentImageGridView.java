@@ -1,35 +1,36 @@
 package com.plingnote;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
-import android.support.v4.view.ViewPager.LayoutParams;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-public class FragmentImageGridView extends Fragment implements AdapterView.OnItemClickListener {
+public class FragmentImageGridView extends Fragment implements OnItemClickListener{
 
 	public FragmentImageGridView(){}
 
 	private Point imgSize;
-	private int mNum;
-	private ImageAdapter imgA = new ImageAdapter(getActivity());
-	private Context mContext;
+	private DatabaseHandler db;
+	private List<Note> notes = new ArrayList<Note>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mNum = getArguments() != null ? getArguments().getInt("num") : 1;
 	}
 	
 	public void setImgSize(int x, int y){
@@ -52,21 +53,21 @@ public class FragmentImageGridView extends Fragment implements AdapterView.OnIte
 		if (container == null){
 			return null;
 		}
+		db = DatabaseHandler.getInstance(getActivity());
+		
+		refreshNotes();
 
 		final View grid = inflater.inflate(R.layout.fragment_imageview, container, false); 
 		GridView g = (GridView) grid.findViewById(R.id.grid);
 		g.setAdapter(new ImageAdapter(getActivity()));
+		g.setOnItemClickListener(this);
 
 		imgSize = new Point();
 		int side = getActivity().getResources().getDisplayMetrics().widthPixels / 4 ;
 		setImgSize(side,side);
+		
+		
 		return grid;
-	}
-
-	public void onItemClick(AdapterView parent, View v, int position, long id) {
-		final Intent i = new Intent(getActivity(), ActivityNote.class);
-		i.putExtra("resId", position);
-		startActivity(i);
 	}
 
 
@@ -76,17 +77,17 @@ public class FragmentImageGridView extends Fragment implements AdapterView.OnIte
 
 		public ImageAdapter(Context context) {
 			super();
-			mContext = context;
+			mContext = context;;
 		}
 
 		@Override
 		public int getCount() {
-			return imageResIds.length;
+			return numberOfNotes();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return imageResIds;
+			return imageIds;
 		}
 
 		@Override
@@ -97,9 +98,10 @@ public class FragmentImageGridView extends Fragment implements AdapterView.OnIte
 
 	    public View getView(int position, View convertView, ViewGroup parent) {
 	        ImageView imageView;
+            
 	        if (convertView == null) {
 	            imageView = new ImageView(mContext);
-	            imageView.setLayoutParams(new GridView.LayoutParams(100 ,100));
+	            imageView.setLayoutParams(new GridView.LayoutParams(200 ,200));
 	            imageView.setAdjustViewBounds(true);
 	            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 	            imageView.setPadding(1,1,1,1);
@@ -107,18 +109,70 @@ public class FragmentImageGridView extends Fragment implements AdapterView.OnIte
 	            imageView = (ImageView) convertView;
 	        }
 
-	        imageView.setImageResource(imageResIds[position]);
+	        imageView.setImageResource(imageIds[position]);
 
 	        return imageView;
 	    }
 		
-		
-		private final int[] imageResIds = new int[]{
+		/**
+		 * stores all the used images.
+		 */
+		private int[] imageIds = new int[]{
 			R.drawable.category_banking, R.drawable.category_chat, R.drawable.category_fun,
+			R.drawable.category_lunch, R.drawable.category_meeting, R.drawable.category_shop,
+			R.drawable.category_write, R.drawable.category_banking, R.drawable.category_chat, R.drawable.category_fun,
+			R.drawable.category_lunch, R.drawable.category_meeting, R.drawable.category_shop,
+			R.drawable.category_write, R.drawable.category_banking, R.drawable.category_chat, R.drawable.category_fun,
 			R.drawable.category_lunch, R.drawable.category_meeting, R.drawable.category_shop,
 			R.drawable.category_write
 		};
 		
+	}
+	
+	/**
+	 * Deletes all the notes in the list notes and then adds freshly from the database.
+	 */
+	public void refreshNotes(){
+		
+		clearNotes();
+		
+		for(Note n : db.getNoteList()){
+			addNote(n);
+		}
+		
+	}
+	/**
+	 * adds a note to the list notes.
+	 * @param note adds this object to the list.
+	 */
+	public void addNote(Note note){
+		notes.add(note);
+	}
+	
+	/**
+	 * Deletes all notes in the list notes.
+	 */
+	public void clearNotes(){
+		notes.clear();
+	}
+	
+	/**
+	 * @return returns an int with the size of the list notes.
+	 */
+	public int numberOfNotes(){
+		return notes.size();
+	}
+
+	@Override
+	public void onItemClick(AdapterView parent, View v, int position, long id) {
+		Intent editNote = new Intent(getActivity(), ActivityNote.class);
+
+		
+		// Get the row ID of the clicked note.
+		int noteId = notes.get(position).getId();
+		editNote.putExtra(IntentExtra.id.toString(), noteId);
+		
+		startActivity(editNote);
 	}
 
 }
