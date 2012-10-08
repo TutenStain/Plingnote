@@ -56,5 +56,12 @@
                android:name="android.support.PARENT_ACTIVITY"
                android:value="com.plingnote.ActivityMain" />
        	</activity>
+       	<receiver android:name=".NoteNotification" >
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" >
+                    <action android:name="android.intent.action.SEND" />
+                </action>
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
