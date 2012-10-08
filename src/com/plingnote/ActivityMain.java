@@ -14,10 +14,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.SearchView;
 
 public class ActivityMain extends FragmentActivity{
@@ -25,8 +23,6 @@ public class ActivityMain extends FragmentActivity{
 	private ScrollableViewPager viewPager;
 	private TabsAdapter tabsAdapter;
 	private SearchView searchView;
-    private ImagePagerAdapter mAdapter;
-    private ImageView mImageView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,8 +32,6 @@ public class ActivityMain extends FragmentActivity{
 		this.viewPager.setId(R.id.viewPager);
 		setContentView(viewPager);
 		
-        mAdapter = new ImagePagerAdapter(getSupportFragmentManager(), ImageAdapter.imageResIds.length);
-        viewPager.setAdapter(mAdapter);
 		
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -47,6 +41,7 @@ public class ActivityMain extends FragmentActivity{
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_mapmode), FragmentMapView.class, null);
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_sort_by_size), FragmentListView.class, null);
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_gallery), FragmentImageGridView.class, null);
+		
 		if (savedInstanceState != null) {
 			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 		}
@@ -177,28 +172,6 @@ public class ActivityMain extends FragmentActivity{
 			return this.tabs.size();
 		}
 		
-		public Fragment getImageItem(int position) {
-            return FragmentImageDetails.newInstance(position);
-        }
-		
 		
 	}
-	public static class ImagePagerAdapter extends FragmentStatePagerAdapter {
-        private final int mSize;
-
-        public ImagePagerAdapter(FragmentManager fm, int size) {
-            super(fm);
-            mSize = size;
-        }
-
-        @Override
-        public int getCount() {
-            return mSize;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return FragmentImageDetails.newInstance(position);
-        }
-    }
 }
