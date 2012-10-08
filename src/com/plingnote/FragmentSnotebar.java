@@ -57,7 +57,6 @@ public class FragmentSnotebar extends Fragment {
 		if(activityNote instanceof ActivityNote) { 
 			this.id = ((ActivityNote) activityNote).getId();
 		}
-
 		setIcons();
 	}	
 	/**
@@ -99,8 +98,6 @@ public class FragmentSnotebar extends Fragment {
 			ll.invalidate();
 		}
 	}
-	
-	
 	public boolean checkIfValueIsSetted(NoteExtra noteExtra){
 		Activity activityNote = getActivity();
 		if(activityNote instanceof ActivityNote) { 
@@ -135,9 +132,9 @@ public class FragmentSnotebar extends Fragment {
 			icon = (IconView)v;
 			PluginFragment pluginFrag = (PluginFragment)icon.getFragment();
 			if(FragmentSnotebar.this.checkIfValueIsSetted(pluginFrag.getKind())){
-			DialogFragment newFragment = new AskIfReset();
-			newFragment.show(getFragmentManager(), "Reset");
-			return true;
+				DialogFragment newFragment = new AskIfReset();
+				newFragment.show(getFragmentManager(), "Reset");
+				return true;
 			}else
 				return false;
 		} 
