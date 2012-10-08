@@ -3,21 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-    <GridView 
+
+    <GridView
         android:id="@+id/grid"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        
+        android:alwaysDrawnWithCache="true"
+        android:clipChildren="true"
+        android:gravity="center"
         android:numColumns="3"
         android:stretchMode="columnWidth"
-        
-        android:gravity="center"
-        android:clipChildren="true"
-        android:alwaysDrawnWithCache="true"
-        >
-        
-        
+        android:verticalSpacing="40dp" >
     </GridView>
     
 </LinearLayout>
