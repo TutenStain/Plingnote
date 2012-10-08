@@ -162,8 +162,18 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public void onPause(){
 		super.onPause();
-		if(deleteNote == false)
+		if(deleteNote == false || !isNoteEmpty())
 			saveToDatabase();
+	}
+	/**
+	 * A function that checks if all value; text,title,reminder,location,imagepath, is not setted.
+	 * @return
+	 */
+	public boolean isNoteEmpty(){
+		if(this.imagePath.equals("") && this.reminderString.equals("") && this.location == null && this.getTextofNoteText().equals("") && this.getTitleofNoteText().equals(""))
+			return true;
+		else 
+			return false;
 	}
 	/**
 	 * Return the id 
@@ -270,7 +280,7 @@ public class ActivityNote extends FragmentActivity {
 		}else
 			return "";
 	}
-	
+
 	/**
 	 * If the boolean 'deletenote' is false,thismethod will save the id and 'anotherFragment' if it isn't null.
 	 */
@@ -331,14 +341,14 @@ public class ActivityNote extends FragmentActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_note, menu);
 		return true;
 	}
 
-	/*
+	/**
 	 * Delete the note's text and title
 	 */
 	public void deleteNoteText(){
@@ -347,7 +357,7 @@ public class ActivityNote extends FragmentActivity {
 		noteText.invalidate(); 
 		saveToDatabase();
 	}
-	
+
 	/**
 	 * Delete all note extra values location,imagepath,reminder.
 	 */
