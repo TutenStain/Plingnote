@@ -62,7 +62,7 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
 		Calendar calendar =  Calendar.getInstance();
 		calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
-		value = calendar.getTime()+"";
+		this.value = calendar.getTime()+"";
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);       
 	}
@@ -71,7 +71,7 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 	 * Return the value of this appliation
 	 */
 	public String getValue() {
-		return value;
+		return this.value;
 	}
 	
 	/**

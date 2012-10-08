@@ -136,7 +136,7 @@ public class FragmentSnotebar extends Fragment {
 			PluginFragment pluginFrag = (PluginFragment)icon.getFragment();
 			if(FragmentSnotebar.this.checkIfValueIsSetted(pluginFrag.getKind())){
 			DialogFragment newFragment = new AskIfReset();
-			newFragment.show(getFragmentManager(), "missiles");
+			newFragment.show(getFragmentManager(), "Reset");
 			return true;
 			}else
 				return false;
