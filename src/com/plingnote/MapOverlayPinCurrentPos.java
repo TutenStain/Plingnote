@@ -35,14 +35,14 @@ import com.google.android.maps.Projection;
  * @author Barnabas Sapan
  */
 
-public class MapOverlayPin extends Overlay implements UpdatableOverlay {
+public class MapOverlayPinCurrentPos extends Overlay implements UpdatableOverlay {
 	private Drawable marker;
 	private MapView map;
 	private int level;
 	private Timer timer;
 	private GeoPoint geoPoint;
 
-	public MapOverlayPin(Context context, MapView mapView, GeoPoint geoPoint) {
+	public MapOverlayPinCurrentPos(Context context, MapView mapView, GeoPoint geoPoint) {
 		this.map = mapView;
 		this.geoPoint = geoPoint;
 		this.marker = context.getResources().getDrawable(R.drawable.position_anim);

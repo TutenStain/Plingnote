@@ -81,7 +81,7 @@ public class ActivityMap extends MapActivity implements LocationListener {
 		GeoPoint point = new GeoPoint((int)(this.location.getLatitude() * 1E6), (int)(this.location.getLongitude() * 1E6));
 		
 		//Instantiate the overlays for the map
-		this.mapOverlayPin = new MapOverlayPin(this, this.map, point);
+		this.mapOverlayPin = new MapOverlayPinCurrentPos(this, this.map, point);
 		this.mapOverlayGPSAccuracy = new MapOverlayGPSAccuracy(point, this.location);
 		
 		//Add the overlays to the list
@@ -149,6 +149,7 @@ public class ActivityMap extends MapActivity implements LocationListener {
 			this.locationManager.requestLocationUpdates(this.provider, 400, 1, this);
 	}
 
+	
 	@Override
 	protected void onPause() {
 		super.onPause();
