@@ -21,14 +21,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Gallery;
 import android.widget.ImageView;
 
 /**
  * Class handling how images in the Snotebar will be shown.
+ * 
  * @author Linus Karlsson
  * 
  */
@@ -57,7 +58,7 @@ public class SBImageAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ImageView imageView = (ImageView) convertView;
+		ImageView imageView;
 		if (convertView == null) {
 			imageView = new ImageView(context);
 			cursor.moveToPosition(position);
@@ -65,7 +66,9 @@ public class SBImageAdapter extends BaseAdapter {
 			imageView.setImageURI(Uri.withAppendedPath(
 					MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, ""
 							+ imageID));
-			imageView = (ImageView) LayoutInflater.from(context).inflate(R.layout.snotebar_image, parent, false);
+			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+			imageView.setLayoutParams(new Gallery.LayoutParams(
+					SBImageSelector.IMAGE_WIDTH, SBImageSelector.IMAGE_WIDTH));
 		} else {
 			imageView = (ImageView) convertView;
 		}

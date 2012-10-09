@@ -21,9 +21,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Gallery;
@@ -37,7 +39,7 @@ import android.widget.Gallery;
 public class SBImageSelector extends Fragment {
 
 	private Cursor cursor;
-
+	public static final int IMAGE_WIDTH = 120;
 	private int column;
 
 	@Override
@@ -59,12 +61,24 @@ public class SBImageSelector extends Fragment {
 		// Set cursor pointing to SD Card
 		cursor = getSDCursor();
 
+		// Initialize the column index
+		column = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
+
+		
+		DisplayMetrics metrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		
 		Gallery gallery = (Gallery) getView().findViewById(
 				R.id.snotebar_image_browser);
 		gallery.setAdapter(new SBImageAdapter(getActivity(), cursor, column));
-
-		// Initialize the column index
-		column = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
+		
+		// Place first gallery image at far left
+		MarginLayoutParams mlp = (MarginLayoutParams) gallery.getLayoutParams();
+		mlp.setMargins(-(metrics.widthPixels/2 + IMAGE_WIDTH), 
+		               mlp.topMargin, 
+		               mlp.rightMargin, 
+		               mlp.bottomMargin
+		);
 
 		// Get user click
 		gallery.setOnItemClickListener(new OnItemClickListener() {
