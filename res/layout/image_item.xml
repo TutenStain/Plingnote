@@ -26,9 +26,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="#999999"
+            android:textColor="#CCC"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" 
+            android:height="28dp"/>
 
         <TextView
             android:id="@+id/gridview_image_text"
@@ -36,6 +37,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="#CCC"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:height="16dp" />
     </LinearLayout>
 </RelativeLayout>

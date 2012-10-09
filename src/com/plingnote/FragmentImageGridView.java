@@ -8,16 +8,24 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+/**
+ * a public class that shows a list of notes in a gridview.
+ * @author magnushuttu
+ *
+ */
 public class FragmentImageGridView extends Fragment implements OnItemClickListener{
 
 	public FragmentImageGridView(){}
@@ -54,9 +62,13 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		}
 		db = DatabaseHandler.getInstance(getActivity());
 
+		final View grid;
 		refreshNotes();
-
-		final View grid = inflater.inflate(R.layout.fragment_imageview, container, false); 
+		if(getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
+			grid = inflater.inflate(R.layout.fragment_gridview, container, false); 
+		} else{
+			grid = inflater.inflate(R.layout.fragment_gridview_land, container, false); 
+		}
 		GridView g = (GridView) grid.findViewById(R.id.grid);
 		g.setAdapter(new ImageAdapter(getActivity()));
 		g.setOnItemClickListener(this);
@@ -66,7 +78,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		imgSize = new Point();
 		int side = getActivity().getResources().getDisplayMetrics().widthPixels / 4 ;
 		setImgSize(side,side);
-
+		
 
 		return grid;
 	}
@@ -114,7 +126,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			}
 			
 			imgView.setBackgroundResource(imageIds[position]);
-			
 			return v;
 		}
 
@@ -177,5 +188,45 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 		startActivity(editNote);
 	}
+	
+	private class LongPress implements MultiChoiceModeListener{
 
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			
+			switch(item.getItemId()){
+			case R.id.remove:
+				
+			
+			default:
+			return false;
+			}
+		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void onItemCheckedStateChanged(ActionMode mode, int position,
+				long id, boolean checked) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 }
