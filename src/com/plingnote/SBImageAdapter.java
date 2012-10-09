@@ -1,6 +1,6 @@
 /**
  * This file is part of Plingnote.
- * Copyright (C) 2012 Linus Karlsson, Sergey Tarasevich
+ * Copyright (C) 2012 Linus Karlsson
  * 
  * Plingnote is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -17,41 +17,39 @@
 
 package com.plingnote;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 /**
- * 
+ * Class handling how images in the Snotebar will be shown.
  * @author Linus Karlsson
  * 
  */
 public class SBImageAdapter extends BaseAdapter {
 
 	private Context context;
-	private List<String> imagePaths;
+	private Cursor cursor;
+	private int column;
 
-	public SBImageAdapter(Context context, List<String> imagePaths,
-			ImageLoader imageLoader) {
+	public SBImageAdapter(Context context, Cursor cursor, int column) {
 		this.context = context;
-		this.imagePaths = new ArrayList<String>(imagePaths);
+		this.cursor = cursor;
+		this.column = column;
 	}
 
 	public int getCount() {
-		return imagePaths.size();
+		return cursor.getCount();
 	}
 
 	public Object getItem(int position) {
-		return imagePaths.get(position);
+		return position;
 	}
 
 	public long getItemId(int position) {
@@ -60,17 +58,18 @@ public class SBImageAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ImageView imageView = (ImageView) convertView;
-		if (imageView == null) {
-			imageView = (ImageView) LayoutInflater.from(context).inflate(
-					R.layout.snotebar_image, parent, false);
+		if (convertView == null) {
+			imageView = new ImageView(context);
+			cursor.moveToPosition(position);
+			int imageID = cursor.getInt(column);
+			imageView.setImageURI(Uri.withAppendedPath(
+					MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, ""
+							+ imageID));
+			imageView = (ImageView) LayoutInflater.from(context).inflate(R.layout.snotebar_image, parent, false);
+		} else {
+			imageView = (ImageView) convertView;
 		}
 
-		// Options for how an image is displayed
-		DisplayImageOptions options = new DisplayImageOptions.Builder()
-				.cacheInMemory().cacheOnDisc().build();
-
-		ImageLoader.getInstance().displayImage(imagePaths.get(position),
-				imageView, options);
 		return imageView;
 	}
 

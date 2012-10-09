@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -93,11 +98,11 @@ public class FragmentSnotebar extends Fragment {
 		icons.get(0).setOnLongClickListener(new PreviewLongListner());
 		ll.addView(icons.get(0));
 		ll.invalidate();
-		RelativeLayout kl = (RelativeLayout) view.findViewById(R.id.icon2);
+	/*	RelativeLayout kl = (RelativeLayout) view.findViewById(R.id.icon2);
 		icons.get(1).setOnClickListener(new PreviewListener());
 		icons.get(1).setOnLongClickListener(new PreviewLongListner());
 		kl.addView(icons.get(1));
-		kl.invalidate();
+		kl.invalidate();*/
 	}
 	public boolean checkIfValueIsSetted(NoteExtra noteExtra){
 		Activity activityNote = getActivity();
@@ -156,6 +161,21 @@ public class FragmentSnotebar extends Fragment {
 					//Call methods that will delete the data
 					public void onClick(DialogInterface dialog, int id) {
 						PluginFragment pluginFrag = (PluginFragment)icon.getFragment();
+						if(pluginFrag instanceof FragmentReminder){
+						FragmentReminder f =(FragmentReminder) pluginFrag ;
+						ActivityNote activityNote = (ActivityNote)getActivity();
+						Log.d("IDCANDEL", "");
+						Intent intent = new Intent(getActivity(), NoteNotification.class);
+						
+					
+						intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
+						PendingIntent sender = PendingIntent.getBroadcast(getActivity(), 0,intent,PendingIntent.FLAG_ONE_SHOT);
+						AlarmManager alarmManager = (AlarmManager)  getActivity().getSystemService(Context.ALARM_SERVICE);
+
+						alarmManager.cancel(sender);
+							//f.cancel();
+						
+						}
 						FragmentSnotebar.this.deleteFragmentValue(pluginFrag.getKind());
 					}
 				});

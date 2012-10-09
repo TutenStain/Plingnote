@@ -1,12 +1,14 @@
 package com.plingnote;
 
 import java.util.Calendar;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import android.widget.TimePicker;
 public class FragmentReminder extends Fragment implements PluginFragment{
 	private View view;
 	private String value;
+	PendingIntent pendingIntent;
 
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
@@ -37,7 +40,8 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		Button cancel = (Button) view.findViewById(R.id.cancel);
 
 		cancel.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {	    
+			public void onClick(View v) {	  
+				
 				replaceBackFragment();
 			}
 		});	
@@ -49,6 +53,7 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 			}
 		});
 	}
+
 	/**
 	 * Make an intent to broadcastreciever notenotification and save the time in datepicker and timepicker and set alarm by alarmmanager.
 	 * @param view
@@ -56,10 +61,12 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 	public void saveTime(View view){
 		DatePicker datepicker = (DatePicker)this.view.findViewById(R.id.datePicker);
 		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);	    	
-		Intent intent = new Intent(getActivity(), NoteNotification.class);
+	Intent intent = new Intent(getActivity(), NoteNotification.class);
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
+		Log.d("IDSave", activityNote.getId() +"");
+		 pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
+		//pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, 0);
 		Calendar calendar =  Calendar.getInstance();
 		calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
 		this.value = calendar.getTime()+"";
