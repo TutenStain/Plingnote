@@ -16,6 +16,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class FragmentImageGridView extends Fragment implements OnItemClickListener{
 
@@ -98,12 +99,18 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v;
+			TextView tvTitle;
+			TextView tvText;
 
 			if (convertView == null) {
 				v = new View(getActivity());
+				tvTitle = new TextView(getActivity());
+				tvText = new TextView(getActivity());
 				v = layoutInflater.inflate(R.layout.image_item, null);
-				
-				
+				tvTitle.findViewById(R.id.gridview_image_title);
+				tvText.findViewById(R.id.gridview_image_text);
+				tvTitle.setText("Title");
+				tvText.setText("text goes here");
 			} else {
 				v = convertView;
 			}

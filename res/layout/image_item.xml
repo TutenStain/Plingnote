@@ -19,23 +19,25 @@
         android:layout_alignParentBottom="true"
         android:background="#7000"
         android:orientation="vertical"
-        android:paddingBottom="2dp"
-        android:paddingTop="2dp" >
+        android:paddingBottom="0dp"
+        android:paddingTop="0dp" >
 
         <TextView
+            android:id="@+id/gridview_image_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Style"
+            android:text="Title"
             android:textColor="#999999"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/gridview_image_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Just awesome!"
+            android:text="Text goes here"
             android:textColor="#CCC"
             android:textSize="12sp" />
     </LinearLayout>
