@@ -25,6 +25,7 @@ public class FragmentSnotebar extends Fragment {
 	private View view;
 	private int id = -1;
 	public String reminderString = "Reminder";
+	public String imageString = "Image";
 
 	public List<IconView> icons = new ArrayList<IconView>();
 	@Override
@@ -48,7 +49,7 @@ public class FragmentSnotebar extends Fragment {
 		}
 	}
 	/**
-	 * Call setIcons method
+	 * Call set id and call setIcons method
 	 */
 	@Override 
 	public void onStart(){
@@ -60,7 +61,7 @@ public class FragmentSnotebar extends Fragment {
 		setIcons();
 	}	
 	/**
-	 * CLear list
+	 * CLear icons list
 	 */
 	@Override 
 	public void onPause(){
