@@ -2,6 +2,7 @@ package com.plingnote;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,6 +17,7 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
 /**
  * Fragment representing a fragment with clickable icons
  * @author Julia Gustafsson
@@ -85,23 +87,17 @@ public class FragmentSnotebar extends Fragment {
 				icons.add(new IconView(getActivity(),"", reminderString, new FragmentReminder()));
 			}
 		}
-		LinearLayout ll = (LinearLayout) view.findViewById(R.id.icon);
-		ll.setOrientation(LinearLayout.HORIZONTAL);
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-				(LayoutParams.FILL_PARENT), (LayoutParams.FILL_PARENT));
-		ll.setPadding(30, 30, 30, 30);
-		//Set icon on layout with onclicklistener.
-		for(IconView item : icons){	
-			item.setOnClickListener(new PreviewListener());
-			item.setOnLongClickListener(new PreviewLongListner());
-			item.setClickable(true);
-			ll.setPadding(30, 30, 30, 30);
-			//LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-				//	(LayoutParams.FILL_PARENT), (LayoutParams.FILL_PARENT));
-			//item.setLayoutParams(lp);
-			ll.addView(item);
-			ll.invalidate();
-		}
+		
+		RelativeLayout ll = (RelativeLayout) view.findViewById(R.id.icon1);
+		icons.get(0).setOnClickListener(new PreviewListener());
+		icons.get(0).setOnLongClickListener(new PreviewLongListner());
+		ll.addView(icons.get(0));
+		ll.invalidate();
+		RelativeLayout kl = (RelativeLayout) view.findViewById(R.id.icon2);
+		icons.get(1).setOnClickListener(new PreviewListener());
+		icons.get(1).setOnLongClickListener(new PreviewLongListner());
+		kl.addView(icons.get(1));
+		kl.invalidate();
 	}
 	public boolean checkIfValueIsSetted(NoteExtra noteExtra){
 		Activity activityNote = getActivity();
