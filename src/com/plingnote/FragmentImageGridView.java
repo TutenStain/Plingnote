@@ -1,14 +1,11 @@
 package com.plingnote;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,12 +16,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 public class FragmentImageGridView extends Fragment implements OnItemClickListener{
 
 	public FragmentImageGridView(){}
-
+	
+	private LayoutInflater layoutInflater;
 	private Point imgSize;
 	private DatabaseHandler db;
 	private List<Note> notes = new ArrayList<Note>();
@@ -63,6 +60,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		g.setAdapter(new ImageAdapter(getActivity()));
 		g.setOnItemClickListener(this);
 
+		layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		imgSize = new Point();
 		int side = getActivity().getResources().getDisplayMetrics().widthPixels / 4 ;
@@ -99,23 +97,18 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 
 		public View getView(int position, View convertView, ViewGroup parent) {
-			ImageView imageView;
-
+			View v;
 
 			if (convertView == null) {
-				imageView = new ImageView(mContext);
-				imageView.setLayoutParams(new GridView.LayoutParams(200 ,200));
-				imageView.setAdjustViewBounds(true);
-				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
+				v = new View(getActivity());
+				v = layoutInflater.inflate(R.layout.image_item, null);
+				
+				
 			} else {
-				imageView = (ImageView) convertView;
+				v = convertView;
 			}
-
-			imageView.setImageResource(imageIds[position]);
-
-
-			return imageView;
+			
+			return v;
 		}
 
 		/**
@@ -177,10 +170,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		editNote.putExtra(IntentExtra.id.toString(), noteId);
 
 		startActivity(editNote);
-	}
-
-	public String[] getNoteTitles(){
-		return null;
 	}
 
 }

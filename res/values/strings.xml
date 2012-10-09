@@ -17,5 +17,6 @@
     <string name="no_search_match">No match for your search!</string>
     <string name="img_description">Image Description</string>
     <string name="img_original_description">Image Original Description</string>
+    <string name="image">image</string>
     
 </resources>
