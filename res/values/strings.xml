@@ -18,5 +18,7 @@
     <string name="img_description">Image Description</string>
     <string name="img_original_description">Image Original Description</string>
     <string name="image">image</string>
+    <string name="title">Title</string>
+    <string name="text">Text goes here</string>
     
 </resources>

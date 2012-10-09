@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/image_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#0000">
 
     <ImageView
+        android:id="@+id/gridview_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:src="@drawable/category_banking" 
         android:contentDescription="@string/image"/>
 
     <LinearLayout
@@ -27,7 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Title"
             android:textColor="#999999"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -37,7 +35,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Text goes here"
             android:textColor="#CCC"
             android:textSize="12sp" />
     </LinearLayout>

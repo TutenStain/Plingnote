@@ -98,22 +98,22 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View v;
-			TextView tvTitle;
-			TextView tvText;
+			View v = new View(getActivity());
+			v = layoutInflater.inflate(R.layout.image_item, null);
+			ImageView imgView = (ImageView) v.findViewById(R.id.gridview_image);
+			TextView tvTitle = (TextView) v.findViewById(R.id.gridview_image_title);
+			TextView tvText = (TextView) v.findViewById(R.id.gridview_image_text);
 
 			if (convertView == null) {
-				v = new View(getActivity());
-				tvTitle = new TextView(getActivity());
-				tvText = new TextView(getActivity());
-				v = layoutInflater.inflate(R.layout.image_item, null);
 				tvTitle.findViewById(R.id.gridview_image_title);
 				tvText.findViewById(R.id.gridview_image_text);
-				tvTitle.setText("Title");
-				tvText.setText("text goes here");
+				tvTitle.setText(notes.get(position).getTitle());
+				tvText.setText(notes.get(position).getText());
 			} else {
 				v = convertView;
 			}
+			
+			imgView.setBackgroundResource(imageIds[position]);
 			
 			return v;
 		}
@@ -143,7 +143,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		for(Note n : db.getNoteList()){
 			addNote(n);
 		}
-
 	}
 	/**
 	 * adds a note to the list notes.
