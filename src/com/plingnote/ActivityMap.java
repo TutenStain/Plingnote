@@ -63,10 +63,20 @@ public class ActivityMap extends MapActivity implements LocationListener {
 				
 		this.locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-		//Get the last known location from the network so we 
-		//quickly can zoom to the users position 
-		this.location = this.locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
+		//Get the last known location from the network and GPS so we 
+		//quickly can zoom to the users position without waiting for a
+		//fix or loockup
+		Location lastKnownNetwork = this.locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		Location lastKnownGPS = this.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		
+		//Determinate which locations is better and set the location
+		//to the most accurate one
+		if(this.isBetterLocation(lastKnownNetwork, lastKnownGPS)){
+			this.location = lastKnownNetwork;
+		} else {
+			this.location = lastKnownGPS;
+		}
+			
 		//Generate a GeoPoint from the last know location
 		GeoPoint point = new GeoPoint((int)(this.location.getLatitude() * 1E6), (int)(this.location.getLongitude() * 1E6));
 		
