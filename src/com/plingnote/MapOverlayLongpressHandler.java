@@ -76,7 +76,7 @@ public class MapOverlayLongpressHandler extends Overlay implements OnMapViewLong
 	 */
 	private void handleLongpress(final MotionEvent event) {
 		//A press gesture have started
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+		if (event.getAction() == MotionEvent.ACTION_UP) {
 			timerLongpress = new Timer();
 			timerLongpress.schedule(new TimerTask() {
 				@Override
