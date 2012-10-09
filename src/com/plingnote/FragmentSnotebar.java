@@ -76,6 +76,7 @@ public class FragmentSnotebar extends Fragment {
 		//Check if id is -1, then no id is set and there is no information to fetch from database
 		if(id == -1){
 			icons.add(new IconView(getActivity(),"", reminderString, new FragmentReminder()));
+			icons.add(new IconView(getActivity(),"", imageString, new SBImageSelector()));
 		}else{
 			//Check if id is set,then it is information to fetch from database else there is no information
 			if(DatabaseHandler.getInstance(getActivity()).getNote(id).getAlarm() != null || !(DatabaseHandler.getInstance(getActivity()).getNote(id).getAlarm().equals(""))){
@@ -86,15 +87,18 @@ public class FragmentSnotebar extends Fragment {
 		}
 		LinearLayout ll = (LinearLayout) view.findViewById(R.id.icon);
 		ll.setOrientation(LinearLayout.HORIZONTAL);
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+				(LayoutParams.FILL_PARENT), (LayoutParams.FILL_PARENT));
 		ll.setPadding(30, 30, 30, 30);
 		//Set icon on layout with onclicklistener.
 		for(IconView item : icons){	
 			item.setOnClickListener(new PreviewListener());
 			item.setOnLongClickListener(new PreviewLongListner());
-			item.setClickable(true);		
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-					(LayoutParams.FILL_PARENT), (LayoutParams.FILL_PARENT));
-			item.setLayoutParams(lp);
+			item.setClickable(true);
+			ll.setPadding(30, 30, 30, 30);
+			//LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+				//	(LayoutParams.FILL_PARENT), (LayoutParams.FILL_PARENT));
+			//item.setLayoutParams(lp);
 			ll.addView(item);
 			ll.invalidate();
 		}

@@ -141,6 +141,7 @@ public class ActivityNote extends FragmentActivity {
 	 * @param fragment
 	 */
 	public void replaceFragmentBack(PluginFragment fragment){
+		if(fragment.getValue() != null){
 		if(fragment.getKind().equals(NoteExtra.REMINDER)){
 			DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),location,this.imagePath,fragment.getValue());			
 			reminderString = fragment.getValue();
@@ -152,7 +153,8 @@ public class ActivityNote extends FragmentActivity {
 		if(fragment.getKind().equals(NoteExtra.LOCATION)){
 			DatabaseHandler.getInstance(this).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(),fragment.getLocation(),this.imagePath,this.reminderString);		
 			location = fragment.getLocation();
-		}	
+		}
+		}
 		changeToSnotebarFragment();
 
 	}	
