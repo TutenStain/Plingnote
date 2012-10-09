@@ -1,6 +1,6 @@
 /**
  * This file is part of Plingnote.
- * Copyright (C) 2012 Linus Karlsson, Sergey Tarasevich
+ * Copyright (C) 2012 Linus Karlsson
  * 
  * Plingnote is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -17,12 +17,9 @@
 
 package com.plingnote;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
+import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,16 +28,17 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Gallery;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-
 /**
- * Fragment showing pictures in a horizontal scrollable list.
+ * Fragment showing pictures in a horizontal scrollable gallery.
  * 
  * @author Linus Karlsson
  * 
  */
 public class SBImageSelector extends Fragment {
+
+	private Cursor cursor;
+
+	private int column;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,44 +56,57 @@ public class SBImageSelector extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		// Initialize ImageLoader
-		ImageLoader.getInstance().init(
-				ImageLoaderConfiguration.createDefault(getActivity()));
-
-		// Get files from a certain directory on the device.
-		String filesDir = Environment.getExternalStorageDirectory()
-				.getAbsolutePath();
-
-		// Insert the image paths into an array
-		File[] pictures = new File(filesDir).listFiles();
-		List<String> imagePaths = new ArrayList<String>();
-		for (File file : pictures) {
-			imagePaths.add(file.getAbsolutePath());
-		}
+		// Set cursor pointing to SD Card
+		cursor = getSDCursor();
 
 		Gallery gallery = (Gallery) getView().findViewById(
 				R.id.snotebar_image_browser);
-		gallery.setAdapter(new SBImageAdapter(getActivity(), imagePaths,
-				ImageLoader.getInstance()));
+		gallery.setAdapter(new SBImageAdapter(getActivity(), cursor, column));
+
+		// Initialize the column index
+		column = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
+
+		// Get user click
 		gallery.setOnItemClickListener(new OnItemClickListener() {
 
-			public void onItemClick(AdapterView<?> parent, View view,
+			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
+
 				// Intent snoteBar = new Intent(getActivity(), FragmentSnoteBar.class);
-
-				// The path to the selected image
-				// String selectedImage = (String)
-				// parent.getAdapter().getItem(position);
-
-				// snoteBar.putExtra("MEDDELANDE", selectedImage);
+				// snoteBar.putExtra("MEDDELANDE", getSelectedImagePath(position));
 			}
 
 		});
 	}
 
-	@Override
-	public void onStop() {
-		ImageLoader.getInstance().stop();
-		super.onStop();
+	/**
+	 * Get cursor pointing to SD Card
+	 * 
+	 * @return point to SD Card
+	 */
+	public Cursor getSDCursor() {
+		String[] projection = { MediaStore.Images.Thumbnails._ID };
+
+		return getActivity().getContentResolver().query(
+				MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection,
+				null, null, MediaStore.Images.Thumbnails.IMAGE_ID);
+	}
+
+	/**
+	 * The path to the selected image in the browser.
+	 * 
+	 * @param position
+	 *            the selected image from image browser
+	 * @return the path to the selected image
+	 */
+	public String getSelectedImagePath(int position) {
+		String[] projection = { MediaStore.Images.Media.DATA };
+		cursor = getActivity().getContentResolver().query(
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
+				null, null);
+		column = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		cursor.moveToPosition(position);
+
+		return cursor.getString(column);
 	}
 }
