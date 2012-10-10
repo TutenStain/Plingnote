@@ -413,7 +413,7 @@ public class DatabaseHandler extends Observable{
 		this.setChanged();
 		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
-	}
+
 
 	/**
 	 * 
@@ -499,8 +499,8 @@ public class DatabaseHandler extends Observable{
 	 */
 	public List<Note> search(String s){
 		this.open();
-		Cursor c = this.db.rawQuery("select " + ID + ", * from " + TABLE_NOTE 
-				+ " where " + TABLE_NOTE + " match '" + s + "*'", null);
+		Cursor c = this.db.rawQuery("select " + ID + ", * from " + TABLE_NOTE
+		+ " where " + TABLE_NOTE + " match '" + s + "*'", null);
 		List<Note> l = this.createNoteList(c);
 		this.close();
 		return l;
