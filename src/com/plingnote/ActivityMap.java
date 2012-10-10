@@ -107,20 +107,23 @@ public class ActivityMap extends MapActivity implements LocationListener {
 	}
 
 	public void click(View view) {
-		//Indicate that we want a GPS fix
-		this.isWantingAFix = true;
-
-		//Select the best provider for our criteria, presumably GPS 
-		this.provider = this.locationManager.getBestProvider(this.criteria, false);
-		this.locationManager.requestLocationUpdates(this.provider, 400, 1, this);
-
-		//Update our overlays as they might have changes
-		//since we are searching for fix more intensively
-		this.updateOverlays();
-		
+		//If we already are waiting for a fix
+		//do not request location updates again
+		if(this.isWantingAFix == false) {
+			//Indicate that we want a GPS fix
+			this.isWantingAFix = true;
+	
+			//Select the best provider for our criteria, presumably GPS 
+			this.provider = this.locationManager.getBestProvider(this.criteria, false);
+			this.locationManager.requestLocationUpdates(this.provider, 400, 1, this);
+	
+			//Update our overlays as they might have changes
+			//since we are searching for fix more intensively
+			this.updateOverlays();
+		} 
+			
 		//Zoom in on the new or last know position
 		this.zoomToLastKnownPosition();
-		
 	}
 
 	/**
@@ -141,7 +144,7 @@ public class ActivityMap extends MapActivity implements LocationListener {
 		GeoPoint point = new GeoPoint((int)(this.location.getLatitude() * 1E6), (int)(this.location.getLongitude() * 1E6));
 		
 		this.mc.animateTo(point);
-		this.mc.setZoom(19);
+		this.mc.setZoom(18);
 	}
 
 	@Override
