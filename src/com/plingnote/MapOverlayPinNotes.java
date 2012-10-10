@@ -23,12 +23,13 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 
-public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> {
+public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements UpdatableOverlay {
 	private Context context;
 	private List <Note> notes = new ArrayList<Note>(); 
 	private ArrayList<OverlayItem> overlays = new ArrayList<OverlayItem>();
@@ -39,27 +40,14 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> {
 	 */
 	public MapOverlayPinNotes(Context context, Drawable marker) {
 		super(boundCenterBottom(marker));
-
 		this.context = context;
-		this.notes = DatabaseHandler.getInstance(context).getNoteList();
-	
+
 		//TEST Inserting notes if no notes with location exist in the database
 		//DatabaseHandler.getInstance(context).insertNote("Jul", "Snart", new Location(18.105469, 59.245662), "", "");
 		//DatabaseHandler.getInstance(context).insertNote("Jul2", "Snart2", new Location(12.513428, 57.710604), "", "");
 		//DatabaseHandler.getInstance(context).insertNote("Jul3", "Snart3", new Location(12.282715, 57.516413), "", "");
 				
-		//Add all notes with a valid location to the map
-		for(Note note : notes){
-			if(note.getLocation().getLatitude() != 0 && note.getLocation().getLongitude() != 0) {
-				GeoPoint point = new GeoPoint((int)(note.getLocation().getLatitude() * 1E6), (int)(note.getLocation().getLongitude() * 1E6));
-				//Ad a title add the note id
-				this.addOverlay(new OverlayItem(point, note.getId() + "", null));
-			}
-		}
-		
-		//Make sure that we always call populate even if there are no notes with location
-		if(notes.isEmpty())
-			populate();
+		this.update(null);
 			
 	}
 	
@@ -93,5 +81,22 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> {
 	private void addOverlay(OverlayItem overlay) {
 	    overlays.add(overlay);
 	    populate();
+	}
+
+	public void update(Location location) {
+		this.notes = DatabaseHandler.getInstance(context).getNoteList();
+		
+		//Add all notes with a valid location to the map
+		for(Note note : notes){
+			if(note.getLocation().getLatitude() != 0 && note.getLocation().getLongitude() != 0) {
+				GeoPoint point = new GeoPoint((int)(note.getLocation().getLatitude() * 1E6), (int)(note.getLocation().getLongitude() * 1E6));
+				//As a title add the note id
+				this.addOverlay(new OverlayItem(point, note.getId() + "", null));
+			}
+		}
+
+		//Make sure that we always call populate if there are no notes with location
+		if(notes.isEmpty())
+			populate();
 	}
 }

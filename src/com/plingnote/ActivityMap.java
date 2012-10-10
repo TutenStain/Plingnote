@@ -51,6 +51,7 @@ public class ActivityMap extends MapActivity implements LocationListener {
 	private List<Overlay> overlayList;
 	private UpdatableOverlay mapOverlayPin;
 	private UpdatableOverlay mapOverlayGPSAccuracy;
+	private UpdatableOverlay mapOverlayPinNotes;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +84,13 @@ public class ActivityMap extends MapActivity implements LocationListener {
 		//Instantiate the overlays for the map
 		this.mapOverlayPin = new MapOverlayPinCurrentPos(this, this.map, point);
 		this.mapOverlayGPSAccuracy = new MapOverlayGPSAccuracy(point, this.location);
+		this.mapOverlayPinNotes = new MapOverlayPinNotes(this, this.getResources().getDrawable(R.drawable.map_note_marker));
 		
 		//Add the overlays to the list
 		this.overlayList.add((Overlay) this.mapOverlayPin);
 		this.overlayList.add((Overlay) this.mapOverlayGPSAccuracy);
 		this.overlayList.add(new MapOverlayLongpressHandler(this, map));
-		this.overlayList.add(new MapOverlayPinNotes(this, this.getResources().getDrawable(R.drawable.map_note_marker)));
+		this.overlayList.add((Overlay) this.mapOverlayPinNotes);
 		
 		//Zoom to the last know position
 		this.zoomToLastKnownPosition();
@@ -126,7 +128,9 @@ public class ActivityMap extends MapActivity implements LocationListener {
 
 			//Zoom in on the new or last know position
 			this.zoomToLastKnownPosition();
+			
 			break;
+			
 		case R.id.button_fit_note_markers:
 			int minLat = Integer.MAX_VALUE;
 			int maxLat = Integer.MIN_VALUE;
@@ -149,6 +153,8 @@ public class ActivityMap extends MapActivity implements LocationListener {
 			double fitFactor = 1.2;
 			mc.zoomToSpan((int)(Math.abs(maxLat - minLat) * fitFactor), (int)(Math.abs(maxLon - minLon) * fitFactor));
 			mc.animateTo(new GeoPoint((maxLat + minLat) / 2, (maxLon + minLon) / 2 )); 
+			
+			break;
 		}
 		
 	}
@@ -177,6 +183,10 @@ public class ActivityMap extends MapActivity implements LocationListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		//Update our notes overlay if new note have been created with locations
+		mapOverlayPinNotes.update(null);
+		
 		if(this.isWantingAFix)
 			this.locationManager.requestLocationUpdates(this.provider, 400, 1, this);
 	}

@@ -19,8 +19,8 @@ package com.plingnote;
 
 /**
  * Interface to indicate that this overlay can be
- * updated dynamically by setting a new location
- * to the overlay
+ * updated. Not guaranteed that the overlay is updated
+ * via the location argument.
  * 
  * @author Barnabas Sapan
  */
