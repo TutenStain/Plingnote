@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,10 +43,8 @@ public class ActivityNote extends FragmentActivity {
 
 		setContentView(R.layout.activity_note);
 		ActionBar actionBar = getActionBar();
-		Log.d("NAKSANDAFKNFDANK", "dkdkdk");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		try{
-			Log.d("REMINDERDONE", getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString()) + "ff");
 			if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==true){
 				reminderDone = true;
 				reminderString ="";
@@ -430,10 +427,10 @@ public class ActivityNote extends FragmentActivity {
 			deleteAllValues();
 			return true;
 		case R.id.clean_notetext:
-			deleteNoteText();
+			deleteNoteTextandTitle();		
 			return true;
 		case R.id.clean_note:
-			deleteNoteText();
+			deleteNoteTextandTitle();
 			deleteAllValues();
 			return true;
 
@@ -454,10 +451,13 @@ public class ActivityNote extends FragmentActivity {
 	/**
 	 * Delete the note's text and title
 	 */
-	public void deleteNoteText(){
+	public void deleteNoteTextandTitle(){
 		EditText noteText = (EditText)findViewById(R.id.notetext);
 		noteText.setText(""); 
 		noteText.invalidate(); 
+		EditText noteTitle = (EditText)findViewById(R.id.notetitle);
+		noteTitle.setText(""); 
+		noteTitle.invalidate(); 
 		saveToDatabase();
 	}
 

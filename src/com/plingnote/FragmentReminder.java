@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 /**
  * A fragment representing a reminder/alarm that is using alarmmanager
@@ -70,8 +71,9 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
 		this.value = calendar.getTime()+"";
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);       
-	}
+		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);    
+		Toast.makeText(getActivity(), "Reminder set : " + value, Toast.LENGTH_LONG).show();	
+		}
 
 	/**
 	 * Return the value of this appliation

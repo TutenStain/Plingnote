@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -80,7 +79,6 @@ public class FragmentSnotebar extends Fragment {
 	 * @param linearLayout
 	 */
 	public void removeChildren(LinearLayout linearLayout){
-		Log.d("child", ""+linearLayout.getChildCount());
 		if(linearLayout.getChildCount()>0){
 			linearLayout.removeAllViews();
 		}
@@ -108,7 +106,7 @@ public class FragmentSnotebar extends Fragment {
 			}
 		}
 	}
-	
+
 	/**
 	 * Add icons to the fragment layout 
 	 * @param linearLayout
@@ -140,7 +138,7 @@ public class FragmentSnotebar extends Fragment {
 		addIcontoLayout(linearLayout);
 
 	}
-	
+
 	/**
 	 * Checks if one of the note's extra value is setted 
 	 * @param noteExtra
@@ -212,7 +210,6 @@ public class FragmentSnotebar extends Fragment {
 							intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
 							PendingIntent sender = PendingIntent.getBroadcast(getActivity(), 0,intent,PendingIntent.FLAG_ONE_SHOT);
 							AlarmManager alarmManager = (AlarmManager)  getActivity().getSystemService(Context.ALARM_SERVICE);
-							alarmManager.cancel(sender);
 						}
 						FragmentSnotebar.this.deleteFragmentValue(pluginFrag.getKind());
 					}

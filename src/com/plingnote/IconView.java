@@ -62,7 +62,6 @@ public class IconView extends View{
 	public void setFragment(Fragment fragment) {
 		this.fragment = fragment;
 	}
-
 	/**
 	 * Return fragment
 	 * @return

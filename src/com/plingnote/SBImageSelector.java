@@ -96,12 +96,7 @@ public class SBImageSelector extends Fragment implements PluginFragment{
 				// The path to the selected image
 				selectedImage = 
 						getSelectedImagePath(position);
-				Log.d("SELCTEDPATH", selectedImage);
-				// snoteBar.putExtra("MEDDELANDE", selectedImage);
-
-				// Intent snoteBar = new Intent(getActivity(), FragmentSnoteBar.class);
-				// snoteBar.putExtra("MEDDELANDE", getSelectedImagePath(position));
-
+			
 			}
 
 		});
@@ -139,27 +134,21 @@ public class SBImageSelector extends Fragment implements PluginFragment{
 	}
 
 	public String getValue() {
-		// TODO Auto-generated method stub
 		return selectedImage;
 	}
 
 	public Location getLocation() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public NoteExtra getKind() {
-		// TODO Auto-generated method stub
 		return NoteExtra.IMAGE;
 	}
 
 	public void replaceBackFragment() {
-		// TODO Auto-generated method stub
-		
+		ActivityNote activityNote = (ActivityNote)getActivity();
+		activityNote.replaceFragmentBack(this);
 	}
 
-	public void cancel() {
-		// TODO Auto-generated method stub
-		
-	}
+
 }
