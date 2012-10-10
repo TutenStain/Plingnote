@@ -88,7 +88,7 @@ public class ActivityMap extends MapActivity implements LocationListener {
 		this.overlayList.add((Overlay) this.mapOverlayPin);
 		this.overlayList.add((Overlay) this.mapOverlayGPSAccuracy);
 		this.overlayList.add(new MapOverlayLongpressHandler(this, map));
-		this.overlayList.add(new MapOverlayPinNotes(this, map));
+		this.overlayList.add(new MapOverlayPinNotes(this, this.getResources().getDrawable(R.drawable.map_note_marker)));
 		
 		//Zoom to the last know position
 		this.zoomToLastKnownPosition();
