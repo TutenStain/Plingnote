@@ -5,10 +5,20 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+
+    <EditText           android:id="@+id/notetitle"
+        android:layout_width="fill_parent"
+        android:layout_height="394dp"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:gravity="top"
+        android:hint="@string/notetitlehint"
+        android:singleLine="false" />
+    
     <EditText
         android:id="@+id/notetext"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="394dp"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
         android:gravity="top"

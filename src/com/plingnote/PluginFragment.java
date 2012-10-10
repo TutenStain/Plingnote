@@ -15,5 +15,5 @@ public interface PluginFragment {
 	
 	public void replaceBackFragment();
 	
-	public void cancel();
+	
 }

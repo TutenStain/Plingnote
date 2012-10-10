@@ -92,13 +92,27 @@ public class FragmentSnotebar extends Fragment {
 				icons.add(new IconView(getActivity(),"", reminderString, new FragmentReminder()));
 			}
 		}
-		
+		LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.snotebar);
+		int i = 0;
+		for(IconView item: icons){
+			Log.d("FOREACH", i+"");
+		i++;
+			item.setOnClickListener(new PreviewListener());
+			item.setOnLongClickListener(new PreviewLongListner());
+			LinearLayout relative = new LinearLayout(getActivity());
+			relative.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,(float) 1.0));
+
+			relative.addView(item);
+			linearLayout.addView(relative);
+		}
+		linearLayout.invalidate();
+		/*
 		RelativeLayout ll = (RelativeLayout) view.findViewById(R.id.icon1);
 		icons.get(0).setOnClickListener(new PreviewListener());
 		icons.get(0).setOnLongClickListener(new PreviewLongListner());
 		ll.addView(icons.get(0));
 		ll.invalidate();
-	/*	RelativeLayout kl = (RelativeLayout) view.findViewById(R.id.icon2);
+		RelativeLayout kl = (RelativeLayout) view.findViewById(R.id.icon2);
 		icons.get(1).setOnClickListener(new PreviewListener());
 		icons.get(1).setOnLongClickListener(new PreviewLongListner());
 		kl.addView(icons.get(1));
@@ -162,19 +176,19 @@ public class FragmentSnotebar extends Fragment {
 					public void onClick(DialogInterface dialog, int id) {
 						PluginFragment pluginFrag = (PluginFragment)icon.getFragment();
 						if(pluginFrag instanceof FragmentReminder){
-						FragmentReminder f =(FragmentReminder) pluginFrag ;
-						ActivityNote activityNote = (ActivityNote)getActivity();
-						Log.d("IDCANDEL", "");
-						Intent intent = new Intent(getActivity(), NoteNotification.class);
-						
-					
-						intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
-						PendingIntent sender = PendingIntent.getBroadcast(getActivity(), 0,intent,PendingIntent.FLAG_ONE_SHOT);
-						AlarmManager alarmManager = (AlarmManager)  getActivity().getSystemService(Context.ALARM_SERVICE);
+							FragmentReminder f =(FragmentReminder) pluginFrag ;
+							ActivityNote activityNote = (ActivityNote)getActivity();
+							Log.d("IDCANDEL", "");
+							Intent intent = new Intent(getActivity(), NoteNotification.class);
 
-						alarmManager.cancel(sender);
+
+							intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
+							PendingIntent sender = PendingIntent.getBroadcast(getActivity(), 0,intent,PendingIntent.FLAG_ONE_SHOT);
+							AlarmManager alarmManager = (AlarmManager)  getActivity().getSystemService(Context.ALARM_SERVICE);
+
+							alarmManager.cancel(sender);
 							//f.cancel();
-						
+
 						}
 						FragmentSnotebar.this.deleteFragmentValue(pluginFrag.getKind());
 					}

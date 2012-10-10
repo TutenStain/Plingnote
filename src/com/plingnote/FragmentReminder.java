@@ -23,7 +23,7 @@ import android.widget.TimePicker;
  */
 public class FragmentReminder extends Fragment implements PluginFragment{
 	private View view;
-	private String value;
+	private String value = "";
 	PendingIntent pendingIntent;
 
 	public View onCreateView(LayoutInflater inflater,

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -99,26 +100,58 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public void onStart(){
 		super.onStart();
-		EditText noteText = (EditText)findViewById(R.id.notetext);
+		EditText noteTitle = (EditText)findViewById(R.id.notetitle);
 		Rect rec = Utils.getScreenPixels(this);
 		int height = rec.height();
 		int widht = rec.width();	
 		getResources().getConfiguration();
 		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-			int h = height/10;
-			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h*4));
+			int h = height;
+			noteTitle.setLayoutParams(new LinearLayout.LayoutParams(widht,h/7));
 		}
 		else{
-			int h = height/15;
-			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h*9));
+			int h = height;
+			noteTitle.setLayoutParams(new LinearLayout.LayoutParams(widht,h/11));
+		}	
+		
+		noteTitle.setOnKeyListener(new View.OnKeyListener() {
+		    public boolean onKey(View v, int keyCode, KeyEvent event) {
+		        switch(keyCode) {
+		            case KeyEvent.KEYCODE_ENTER:		    
+		            	 EditText noteText = (EditText)findViewById(R.id.notetext);
+		            	 noteText.setFocusable(true);
+		            	 noteText.requestFocus();
+		            	 return true;
+		                
+		            default:
+		                break;
+		        }
+				return false;
+		    }
+		});
+		EditText noteText = (EditText)findViewById(R.id.notetext);
+		 rec = Utils.getScreenPixels(this);
+		 height = rec.height();
+		 widht = rec.width();	
+		getResources().getConfiguration();
+		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+			int h = height/3;
+			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h));
+		}
+		else{
+			int h = height/2;
+			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h));
 		}	
 		//If this class was opened with an intent or saved instances, the note text will get the text from the database
 		if(this.id != -1){
-			String txt = (DatabaseHandler.getInstance(this).getNote(this.id).getTitle());
-			txt = txt +(DatabaseHandler.getInstance(this).getNote(this.id).getText());
+			String title = (DatabaseHandler.getInstance(this).getNote(this.id).getTitle());
+			noteTitle.setText(title);
+			
+			String txt = (DatabaseHandler.getInstance(this).getNote(this.id).getText());
 			//The cursor position will be saved even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
 			noteText.setText(""); 
 			noteText.append(txt);
+			noteTitle.invalidate(); 
 			noteText.invalidate(); 
 		}
 	}
@@ -128,7 +161,6 @@ public class ActivityNote extends FragmentActivity {
 	 * @param fragment
 	 */
 	public void replaceFragment(Fragment fragment){
-		Log.d("replace", this.id +"");
 		saveToDatabase();
 		anotherFragment= fragment;
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, anotherFragment).commit();
@@ -260,7 +292,7 @@ public class ActivityNote extends FragmentActivity {
 	 * @return String
 	 */
 	public String getTitleofNoteText(){
-		EditText noteText = (EditText) findViewById(R.id.notetext);
+		EditText noteText = (EditText) findViewById(R.id.notetitle);
 		if(noteText.getText().toString().length()>0){
 			String txt = noteText.getText().toString();
 			String[] txtLines = txt.split("\n");
