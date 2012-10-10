@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:background="#50505050"
             android:onClick="click"
-            android:contentDescription="@string/cont_descr_compass_button"
+            android:contentDescription="@string/cont_descr_fit_notes"
             android:src="@android:drawable/ic_menu_zoom" >
         </ImageButton>
     
