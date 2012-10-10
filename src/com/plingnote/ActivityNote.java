@@ -31,6 +31,7 @@ public class ActivityNote extends FragmentActivity {
 	private FragmentSnotebar snotebarFragment = null;
 	private Fragment anotherFragment = null;
 	private boolean deleteNote = false;
+	private boolean reminderDone = false;
 
 	/**
 	 * Set content view and try to fetch id from saved instance or intent,
@@ -40,13 +41,22 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_note);
 		ActionBar actionBar = getActionBar();
+		Log.d("NAKSANDAFKNFDANK", "dkdkdk");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		try{
+			Log.d("REMINDERDONE", getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString()) + "ff");
+			if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==true){
+				reminderDone = true;
+					reminderString ="";
+			}
+		}catch(Exception o){}
+		try{
 			id =savedInstanceState.getInt(IntentExtra.id.toString());
-		}
-		catch(Exception eka)
+			setLocalExtraValues();
+		}catch(Exception eka)
 		{
 		}
 		try {   
@@ -57,24 +67,8 @@ public class ActivityNote extends FragmentActivity {
 					if(this.id == -1){
 						if(getIntent().getExtras().getInt(IntentExtra.id.toString()) != -1){ 
 							id = getIntent().getExtras().getInt(IntentExtra.id.toString());
-							if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==true){
-								try{
-									deleteValue(NoteExtra.REMINDER);
-									//reminderString = DatabaseHandler.getInstance(this).getNote(this.id).getAlarm();
-								}catch(Exception el){	
-								}
-								try{
-									imagePath = DatabaseHandler.getInstance(this).getNote(this.id).getImagePath();
-								}catch(Exception ell){	
-								}
-								try{
-									location = DatabaseHandler.getInstance(this).getNote(this.id).getLocation();
-								}catch(Exception el){	
-								}
-						
-							}
-							
-						}
+							setLocalExtraValues();
+					}
 					}
 				}catch(Exception ek)
 				{
@@ -91,12 +85,46 @@ public class ActivityNote extends FragmentActivity {
 				fragmentTransaction.attach(newFragment);
 				fragmentTransaction.add(R.id.fragmentcontainer, newFragment);
 				fragmentTransaction.commit();
+			
+		}
 			}
 		}
-
+		
 		//Fetching values from database
+	/*	try{
+			if(reminderDone == false)
+			reminderString = DatabaseHandler.getInstance(this).getNote(this.id).getAlarm();
+	}catch(Exception el){	
+	}
+	try{
+		imagePath = DatabaseHandler.getInstance(this).getNote(this.id).getImagePath();
+	}catch(Exception ell){	
+	}
+	try{
+		location = DatabaseHandler.getInstance(this).getNote(this.id).getLocation();
+	}catch(Exception el){	
+	}*/
 	
-	}	   
+		
+		public void setLocalExtraValues(){
+			try{
+				if(reminderDone == false)
+				reminderString = DatabaseHandler.getInstance(this).getNote(this.id).getAlarm();
+		}catch(Exception el){	
+		}
+		try{
+			imagePath = DatabaseHandler.getInstance(this).getNote(this.id).getImagePath();
+		}catch(Exception ell){	
+		}
+		try{
+			location = DatabaseHandler.getInstance(this).getNote(this.id).getLocation();
+		}catch(Exception el){	
+		}
+		try{
+		 DatabaseHandler.getInstance(this).updateNote(id, DatabaseHandler.getInstance(this).getNote(this.id).getTitle(), DatabaseHandler.getInstance(this).getNote(this.id).getText(), location, imagePath, reminderString);
+		}catch(Exception o){}
+		
+		}
 	public void setNoteTitleLayoutParam(){
 		EditText noteTitle = (EditText)findViewById(R.id.notetitle);
 		Rect rec = Utils.getScreenPixels(this);
@@ -149,11 +177,10 @@ public class ActivityNote extends FragmentActivity {
 	public void setNoteText(){
 		EditText noteText = (EditText)findViewById(R.id.notetext);
 		//If this class was opened with an intent or saved instances, the note text will get the text from the database
-				if(this.id != -1){
-					String title = (DatabaseHandler.getInstance(this).getNote(this.id).getTitle());					
+				if(this.id != -1){				
 					String txt = (DatabaseHandler.getInstance(this).getNote(this.id).getText());
 					//The cursor position will be saved even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
-					noteText.setText(""); 
+					//noteText.setText(""); 
 					noteText.append(txt);
 					noteText.invalidate(); 
 				}
@@ -333,9 +360,9 @@ public class ActivityNote extends FragmentActivity {
 	public String getTextofNoteText(){
 		EditText noteText = (EditText) findViewById(R.id.notetext);
 		String txt = noteText.getText().toString();
-		if(txt.length()-this.getTitleofNoteText().length() >0){
-			String text =txt.substring(this.getTitleofNoteText().length(), txt.length());
-			return text;
+		if(txt.length() >0){
+		
+			return txt;
 		}else
 			return "";
 	}
@@ -434,4 +461,7 @@ public class ActivityNote extends FragmentActivity {
 		}
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, snotebarFragment).commit();
 	}
+	
+
+	
 }
