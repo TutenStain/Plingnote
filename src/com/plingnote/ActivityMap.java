@@ -107,23 +107,50 @@ public class ActivityMap extends MapActivity implements LocationListener {
 	}
 
 	public void click(View view) {
-		//If we already are waiting for a fix
-		//do not request location updates again
-		if(this.isWantingAFix == false) {
-			//Indicate that we want a GPS fix
-			this.isWantingAFix = true;
-	
-			//Select the best provider for our criteria, presumably GPS 
-			this.provider = this.locationManager.getBestProvider(this.criteria, false);
-			this.locationManager.requestLocationUpdates(this.provider, 400, 1, this);
-	
-			//Update our overlays as they might have changes
-			//since we are searching for fix more intensively
-			this.updateOverlays();
-		} 
-			
-		//Zoom in on the new or last know position
-		this.zoomToLastKnownPosition();
+		switch (view.getId()) {
+		case R.id.button_find_my_location:
+			//If we already are waiting for a fix
+			//do not request location updates again
+			if(this.isWantingAFix == false) {
+				//Indicate that we want a GPS fix
+				this.isWantingAFix = true;
+
+				//Select the best provider for our criteria, presumably GPS 
+				this.provider = this.locationManager.getBestProvider(this.criteria, false);
+				this.locationManager.requestLocationUpdates(this.provider, 400, 1, this);
+
+				//Update our overlays as they might have changes
+				//since we are searching for fix more intensively
+				this.updateOverlays();
+			} 
+
+			//Zoom in on the new or last know position
+			this.zoomToLastKnownPosition();
+			break;
+		case R.id.button_fit_note_markers:
+			int minLat = Integer.MAX_VALUE;
+			int maxLat = Integer.MIN_VALUE;
+			int minLon = Integer.MAX_VALUE;
+			int maxLon = Integer.MIN_VALUE;
+
+			for (Note note :  DatabaseHandler.getInstance(this).getNoteList()) { 
+				int lat = (int)(note.getLocation().getLatitude() * 1E6);
+				int lon = (int)(note.getLocation().getLongitude() * 1E6);
+
+				maxLat = Math.max(lat, maxLat);
+				minLat = Math.min(lat, minLat);
+				maxLon = Math.max(lon, maxLon);
+				minLon = Math.min(lon, minLon);
+			}
+
+			//Formula to zoom and fit the view nicely is taken from
+			//http://stackoverflow.com/questions/5241487/
+			//android-mapview-setting-zoom-automatically-until-all-itemizedoverlays-are-visi
+			double fitFactor = 1.2;
+			mc.zoomToSpan((int)(Math.abs(maxLat - minLat) * fitFactor), (int)(Math.abs(maxLon - minLon) * fitFactor));
+			mc.animateTo(new GeoPoint((maxLat + minLat) / 2, (maxLon + minLon) / 2 )); 
+		}
+		
 	}
 
 	/**

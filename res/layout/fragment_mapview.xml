@@ -29,10 +29,33 @@
             android:id="@+id/button_find_my_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="#50505050"
             android:onClick="click"
             android:contentDescription="@string/cont_descr_compass_button"
             android:src="@android:drawable/ic_menu_mylocation" >
         </ImageButton>
+    
+    </LinearLayout>
+    
+    
+    <LinearLayout
+        android:id="@+id/button_layout_mapoverlay2"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp" >
+
+        <ImageButton
+            android:id="@+id/button_fit_note_markers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#50505050"
+            android:onClick="click"
+            android:contentDescription="@string/cont_descr_compass_button"
+            android:src="@android:drawable/ic_menu_zoom" >
+        </ImageButton>
+    
     </LinearLayout>
 
 </RelativeLayout>
