@@ -96,6 +96,7 @@ public class SBImageSelector extends Fragment implements PluginFragment{
 				// The path to the selected image
 				selectedImage = 
 						getSelectedImagePath(position);
+				replaceBackFragment();
 			
 			}
 
