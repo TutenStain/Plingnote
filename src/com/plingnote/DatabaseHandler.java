@@ -106,19 +106,18 @@ public class DatabaseHandler extends Observable{
 			}
 		}
 
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			DatabaseHandler dbHandler = DatabaseHandler.getInstance(this.context);
-			List<Note> backup = dbHandler.getNoteList();
-			try{
-				db.execSQL("drop table if exists " + TABLE_NOTE);
-			} catch(SQLException e){
+			@Override
+			public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+				DatabaseHandler dbHandler = DatabaseHandler.getInstance(this.context);
+				List<Note> backup = dbHandler.getNoteList();
+				try{
+					db.execSQL("drop table if exists " + TABLE_NOTE);
+				}	 catch(SQLException e){
 				Log.e("SQLException", "while upgrading database");
-			}
-			this.onCreate(db);
+				}	
+				this.onCreate(db);
 			dbHandler.insertOldData(backup);
-		}
-	}
+		}	
 
 	/**
 	 * 
@@ -571,12 +570,11 @@ public class DatabaseHandler extends Observable{
 		}
 		return l;
 	}
-
-	private void insertOldData(List<Note> nlist){
-		for(Note n: nlist)
-			this.insertNote(n.getTitle(), n.getText(), n.getLocation(), 
-					n.getImagePath(), n.getAlarm(), n.getCategory(), n.getAddress());
-	}
+		private void insertOldData(List<Note> nlist){
+			for(Note n: nlist)	
+			this.insertNote(n.getTitle(), n.getText(), n.getLocation(),
+			n.getImagePath(), n.getAlarm(), n.getCategory(), n.getAddress());
+		}
 
 	private DatabaseHandler open() throws SQLException{
 		this.db = this.dbHelp.getWritableDatabase();
