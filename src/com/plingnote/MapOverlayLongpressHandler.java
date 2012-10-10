@@ -39,7 +39,7 @@ import com.google.android.maps.Overlay;
  * @author Barnabas Sapan
  */
 public class MapOverlayLongpressHandler extends Overlay implements OnMapViewLongpressListener {
-	private static final int THRESHOLD_LONGPRESS = 600;
+	private static final int THRESHOLD_LONGPRESS = 200;
 	private MapView map;
 	private Context context;  
 	private GeoPoint mapCenterLast;
@@ -56,7 +56,6 @@ public class MapOverlayLongpressHandler extends Overlay implements OnMapViewLong
 		//Check to see if this touch event is a longpress. If yes, then run
 		//the onLongPress method
 		this.handleLongpress(event);
-		
 		return false;
 	}
 	
@@ -76,7 +75,7 @@ public class MapOverlayLongpressHandler extends Overlay implements OnMapViewLong
 	 */
 	private void handleLongpress(final MotionEvent event) {
 		//A press gesture have started
-		if (event.getAction() == MotionEvent.ACTION_UP) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			timerLongpress = new Timer();
 			timerLongpress.schedule(new TimerTask() {
 				@Override
