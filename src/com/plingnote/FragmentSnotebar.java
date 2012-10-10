@@ -75,12 +75,17 @@ public class FragmentSnotebar extends Fragment {
 		super.onPause();
 		icons.clear();
 	}
-	/**
-	 * Setting icon depending if they got an id or not and if their is already information setted or not.
-	 */
-	public void setIcons(){
-		icons.clear();
-		//Check if id is -1, then no id is set and there is no information to fetch from database
+	
+	
+	public void removeChildren(LinearLayout linearLayout){
+		Log.d("child", ""+linearLayout.getChildCount());
+		if(linearLayout.getChildCount()>0){
+			linearLayout.removeAllViews();
+		}
+		linearLayout.invalidate();
+	}
+	
+	public void addIcontoList(){
 		if(id == -1){
 			icons.add(new IconView(getActivity(),"", reminderString, new FragmentReminder()));
 			icons.add(new IconView(getActivity(),"", imageString, new SBImageSelector()));
@@ -91,32 +96,41 @@ public class FragmentSnotebar extends Fragment {
 			}else{
 				icons.add(new IconView(getActivity(),"", reminderString, new FragmentReminder()));
 			}
+			if(DatabaseHandler.getInstance(getActivity()).getNote(id).getImagePath() != null || !(DatabaseHandler.getInstance(getActivity()).getNote(id).getImagePath().equals(""))){
+				icons.add(new IconView(getActivity(),DatabaseHandler.getInstance(getActivity()).getNote(id).getImagePath(), imageString, new SBImageSelector()));					
+			}else{
+				icons.add(new IconView(getActivity(),DatabaseHandler.getInstance(getActivity()).getNote(id).getImagePath(), imageString, new SBImageSelector()));
+			}
 		}
-		LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.snotebar);
-		int i = 0;
+	}
+	
+	public void addIcontoLayout(LinearLayout linearLayout){
+		int i = 1;
 		for(IconView item: icons){
-			Log.d("FOREACH", i+"");
-		i++;
+		
 			item.setOnClickListener(new PreviewListener());
 			item.setOnLongClickListener(new PreviewLongListner());
 			LinearLayout relative = new LinearLayout(getActivity());
-			relative.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,(float) 1.0));
-
+			double j = (i*0.1);
+			relative.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.FILL_PARENT,(float) j));
 			relative.addView(item);
 			linearLayout.addView(relative);
+			i = 2+i;
 		}
 		linearLayout.invalidate();
-		/*
-		RelativeLayout ll = (RelativeLayout) view.findViewById(R.id.icon1);
-		icons.get(0).setOnClickListener(new PreviewListener());
-		icons.get(0).setOnLongClickListener(new PreviewLongListner());
-		ll.addView(icons.get(0));
-		ll.invalidate();
-		RelativeLayout kl = (RelativeLayout) view.findViewById(R.id.icon2);
-		icons.get(1).setOnClickListener(new PreviewListener());
-		icons.get(1).setOnLongClickListener(new PreviewLongListner());
-		kl.addView(icons.get(1));
-		kl.invalidate();*/
+	}
+	/**
+	 * Setting icon depending if they got an id or not and if their is already information setted or not.
+	 */
+	public void setIcons(){
+		LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.snotebar);
+		removeChildren(linearLayout);
+		icons.clear();
+		//Check if id is -1, then no id is set and there is no information to fetch from database
+		addIcontoList();
+		linearLayout = (LinearLayout)view.findViewById(R.id.snotebar);
+		addIcontoLayout(linearLayout);
+
 	}
 	public boolean checkIfValueIsSetted(NoteExtra noteExtra){
 		Activity activityNote = getActivity();
@@ -178,17 +192,11 @@ public class FragmentSnotebar extends Fragment {
 						if(pluginFrag instanceof FragmentReminder){
 							FragmentReminder f =(FragmentReminder) pluginFrag ;
 							ActivityNote activityNote = (ActivityNote)getActivity();
-							Log.d("IDCANDEL", "");
 							Intent intent = new Intent(getActivity(), NoteNotification.class);
-
-
 							intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
 							PendingIntent sender = PendingIntent.getBroadcast(getActivity(), 0,intent,PendingIntent.FLAG_ONE_SHOT);
 							AlarmManager alarmManager = (AlarmManager)  getActivity().getSystemService(Context.ALARM_SERVICE);
-
 							alarmManager.cancel(sender);
-							//f.cancel();
-
 						}
 						FragmentSnotebar.this.deleteFragmentValue(pluginFrag.getKind());
 					}
