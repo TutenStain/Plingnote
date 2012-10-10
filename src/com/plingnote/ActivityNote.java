@@ -57,6 +57,23 @@ public class ActivityNote extends FragmentActivity {
 					if(this.id == -1){
 						if(getIntent().getExtras().getInt(IntentExtra.id.toString()) != -1){ 
 							id = getIntent().getExtras().getInt(IntentExtra.id.toString());
+							if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==true){
+								try{
+									deleteValue(NoteExtra.REMINDER);
+									//reminderString = DatabaseHandler.getInstance(this).getNote(this.id).getAlarm();
+								}catch(Exception el){	
+								}
+								try{
+									imagePath = DatabaseHandler.getInstance(this).getNote(this.id).getImagePath();
+								}catch(Exception ell){	
+								}
+								try{
+									location = DatabaseHandler.getInstance(this).getNote(this.id).getLocation();
+								}catch(Exception el){	
+								}
+						
+							}
+							
 						}
 					}
 				}catch(Exception ek)
@@ -78,28 +95,9 @@ public class ActivityNote extends FragmentActivity {
 		}
 
 		//Fetching values from database
-		try{
-			reminderString = DatabaseHandler.getInstance(this).getNote(this.id).getAlarm();
-		}catch(Exception e){	
-		}
-		try{
-			imagePath = DatabaseHandler.getInstance(this).getNote(this.id).getImagePath();
-		}catch(Exception e){	
-		}
-		try{
-			location = DatabaseHandler.getInstance(this).getNote(this.id).getLocation();
-		}catch(Exception e){	
-		}
+	
 	}	   
-
-
-	/**
-	 *Set the view noteText text to the latest inserted note's text if is during editing.
-	 *Sets the curser of the view noteText to the bottom of the text.
-	 */
-	@Override
-	public void onStart(){
-		super.onStart();
+	public void setNoteTitleLayoutParam(){
 		EditText noteTitle = (EditText)findViewById(R.id.notetitle);
 		Rect rec = Utils.getScreenPixels(this);
 		int height = rec.height();
@@ -129,10 +127,14 @@ public class ActivityNote extends FragmentActivity {
 				return false;
 		    }
 		});
+	}
+	
+	public void setNoteTextLayoutParam(){
+		
 		EditText noteText = (EditText)findViewById(R.id.notetext);
-		 rec = Utils.getScreenPixels(this);
-		 height = rec.height();
-		 widht = rec.width();	
+		Rect  rec = Utils.getScreenPixels(this);
+		int height = rec.height();
+		int widht = rec.width();	
 		getResources().getConfiguration();
 		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
 			int h = height/3;
@@ -141,19 +143,42 @@ public class ActivityNote extends FragmentActivity {
 		else{
 			int h = height/2;
 			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h));
-		}	
-		//If this class was opened with an intent or saved instances, the note text will get the text from the database
-		if(this.id != -1){
-			String title = (DatabaseHandler.getInstance(this).getNote(this.id).getTitle());
-			noteTitle.setText(title);
-			
-			String txt = (DatabaseHandler.getInstance(this).getNote(this.id).getText());
-			//The cursor position will be saved even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
-			noteText.setText(""); 
-			noteText.append(txt);
-			noteTitle.invalidate(); 
-			noteText.invalidate(); 
 		}
+	}
+	
+	public void setNoteText(){
+		EditText noteText = (EditText)findViewById(R.id.notetext);
+		//If this class was opened with an intent or saved instances, the note text will get the text from the database
+				if(this.id != -1){
+					String title = (DatabaseHandler.getInstance(this).getNote(this.id).getTitle());					
+					String txt = (DatabaseHandler.getInstance(this).getNote(this.id).getText());
+					//The cursor position will be saved even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
+					noteText.setText(""); 
+					noteText.append(txt);
+					noteText.invalidate(); 
+				}
+	}
+	public void setNoteTitle(){
+		EditText noteTitle = (EditText)findViewById(R.id.notetitle);
+		//If this class was opened with an intent or saved instances, the note text will get the text from the database
+				if(this.id != -1){
+					String title = (DatabaseHandler.getInstance(this).getNote(this.id).getTitle());
+					noteTitle.setText(title);		
+					noteTitle.invalidate(); 
+				}
+	}
+
+	/**
+	 *Set the view noteText text to the latest inserted note's text if is during editing.
+	 *Sets the curser of the view noteText to the bottom of the text.
+	 */
+	@Override
+	public void onStart(){
+		super.onStart();
+		setNoteTitleLayoutParam();
+		setNoteTextLayoutParam();
+		setNoteText();	
+		setNoteTitle();
 	}
 
 	/**

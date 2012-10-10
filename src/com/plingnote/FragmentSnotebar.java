@@ -21,8 +21,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.RelativeLayout;
+
 /**
  * Fragment representing a fragment with clickable icons
  * @author Julia Gustafsson
@@ -65,7 +64,7 @@ public class FragmentSnotebar extends Fragment {
 		if(activityNote instanceof ActivityNote) { 
 			this.id = ((ActivityNote) activityNote).getId();
 		}
-		setIcons();
+		addAndSetIconstoLayout();
 	}	
 	/**
 	 * CLear icons list
@@ -75,8 +74,11 @@ public class FragmentSnotebar extends Fragment {
 		super.onPause();
 		icons.clear();
 	}
-	
-	
+
+	/**
+	 * Remove childrens view to the layout to avoid duplicated icons. 
+	 * @param linearLayout
+	 */
 	public void removeChildren(LinearLayout linearLayout){
 		Log.d("child", ""+linearLayout.getChildCount());
 		if(linearLayout.getChildCount()>0){
@@ -84,7 +86,10 @@ public class FragmentSnotebar extends Fragment {
 		}
 		linearLayout.invalidate();
 	}
-	
+
+	/**
+	 * Add new icons to list, it's information depends on if the note id exist and if the note has stored value
+	 */
 	public void addIcontoList(){
 		if(id == -1){
 			icons.add(new IconView(getActivity(),"", reminderString, new FragmentReminder()));
@@ -104,10 +109,13 @@ public class FragmentSnotebar extends Fragment {
 		}
 	}
 	
+	/**
+	 * Add icons to the fragment layout 
+	 * @param linearLayout
+	 */
 	public void addIcontoLayout(LinearLayout linearLayout){
 		int i = 1;
 		for(IconView item: icons){
-		
 			item.setOnClickListener(new PreviewListener());
 			item.setOnLongClickListener(new PreviewLongListner());
 			LinearLayout relative = new LinearLayout(getActivity());
@@ -122,7 +130,7 @@ public class FragmentSnotebar extends Fragment {
 	/**
 	 * Setting icon depending if they got an id or not and if their is already information setted or not.
 	 */
-	public void setIcons(){
+	public void addAndSetIconstoLayout(){
 		LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.snotebar);
 		removeChildren(linearLayout);
 		icons.clear();
@@ -132,6 +140,12 @@ public class FragmentSnotebar extends Fragment {
 		addIcontoLayout(linearLayout);
 
 	}
+	
+	/**
+	 * Checks if one of the note's extra value is setted 
+	 * @param noteExtra
+	 * @return
+	 */
 	public boolean checkIfValueIsSetted(NoteExtra noteExtra){
 		Activity activityNote = getActivity();
 		if(activityNote instanceof ActivityNote) { 
@@ -189,6 +203,8 @@ public class FragmentSnotebar extends Fragment {
 					//Call methods that will delete the data
 					public void onClick(DialogInterface dialog, int id) {
 						PluginFragment pluginFrag = (PluginFragment)icon.getFragment();
+						//This code must unfortunalty be in this class or in fragmentsnotebarclass because if the fragmentReminder isn't
+						//in snotebar it's value it's getactivty return null and you can't remove the alarm.
 						if(pluginFrag instanceof FragmentReminder){
 							FragmentReminder f =(FragmentReminder) pluginFrag ;
 							ActivityNote activityNote = (ActivityNote)getActivity();
@@ -210,6 +226,10 @@ public class FragmentSnotebar extends Fragment {
 			}
 		}
 	}
+	/**
+	 * Delete one of the note 'extra' value, which value depends on the parameter.
+	 * @param noteExtra
+	 */
 	public void deleteFragmentValue(NoteExtra noteExtra){
 		Activity activityNote = getActivity();
 		if(activityNote instanceof ActivityNote) { 

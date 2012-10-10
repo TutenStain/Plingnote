@@ -40,8 +40,7 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		Button cancel = (Button) view.findViewById(R.id.cancel);
 
 		cancel.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {	  
-				
+			public void onClick(View v) {	  			
 				replaceBackFragment();
 			}
 		});	
@@ -61,11 +60,11 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 	public void saveTime(View view){
 		DatePicker datepicker = (DatePicker)this.view.findViewById(R.id.datePicker);
 		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);	    	
-	Intent intent = new Intent(getActivity(), NoteNotification.class);
+		Intent intent = new Intent(getActivity(), NoteNotification.class);
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
 		Log.d("IDSave", activityNote.getId() +"");
-		 pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
+		pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
 		//pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, 0);
 		Calendar calendar =  Calendar.getInstance();
 		calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
@@ -73,28 +72,28 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);       
 	}
-	
+
 	/**
 	 * Return the value of this appliation
 	 */
 	public String getValue() {
 		return this.value;
 	}
-	
+
 	/**
-	 * Return a location if this fragment is containing one
+	 * Return a location if this fragment is containing one. This one contains 
 	 */
 	public Location getLocation() {
 		return null;
 	}
-	
+
 	/**
 	 * Return which kind of note extra this fragment is
 	 */
 	public NoteExtra getKind() {
 		return NoteExtra.REMINDER;
 	}
-	
+
 	/**
 	 * Call replacebackfragment in the activity/fragment that host this fragment
 	 */
