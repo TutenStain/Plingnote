@@ -7,10 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +32,14 @@ import android.widget.TextView;
 public class FragmentImageGridView extends Fragment implements OnItemClickListener{
 
 	public FragmentImageGridView(){}
-	
+
 	private LayoutInflater layoutInflater;
 	private Point imgSize;
 	private DatabaseHandler db;
-	private List<Note> notes = new ArrayList<Note>();
-
+	private List<Note> notes = new ArrayList<Note>();		
+	private ActionMode actionBar;
+	private GridView gView;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,6 +55,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		Bundle args = new Bundle();
 		args.putInt("index", index);
 
+
 		f.setArguments(args);
 		return f;
 
@@ -60,25 +66,28 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		if (container == null){
 			return null;
 		}
-		db = DatabaseHandler.getInstance(getActivity());
-
+		db = DatabaseHandler.getInstance(getActivity());;
 		final View grid;
-		refreshNotes();
 		if(getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
 			grid = inflater.inflate(R.layout.fragment_gridview, container, false); 
 		} else{
 			grid = inflater.inflate(R.layout.fragment_gridview_land, container, false); 
 		}
-		GridView g = (GridView) grid.findViewById(R.id.grid);
-		g.setAdapter(new ImageAdapter(getActivity()));
-		g.setOnItemClickListener(this);
+		gView = (GridView) grid.findViewById(R.id.grid);
+		gView.setAdapter(new ImageAdapter(getActivity()));
+		gView.setOnItemClickListener(this);
+
+		// Make it possible for the user to select multiple items.
+		gView.setChoiceMode(gView.CHOICE_MODE_MULTIPLE_MODAL);
+		gView.setMultiChoiceModeListener(new LongPress());
 
 		layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		imgSize = new Point();
 		int side = getActivity().getResources().getDisplayMetrics().widthPixels / 4 ;
 		setImgSize(side,side);
-		
+
+		refreshNotes();
 
 		return grid;
 	}
@@ -108,7 +117,10 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			return position;
 		}
 
-
+		/**
+		 * Returns a View with three view baked into it, these create an image with some 
+		 * text on top.
+		 */
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = new View(getActivity());
 			v = layoutInflater.inflate(R.layout.image_item, null);
@@ -124,7 +136,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			} else {
 				v = convertView;
 			}
-			
+
 			imgView.setBackgroundResource(imageIds[position]);
 			return v;
 		}
@@ -148,13 +160,14 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 	 * Deletes all the notes in the list notes and then adds freshly from the database.
 	 */
 	public void refreshNotes(){
-
 		clearNotes();
 
 		for(Note n : db.getNoteList()){
 			addNote(n);
 		}
+		
 	}
+
 	/**
 	 * adds a note to the list notes.
 	 * @param note adds this object to the list.
@@ -181,52 +194,115 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 	public void onItemClick(AdapterView parent, View v, int position, long id) {
 		Intent editNote = new Intent(getActivity(), ActivityNote.class);
 
-
-		// Get the row ID of the clicked note.
+		// Get the ID of the clicked note.
 		int noteId = notes.get(position).getId();
 		editNote.putExtra(IntentExtra.id.toString(), noteId);
 
-		startActivity(editNote);
+		startActivity(editNote);		
 	}
-	
-	private class LongPress implements MultiChoiceModeListener{
 
-		@Override
-		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-			
-			switch(item.getItemId()){
-			case R.id.remove:
-				
-			
-			default:
-			return false;
+	/**
+	 * Remove checked notes from the list.
+	 */
+	public void removeItem() {
+		// Get the positions of all the checked items.
+		SparseBooleanArray checkedItemPositions = gView
+				.getCheckedItemPositions();
+		
+		// Walk through the notes and delete the checked ones.
+		for (int i = notes.size() - 1; i >= 0; i--) {
+			if (checkedItemPositions.get(i)) {
+				db.deleteNote(notes.get(i).getId());
 			}
 		}
+		// Refresh the note list.
+		refreshNotes();
+		gView.invalidateViews();
+	}
 
-		@Override
+
+	/**
+	 * Private class handling long presses, which forces the action bar to show
+	 * up. Users can also choose multiple notes.
+	 * 
+	 * @author Magnus Huttu
+	 * 
+	 */
+	private class LongPress implements MultiChoiceModeListener {
+
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			// Listen to user input and perform the action of choice.
+			switch (item.getItemId()) {
+			case R.id.remove:
+				removeItem(); // Delete the selected notes.
+				mode.finish(); // Close the action bar after deletion.
+			default:
+				return false;
+			}
+
+		}
+
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			// TODO Auto-generated method stub
-			return false;
+			actionBar = mode;
+			// Make the mobile vibrate on long click
+			((Vibrator) getActivity()
+					.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(50);
+
+			// Display contextual action bar to user.
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.multi_select_menu, menu);
+			mode.setTitle("Select notes");
+			return true;
 		}
 
-		@Override
 		public void onDestroyActionMode(ActionMode mode) {
-			// TODO Auto-generated method stub
-			
+			gView.getCheckedItemPositions().clear();
 		}
 
-		@Override
 		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			// TODO Auto-generated method stub
-			return false;
+			return true;
 		}
 
-		@Override
+		/**
+		 * Called everytime the state of the list is changed, for example when a
+		 * note is selected. Displays the number of selected notes to the user.
+		 */
 		public void onItemCheckedStateChanged(ActionMode mode, int position,
 				long id, boolean checked) {
-			// TODO Auto-generated method stub
-			
+			switch (gView.getCheckedItemCount()) {
+			case (0):
+				// If no note is selected, don't set any subtitle.
+				mode.setSubtitle(null);
+			break;
+			case (1):
+				// If one note is selected
+				mode.setSubtitle("One note selected");
+			break;
+			default:
+				// If more than one time are selected, display the number of
+				// selected notes to user.
+				mode.setSubtitle("" + gView.getCheckedItemCount()
+						+ " notes selected");
+				break;
+			}
 		}
-		
+	}
+
+	/**
+	 * Close the contextual action bar (top menu) when changing to map view.
+	 */
+	@Override
+	public void setUserVisibleHint(boolean isActive) {
+		super.setUserVisibleHint(isActive);
+
+		// Check if current view
+		if (isVisible()) {
+			if (!isActive) {
+				// If user leaves the list view, a close the top menu.
+				if(actionBar != null) {
+					actionBar.finish();
+				}
+			}
+		}
 	}
 }
