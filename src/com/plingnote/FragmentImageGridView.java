@@ -5,6 +5,8 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -25,6 +27,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.graphics.ColorFilter;
 /**
  * a public class that shows a list of notes in a gridview.
  * @author magnushuttu
@@ -41,7 +44,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 	private ActionMode actionBar;
 	private GridView gView;
 	private ImageAdapter imgAdapter;
-	
+	private boolean abOn;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,6 +72,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		if (container == null){
 			return null;
 		}
+		abOn = false;
 		db = DatabaseHandler.getInstance(getActivity());;
 		final View grid;
 		if(getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
@@ -126,21 +131,30 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		 */
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = new View(getActivity());
-			v = layoutInflater.inflate(R.layout.image_item, null);
-			ImageView imgView = (ImageView) v.findViewById(R.id.gridview_image);
-			TextView tvTitle = (TextView) v.findViewById(R.id.gridview_image_title);
-			TextView tvText = (TextView) v.findViewById(R.id.gridview_image_text);
 
 			if (convertView == null) {
-				tvTitle.findViewById(R.id.gridview_image_title);
-				tvText.findViewById(R.id.gridview_image_text);
-				tvTitle.setText(notes.get(position).getTitle());
-				tvText.setText(notes.get(position).getText());
+				v = layoutInflater.inflate(R.layout.image_item, null);
 			} else {
 				v = convertView;
 			}
-
+			ImageView imgView = (ImageView) v.findViewById(R.id.gridview_image);
+			ImageView imgViewTop = (ImageView) v.findViewById(R.id.gridview_image_top);
+			TextView tvTitle = (TextView) v.findViewById(R.id.gridview_image_title);
+			TextView tvText = (TextView) v.findViewById(R.id.gridview_image_text);
+			tvTitle.findViewById(R.id.gridview_image_title);
+			tvText.findViewById(R.id.gridview_image_text);
+			tvTitle.setText(notes.get(position).getTitle());
+			tvText.setText(notes.get(position).getText());
 			imgView.setBackgroundResource(imageIds[position]);
+
+			if(abOn){
+				imgViewTop.setBackgroundColor(Color.TRANSPARENT);
+				if(gView.getCheckedItemPositions().get(position)){
+					imgViewTop.setBackgroundResource(R.drawable.checked);
+				}
+			} else{
+				imgViewTop.setBackgroundColor(Color.TRANSPARENT);
+			}
 			return v;
 		}
 
@@ -168,7 +182,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		for(Note n : db.getNoteList()){
 			addNote(n);
 		}
-		gView.setAdapter(imgAdapter);
 	}
 
 	/**
@@ -211,7 +224,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		// Get the positions of all the checked items.
 		SparseBooleanArray checkedItemPositions = gView
 				.getCheckedItemPositions();
-		
+
 		// Walk through the notes and delete the checked ones.
 		for (int i = notes.size() - 1; i >= 0; i--) {
 			if (checkedItemPositions.get(i)) {
@@ -247,6 +260,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 			actionBar = mode;
+			abOn = true;
 			// Make the mobile vibrate on long click
 			((Vibrator) getActivity()
 					.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(50);
@@ -260,6 +274,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 		public void onDestroyActionMode(ActionMode mode) {
 			gView.getCheckedItemPositions().clear();
+			abOn = false;
+			gView.setAdapter(imgAdapter);
 		}
 
 		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -272,7 +288,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		 */
 		public void onItemCheckedStateChanged(ActionMode mode, int position,
 				long id, boolean checked) {
-			
+
+			imgAdapter.notifyDataSetChanged();
 			switch (gView.getCheckedItemCount()) {
 			case (0):
 				// If no note is selected, don't set any subtitle.
