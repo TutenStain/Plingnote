@@ -63,7 +63,7 @@ public class IconView extends View{
 			bit = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 		}else{
 			bit = BitmapFactory.decodeFile(path,null);
-		
+			bit = Bitmap.createScaledBitmap(bit, 120, 120, false);
 		}
 			
 		if(this.text.equals(""))
