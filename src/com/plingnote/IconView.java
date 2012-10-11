@@ -34,6 +34,7 @@ public class IconView extends View{
 	private String text = ""; 
 	private Fragment fragment;
 	private String defaultText = "";
+	private String path = "";
 
 	public IconView(Context context,String text,String defaultText, Fragment fragment) {
 		super(context);
@@ -41,7 +42,13 @@ public class IconView extends View{
 		this.defaultText = defaultText;
 		this.fragment = fragment;
 	}
-
+	public IconView(Context context,String text,String defaultText, Fragment fragment, String path) {
+		super(context);
+		this.text = text;
+		this.defaultText = defaultText;
+		this.fragment = fragment;
+		this.path = path;
+	}
 	/**
 	 * Draw a icon with text under 
 	 */
@@ -51,7 +58,14 @@ public class IconView extends View{
 		Paint paint = new Paint();
 		paint.setColor(Color.WHITE); 
 		paint.setTextSize(30); 
-		Bitmap bit = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+		Bitmap bit;
+		if(this.path.equals("")){
+			bit = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+		}else{
+			bit = BitmapFactory.decodeFile(path,null);
+		
+		}
+			
 		if(this.text.equals(""))
 			canvas.drawText(defaultText,0,defaultText.length(),0,130, paint);
 		else

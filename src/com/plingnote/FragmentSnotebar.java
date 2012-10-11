@@ -19,7 +19,7 @@ package com.plingnote;
 import java.util.ArrayList;
 import java.util.List;
 import android.app.Activity;
-import android.app.AlarmManager;
+import android.app.AlarmManager; 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -117,7 +117,7 @@ public class FragmentSnotebar extends Fragment {
 				icons.add(new IconView(getActivity(),"", reminderString, new FragmentReminder()));
 			}
 			if(DatabaseHandler.getInstance(getActivity()).getNote(id).getImagePath() != null || !(DatabaseHandler.getInstance(getActivity()).getNote(id).getImagePath().equals(""))){
-				icons.add(new IconView(getActivity(),DatabaseHandler.getInstance(getActivity()).getNote(id).getImagePath(), imageString, new SBImageSelector()));					
+				icons.add(new IconView(getActivity(),"", imageString, new SBImageSelector(), DatabaseHandler.getInstance(getActivity()).getNote(id).getImagePath()));					
 			}else{
 				icons.add(new IconView(getActivity(),DatabaseHandler.getInstance(getActivity()).getNote(id).getImagePath(), imageString, new SBImageSelector()));
 			}
