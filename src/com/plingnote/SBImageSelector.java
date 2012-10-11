@@ -18,6 +18,7 @@
 package com.plingnote;
 
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -39,8 +40,11 @@ import android.widget.Gallery;
 public class SBImageSelector extends Fragment {
 
 	private Cursor cursor;
+
+	/**
+	 * The width of the gallery image
+	 */
 	public static final int IMAGE_WIDTH = 120;
-	private int column;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,23 +66,34 @@ public class SBImageSelector extends Fragment {
 		cursor = getSDCursor();
 
 		// Initialize the column index
-		column = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
+		int columnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
 
-		
-		DisplayMetrics metrics = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		
+		// Create array of bitmaps with the siza of cursor
+		Bitmap[] images = new Bitmap[cursor.getCount()];
+
+		// Add images to array.
+		for (int i = 0; i < this.cursor.getCount(); i++) {
+
+			cursor.moveToPosition(i);
+			images[i] = MediaStore.Images.Thumbnails.getThumbnail(getActivity()
+					.getContentResolver(), cursor.getInt(columnIndex),
+					MediaStore.Images.Thumbnails.MICRO_KIND, null);
+
+		}
+
+		// Create gallery using ImageAdapter.
 		Gallery gallery = (Gallery) getView().findViewById(
 				R.id.snotebar_image_browser);
-		gallery.setAdapter(new SBImageAdapter(getActivity(), cursor, column));
-		
+		gallery.setAdapter(new SBImageAdapter(getActivity(), cursor, images));
+
 		// Place first gallery image at far left
+		DisplayMetrics metrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay()
+				.getMetrics(metrics);
+
 		MarginLayoutParams mlp = (MarginLayoutParams) gallery.getLayoutParams();
-		mlp.setMargins(-(metrics.widthPixels/2 + IMAGE_WIDTH), 
-		               mlp.topMargin, 
-		               mlp.rightMargin, 
-		               mlp.bottomMargin
-		);
+		mlp.setMargins(-(metrics.widthPixels / 2 + IMAGE_WIDTH), mlp.topMargin,
+				mlp.rightMargin, mlp.bottomMargin);
 
 		// Get user click
 		gallery.setOnItemClickListener(new OnItemClickListener() {
@@ -86,8 +101,10 @@ public class SBImageSelector extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 
-				// Intent snoteBar = new Intent(getActivity(), FragmentSnoteBar.class);
-				// snoteBar.putExtra("MEDDELANDE", getSelectedImagePath(position));
+				// Intent snoteBar = new Intent(getActivity(),
+				// FragmentSnoteBar.class);
+				// snoteBar.putExtra("MEDDELANDE",
+				// getSelectedImagePath(position));
 			}
 
 		});
@@ -99,11 +116,11 @@ public class SBImageSelector extends Fragment {
 	 * @return point to SD Card
 	 */
 	public Cursor getSDCursor() {
-		String[] projection = { MediaStore.Images.Thumbnails._ID };
+		String[] projection = { MediaStore.Images.Media._ID };
 
 		return getActivity().getContentResolver().query(
-				MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection,
-				null, null, MediaStore.Images.Thumbnails.IMAGE_ID);
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
+				null, MediaStore.Images.Media._ID);
 	}
 
 	/**
@@ -115,12 +132,13 @@ public class SBImageSelector extends Fragment {
 	 */
 	public String getSelectedImagePath(int position) {
 		String[] projection = { MediaStore.Images.Media.DATA };
-		cursor = getActivity().getContentResolver().query(
+		Cursor anotherCursor = getActivity().getContentResolver().query(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
 				null, null);
-		column = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-		cursor.moveToPosition(position);
+		final int column = anotherCursor
+				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		anotherCursor.moveToPosition(position);
 
-		return cursor.getString(column);
+		return anotherCursor.getString(column);
 	}
 }
