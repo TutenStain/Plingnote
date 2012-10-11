@@ -7,13 +7,15 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/list_item_title_color"
         android:lines="1"
+        android:maxLength="30"
         android:ellipsize="end"
-        android:textSize="16sp"
-        android:paddingLeft="15sp"
-        android:paddingTop="1sp"
         android:paddingBottom="2sp"
+        android:paddingLeft="15sp"
+        android:paddingRight="15sp"
+        android:paddingTop="1sp"
+        android:textColor="@color/list_item_title_color"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
     <TextView
@@ -23,11 +25,11 @@
         android:layout_below="@id/title"
         android:ellipsize="end"
         android:lines="2"
-        android:paddingLeft ="15sp"
+        android:paddingBottom="1sp"
+        android:paddingLeft="15sp"
         android:paddingRight="15sp"
-        android:paddingBottom ="1sp"
         android:textColor="@color/list_item_text_color"
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/date"
@@ -38,5 +40,16 @@
         android:paddingRight="4sp"
         android:paddingTop="1sp"
         android:textColor="@color/list_item_date_color" />
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/icons"
+        android:layout_width="fill_parent"
+        android:layout_height="32px"
+        android:paddingBottom="3sp"
+        android:paddingRight="3sp"
+        android:layout_below="@id/text"
+        android:gravity="right" >
+    </LinearLayout>
 
 </RelativeLayout>

@@ -17,9 +17,6 @@
 
 package com.plingnote;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -27,6 +24,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -37,10 +36,12 @@ import android.widget.TextView;
  */
 public class NoteAdapter extends ArrayAdapter<Note> {
 	private List<Note> notes;
+	private Context context;
 
 	public NoteAdapter(Context context, int textViewResourceId, List<Note> notes) {
 		super(context, textViewResourceId, notes);
 		this.notes = notes;
+		this.context = context;
 	}
 
 	@Override
@@ -63,6 +64,7 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 			TextView title = (TextView) view.findViewById(R.id.title);
 			TextView text = (TextView) view.findViewById(R.id.text);
 			TextView date = (TextView) view.findViewById(R.id.date);
+			LinearLayout icons = (LinearLayout) view.findViewById(R.id.icons);
 
 			// If the views exists, assign text to it.
 			if (title != null) {
@@ -74,12 +76,43 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 			}
 
 			if (date != null) {
-				String dateFormat = ListDateHandler.customDateFormat(n.getDate());
+				String dateFormat = ListDateHandler.customDateFormat(n
+						.getDate());
 				date.setText(dateFormat);
 			}
+
+			addItemIcons(n, icons);
 		}
 
 		return view;
+	}
+
+	/**
+	 * Add icons to the bottom right corner of the list item.
+	 * 
+	 * @param n
+	 *            a note object
+	 */
+	public void addItemIcons(Note n, LinearLayout icons) {
+
+		// If the note has an image attached to it, add image icon
+		if (n.getImagePath() != null) {
+			ImageView icon = new ImageView(context);
+			icon.setImageResource(R.drawable.ic_image_icon);
+			icon.setLayoutParams(new ViewGroup.LayoutParams(32, 32));
+
+			icons.addView(icon);
+		}
+
+		// If the note has an alarm set, add alarm icon
+		if (n.getAlarm() != null) {
+			ImageView icon = new ImageView(context);
+			icon.setImageResource(R.drawable.ic_alarm_icon);
+			icon.setLayoutParams(new ViewGroup.LayoutParams(32, 32));
+
+			icons.addView(icon);
+		}
+
 	}
 
 }
