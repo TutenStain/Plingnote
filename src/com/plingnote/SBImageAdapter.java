@@ -19,8 +19,7 @@ package com.plingnote;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
-import android.provider.MediaStore;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -37,12 +36,12 @@ public class SBImageAdapter extends BaseAdapter {
 
 	private Context context;
 	private Cursor cursor;
-	private int column;
+	private Bitmap[] images;
 
-	public SBImageAdapter(Context context, Cursor cursor, int column) {
+	public SBImageAdapter(Context context, Cursor cursor, Bitmap[] images) {
 		this.context = context;
 		this.cursor = cursor;
-		this.column = column;
+		this.images = images;
 	}
 
 	public int getCount() {
@@ -58,22 +57,20 @@ public class SBImageAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ImageView imageView;
-		if (convertView == null) {
-			imageView = new ImageView(context);
-			cursor.moveToPosition(position);
-			int imageID = cursor.getInt(column);
-			imageView.setImageURI(Uri.withAppendedPath(
-					MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, ""
-							+ imageID));
-			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-			imageView.setLayoutParams(new Gallery.LayoutParams(
+		ImageView view = (ImageView) convertView;
+
+		if (view == null) {
+			view = new ImageView(context.getApplicationContext());
+			view.setImageBitmap(images[position]);
+			
+			// Set size on gallery images
+			view.setLayoutParams(new Gallery.LayoutParams(
 					SBImageSelector.IMAGE_WIDTH, SBImageSelector.IMAGE_WIDTH));
 		} else {
-			imageView = (ImageView) convertView;
+			view.setImageBitmap(images[position]);
 		}
 
-		return imageView;
+		return view;
 	}
 
 }
