@@ -6,7 +6,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -19,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -27,7 +25,6 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.graphics.ColorFilter;
 /**
  * a public class that shows a list of notes in a gridview.
  * @author magnushuttu
@@ -145,7 +142,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			tvText.findViewById(R.id.gridview_image_text);
 			tvTitle.setText(notes.get(position).getTitle());
 			tvText.setText(notes.get(position).getText());
-			imgView.setBackgroundResource(imageIds[position]);
+			imgView.setBackgroundResource(imageIds[0]);
 
 			if(abOn){
 				imgViewTop.setBackgroundColor(Color.TRANSPARENT);
@@ -162,13 +159,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		 * stores all the used images.
 		 */
 		private int[] imageIds = new int[]{
-				R.drawable.category_banking, R.drawable.category_chat, R.drawable.category_fun,
-				R.drawable.category_lunch, R.drawable.category_meeting, R.drawable.category_shop,
-				R.drawable.category_write, R.drawable.category_banking, R.drawable.category_chat, R.drawable.category_fun,
-				R.drawable.category_lunch, R.drawable.category_meeting, R.drawable.category_shop,
-				R.drawable.category_write, R.drawable.category_banking, R.drawable.category_chat, R.drawable.category_fun,
-				R.drawable.category_lunch, R.drawable.category_meeting, R.drawable.category_shop,
-				R.drawable.category_write
+				R.drawable.category_banking
 		};
 
 	}
