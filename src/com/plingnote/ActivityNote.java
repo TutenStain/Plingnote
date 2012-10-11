@@ -31,6 +31,7 @@ public class ActivityNote extends FragmentActivity {
 	private Fragment anotherFragment = null;
 	private boolean deleteNote = false;
 	private boolean reminderDone = false;
+ 
 
 	/**
 	 * Set content view and try to fetch id from saved instance or intent,
@@ -44,6 +45,11 @@ public class ActivityNote extends FragmentActivity {
 		setContentView(R.layout.activity_note);
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		try{
+			
+				location = new Location(getIntent().getExtras().getDouble(IntentExtra.longitude.toString()),getIntent().getExtras().getDouble(IntentExtra.latitude.toString()));
+			
+		}catch(Exception o){}
 		try{
 			if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==true){
 				reminderDone = true;
@@ -92,7 +98,7 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public void setLocalExtraValues(){
 		try{
-			if(reminderDone == false)
+			if(!reminderDone)
 				reminderString = DatabaseHandler.getInstance(this).getNote(this.id).getAlarm();
 		}catch(Exception el){	
 		}
@@ -101,6 +107,7 @@ public class ActivityNote extends FragmentActivity {
 		}catch(Exception ell){	
 		}
 		try{
+			
 			location = DatabaseHandler.getInstance(this).getNote(this.id).getLocation();
 		}catch(Exception el){	
 		}
