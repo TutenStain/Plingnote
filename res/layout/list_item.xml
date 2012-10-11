@@ -7,12 +7,11 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="1"
-        android:maxLength="30"
         android:ellipsize="end"
+        android:maxLines="1"
         android:paddingBottom="2sp"
         android:paddingLeft="15sp"
-        android:paddingRight="15sp"
+        android:paddingRight="100sp"
         android:paddingTop="1sp"
         android:textColor="@color/list_item_title_color"
         android:textSize="15sp"
@@ -25,9 +24,9 @@
         android:layout_below="@id/title"
         android:ellipsize="end"
         android:lines="2"
-        android:paddingBottom="1sp"
+        android:paddingBottom="3sp"
         android:paddingLeft="15sp"
-        android:paddingRight="15sp"
+        android:paddingRight="60sp"
         android:textColor="@color/list_item_text_color"
         android:textSize="13sp" />
 
@@ -45,11 +44,12 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/icons"
         android:layout_width="fill_parent"
-        android:layout_height="32px"
+        android:layout_height="28px"
+        android:layout_below="@id/date"
+        android:gravity="right"
         android:paddingBottom="3sp"
-        android:paddingRight="3sp"
-        android:layout_below="@id/text"
-        android:gravity="right" >
+        android:paddingRight="3sp" >
+        
     </LinearLayout>
 
 </RelativeLayout>

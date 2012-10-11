@@ -59,7 +59,6 @@ public class FragmentListView extends ListFragment {
 
 		// Make it possible for the user to select multiple items.
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		getListView().setItemsCanFocus(false);
 		getListView().setMultiChoiceModeListener(new LongPress());
 
 		noteAdapter = new NoteAdapter(getActivity(),
