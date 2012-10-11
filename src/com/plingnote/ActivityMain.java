@@ -9,16 +9,18 @@ import android.app.SearchManager.OnDismissListener;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
 public class ActivityMain extends FragmentActivity{
-
+	private boolean isSearching = false;
 	private ScrollableViewPager viewPager;
 	private TabsAdapter tabsAdapter;
 	private SearchView searchView;
@@ -39,6 +41,9 @@ public class ActivityMain extends FragmentActivity{
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_sort_by_size), FragmentListView.class, null);
 		if (savedInstanceState != null) {
 			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+			if(savedInstanceState.getBoolean("isSearching")) {
+				this.onSearchRequested();
+			}
 		}
 	}
 
@@ -54,9 +59,10 @@ public class ActivityMain extends FragmentActivity{
 			public void onDismiss() {
 				searchView.setIconified(true);
 				m.findItem(R.id.search).collapseActionView();
+				isSearching = false;
 			}
 		});
-
+		
 		return true;
 	}
 	
@@ -77,14 +83,15 @@ public class ActivityMain extends FragmentActivity{
 	
 	@Override
 	public boolean onSearchRequested() {
-		
+		this.isSearching = true;
 		return super.onSearchRequested();
 	}
-	
+		
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
+		outState.putBoolean("isSearching", isSearching);
 	}
 	
 	/**
