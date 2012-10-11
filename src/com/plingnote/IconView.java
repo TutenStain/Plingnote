@@ -67,7 +67,7 @@ public class IconView extends View{
 		}
 			
 		if(this.text.equals(""))
-			canvas.drawText(defaultText,0,defaultText.length(),0,130, paint);
+			canvas.drawText(defaultText,0,defaultText.length(),0,160, paint);
 		else
 			canvas.drawText(text,0,10,0,130,paint);
 		canvas.drawBitmap(bit, 0, 10, null);	          
