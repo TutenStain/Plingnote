@@ -159,7 +159,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		 * stores all the used images.
 		 */
 		private int[] imageIds = new int[]{
-				R.drawable.category_banking
+				R.drawable.category_write
 		};
 
 	}
