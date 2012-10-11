@@ -1,3 +1,19 @@
+/**
+* This file is part of Plingnote.
+* Copyright (C) 2012 Julia Gustafsson
+*
+* Plingnote is free software: you can redistribute it and/or modify it under
+* the terms of the GNU General Public License as published by the Free Software
+* Foundation, either version 3 of the License, or any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License along with
+* this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 package com.plingnote;
 
 import android.app.ActionBar;
@@ -32,7 +48,6 @@ public class ActivityNote extends FragmentActivity {
 	private boolean deleteNote = false;
 	private boolean reminderDone = false;
  
-
 	/**
 	 * Set content view and try to fetch id from saved instance or intent,
 	 * Decide which fragment to be shown 'anotherFragment' or new fragment and if new fragment should be instanced and added again. 
@@ -46,28 +61,33 @@ public class ActivityNote extends FragmentActivity {
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		try{
-			
+			//Try to set location to intent extra values. If exist a the local location is set to the extra values long and lat
 				location = new Location(getIntent().getExtras().getDouble(IntentExtra.longitude.toString()),getIntent().getExtras().getDouble(IntentExtra.latitude.toString()));
 			
 		}catch(Exception o){}
 		try{
+			//Sets local reminder to an empty string. This happend if a alarm is fired.
 			if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==true){
 				reminderDone = true;
 				reminderString ="";
 			}
 		}catch(Exception o){}
 		try{
+			//Try to set id to saved instance. Then fetch this id's values. This happens if the screen is turned.
 			id =savedInstanceState.getInt(IntentExtra.id.toString());
 			setLocalExtraValues();
 		}catch(Exception eka)
 		{
 		}
-		try {   
+		try { 
+			//Try to set antoherfragment to to fragment saved in savedinstance. 
+			//If turning to phone when when to snotebar is replaced with some other fragment this will set antotherfragment to that.
 			anotherFragment = getSupportFragmentManager().getFragment(savedInstanceState,"anotherFragment");
 		}catch(Exception e){
 			if(snotebarFragment ==null){
 				try{
 					if(this.id == -1){
+						//If an intent with id (that not is -1) the id will be setted here. Fetch values from the id.
 						if(getIntent().getExtras().getInt(IntentExtra.id.toString()) != -1){ 
 							id = getIntent().getExtras().getInt(IntentExtra.id.toString());
 							setLocalExtraValues();
@@ -76,6 +96,7 @@ public class ActivityNote extends FragmentActivity {
 				}catch(Exception ek)
 				{
 				}
+				//Made a new snotebar and add an intent with id if this note's id is setted
 				FragmentSnotebar newFragment = new FragmentSnotebar();
 				newFragment.setRetainInstance(true);
 				if(this.id != -1){
@@ -88,11 +109,11 @@ public class ActivityNote extends FragmentActivity {
 				fragmentTransaction.attach(newFragment);
 				fragmentTransaction.add(R.id.fragmentcontainer, newFragment);
 				fragmentTransaction.commit();
-
 			}
 		}
 		reminderDone = false;
 	}
+	
 	/**
 	 * Sets the local extra values to the extra values in the database
 	 */
@@ -106,15 +127,13 @@ public class ActivityNote extends FragmentActivity {
 			imagePath = DatabaseHandler.getInstance(this).getNote(this.id).getImagePath();
 		}catch(Exception ell){	
 		}
-		try{
-			
+		try{			
 			location = DatabaseHandler.getInstance(this).getNote(this.id).getLocation();
 		}catch(Exception el){	
 		}
 		try{
 			DatabaseHandler.getInstance(this).updateNote(id, DatabaseHandler.getInstance(this).getNote(this.id).getTitle(), DatabaseHandler.getInstance(this).getNote(this.id).getText(), location, imagePath, reminderString);
 		}catch(Exception o){}
-
 	}
 	
 	/**
@@ -134,7 +153,6 @@ public class ActivityNote extends FragmentActivity {
 			int h = height;
 			noteTitle.setLayoutParams(new LinearLayout.LayoutParams(widht,h/11));
 		}	
-
 	}
 	
 	/**
@@ -193,6 +211,7 @@ public class ActivityNote extends FragmentActivity {
 			noteText.invalidate(); 
 		}
 	}
+	
 	/**
 	 * If id is set this method set the title of this note in the edittext field for the title that is saved in the database
 	 */
@@ -326,6 +345,7 @@ public class ActivityNote extends FragmentActivity {
 		}	
 		changeToSnotebarFragment();
 	}
+	
 	/**
 	 * Save to database, remove anotherFragment and replace it with snotbarFragment
 	 */
@@ -357,6 +377,7 @@ public class ActivityNote extends FragmentActivity {
 			id = DatabaseHandler.getInstance(this).getLastId();
 		}
 	}
+	
 	/**
 	 * Find the first line of the text in notetext in the layout and returning it as a string
 	 * @return String
@@ -379,7 +400,6 @@ public class ActivityNote extends FragmentActivity {
 		EditText noteText = (EditText) findViewById(R.id.notetext);
 		String txt = noteText.getText().toString();
 		if(txt.length() >0){
-
 			return txt;
 		}else
 			return "";
@@ -485,7 +505,4 @@ public class ActivityNote extends FragmentActivity {
 		}
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, snotebarFragment).commit();
 	}
-
-
-
 }

@@ -1,8 +1,23 @@
+/**
+* This file is part of Plingnote.
+* Copyright (C) 2012 Julia Gustafsson
+*
+* Plingnote is free software: you can redistribute it and/or modify it under
+* the terms of the GNU General Public License as published by the Free Software
+* Foundation, either version 3 of the License, or any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License along with
+* this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 package com.plingnote;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -43,6 +58,7 @@ public class FragmentSnotebar extends Fragment {
 		view = inflater.inflate(R.layout.fragment_snotebar, container, false);
 		return view;
 	}
+	
 	/**
 	 * Passing parameter fragment to noteActivity method replace.
 	 * @param noteExtra
@@ -53,6 +69,7 @@ public class FragmentSnotebar extends Fragment {
 			((ActivityNote) activityNote).replaceFragment(fragment);
 		}
 	}
+	
 	/**
 	 * Call set id and call setIcons method
 	 */
@@ -125,6 +142,7 @@ public class FragmentSnotebar extends Fragment {
 		}
 		linearLayout.invalidate();
 	}
+	
 	/**
 	 * Setting icon depending if they got an id or not and if their is already information setted or not.
 	 */
@@ -151,14 +169,15 @@ public class FragmentSnotebar extends Fragment {
 		}
 		return false;
 	}
+	
 	/**
 	 * An on click listener
-	 * @author Julia
-	 *
+	 * @author Julia Gustafsson
 	 */
 	private class PreviewListener implements OnClickListener{
 		public PreviewListener(){	
 		}
+		
 		/**
 		 * Cast view IconView and call the fragment snotebar method 'openNewFragment'
 		 */
@@ -167,6 +186,7 @@ public class FragmentSnotebar extends Fragment {
 			FragmentSnotebar.this.replaceFragment(icon.getFragment());
 		}
 	}
+	
 	/**
 	 * An on long click listener
 	 * @author Julia
@@ -223,6 +243,7 @@ public class FragmentSnotebar extends Fragment {
 			}
 		}
 	}
+	
 	/**
 	 * Delete one of the note 'extra' value, which value depends on the parameter.
 	 * @param noteExtra
@@ -233,6 +254,5 @@ public class FragmentSnotebar extends Fragment {
 			((ActivityNote) activityNote).deleteValue(noteExtra);
 		}
 	}
-
 }
 
