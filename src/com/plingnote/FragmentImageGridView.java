@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -39,6 +40,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 	private List<Note> notes = new ArrayList<Note>();		
 	private ActionMode actionBar;
 	private GridView gView;
+	private ImageAdapter imgAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -73,8 +75,9 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		} else{
 			grid = inflater.inflate(R.layout.fragment_gridview_land, container, false); 
 		}
+		imgAdapter = new ImageAdapter(getActivity());
 		gView = (GridView) grid.findViewById(R.id.grid);
-		gView.setAdapter(new ImageAdapter(getActivity()));
+		gView.setAdapter(imgAdapter);
 		gView.setOnItemClickListener(this);
 
 		// Make it possible for the user to select multiple items.
@@ -165,7 +168,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		for(Note n : db.getNoteList()){
 			addNote(n);
 		}
-		
+		gView.setAdapter(imgAdapter);
 	}
 
 	/**
@@ -217,7 +220,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		}
 		// Refresh the note list.
 		refreshNotes();
-		gView.invalidateViews();
 	}
 
 
@@ -235,6 +237,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			switch (item.getItemId()) {
 			case R.id.remove:
 				removeItem(); // Delete the selected notes.
+				imgAdapter.notifyDataSetChanged();
 				mode.finish(); // Close the action bar after deletion.
 			default:
 				return false;
@@ -269,6 +272,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		 */
 		public void onItemCheckedStateChanged(ActionMode mode, int position,
 				long id, boolean checked) {
+			
 			switch (gView.getCheckedItemCount()) {
 			case (0):
 				// If no note is selected, don't set any subtitle.
