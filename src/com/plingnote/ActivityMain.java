@@ -39,6 +39,7 @@ public class ActivityMain extends FragmentActivity{
 		if (savedInstanceState != null) {
 			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 		}
+		this.startService(new Intent(this, LocationService.class));
 	}
 
 	@Override
