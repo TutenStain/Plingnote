@@ -1,10 +1,10 @@
 package com.plingnote.test;
 
+import junit.framework.Assert;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityMain;
-import junit.framework.Assert;
 
 /**
  * Testing the connection between the edit and list view. When a note is edited,

@@ -2,6 +2,7 @@ package com.plingnote.test;
 
 import junit.framework.Assert;
 import android.test.ActivityInstrumentationTestCase2;
+
 import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityMain;
 
