@@ -62,7 +62,7 @@ public class FragmentListView extends ListFragment {
 		getListView().setMultiChoiceModeListener(new LongPress());
 
 		noteAdapter = new NoteAdapter(getActivity(),
-				android.R.layout.simple_list_item_activated_1, notes);
+				android.R.layout.simple_list_item_activated_2, notes);
 		setListAdapter(noteAdapter);
 	}
 
@@ -128,7 +128,7 @@ public class FragmentListView extends ListFragment {
 		}
 
 		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			return true;
+			return false;
 		}
 
 		/**
