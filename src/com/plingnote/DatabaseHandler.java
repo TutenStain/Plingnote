@@ -1,19 +1,19 @@
 /**
-* This file is part of Plingnote.
-* Copyright (C) 2012 David Grankvist
-*
-* Plingnote is free software: you can redistribute it and/or modify it under
-* the terms of the GNU General Public License as published by the Free Software
-* Foundation, either version 3 of the License, or any later version.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-* FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-* details.
-*
-* You should have received a copy of the GNU General Public License along with
-* this program. If not, see <http://www.gnu.org/licenses/>.
-*/
+ * This file is part of Plingnote.
+ * Copyright (C) 2012 David Grankvist
+ *
+ * Plingnote is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 package com.plingnote;
 
@@ -82,8 +82,11 @@ public class DatabaseHandler {
 	}
 
 	private static class DBHelper extends SQLiteOpenHelper{
+		Context context;
+
 		DBHelper(Context con){
 			super(con, DB_NAME, null, 1);
+			this.context = con;
 		}
 
 		@Override
@@ -97,15 +100,22 @@ public class DatabaseHandler {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			//TODO left empty for now
+			DatabaseHandler dbHandler = DatabaseHandler.getInstance(this.context);
+			List<Note> backup = dbHandler.getNoteList();
+			db.execSQL("drop table if exists " + TABLE_NOTE);
+			this.onCreate(db);
+			dbHandler.insertOldData(backup);
 		}
 	}
 
 	/**
 	 * 
-	 * @param title title of the note to insert
-	 * @param text text of the note to insert
-	 * @return id or -1 if an error occurred
+	 * @param title Title of the note to insert
+	 * @param text Text of the note to insert
+	 * @param l Location of the note to insert
+	 * @param path ImagePath of the note to insert
+	 * @param alarm Alarm date of the note to insert
+	 * @return Id or -1 if an error occurred
 	 */
 	public long insertNote(String title, String text, Location l, String path, String alarm){
 		if(l == null)
@@ -128,7 +138,7 @@ public class DatabaseHandler {
 
 	/**
 	 * 
-	 * @param  id id of the Note to delete
+	 * @param  id Id of the Note to delete
 	 * @return true if the whereclause is passed in, false otherwise
 	 */
 	public boolean deleteNote(int id){
@@ -137,46 +147,46 @@ public class DatabaseHandler {
 		this.close();
 		return b;
 	}
-	
+
 	/**
 	 * 
-	 * @param id id of the note to delete the title from
+	 * @param id Id of the note to delete the title from
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteTitle(int id){
 		return this.updateTitle(id, null);
 	}
-	
+
 	/**
 	 * 
-	 * @param id id of the note to delete the text from
+	 * @param id Id of the note to delete the text from
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteText(int id){
 		return this.updateTitle(id, null);
 	}
-	
+
 	/**
 	 * 
-	 * @param id id of the note to delete the location from
+	 * @param id Id of the note to delete the location from
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteLocation(int id){
 		return this.updateLocation(id, null);
 	}
-	
+
 	/**
 	 * 
-	 * @param id id of the note to delete the image path from
+	 * @param id Id of the note to delete the image path from
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteImagePath(int id){
 		return this.updateImagePath(id, null);
 	}
-	
+
 	/**
 	 * 
-	 * @param id id of the note to delete the alarm from
+	 * @param id Id of the note to delete the alarm from
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteAlarm(int id){
@@ -185,7 +195,7 @@ public class DatabaseHandler {
 
 	/**
 	 * 
-	 * @return all data in the note table represented as a list of Note objects
+	 * @return All data in the note table represented as a list of Note objects
 	 */
 	public List<Note> getNoteList(){
 		this.open();
@@ -203,9 +213,12 @@ public class DatabaseHandler {
 
 	/**
 	 * 
-	 * @param id id of the note to update
-	 * @param title the title to update to
-	 * @param text the text to update to
+	 * @param id Id of the note to update
+	 * @param title Title to update to
+	 * @param text Text to update to
+	 * @param l Location to update to
+	 * @param path ImagePath to update to
+	 * @param alarm Alarm to update to
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean updateNote(int id, String title, String text, Location l, String path, String alarm){
@@ -223,11 +236,11 @@ public class DatabaseHandler {
 		this.close();
 		return b;
 	}
-	
+
 	/**
 	 * 
-	 * @param id id of the note to update
-	 * @param title the title to update to
+	 * @param id Id of the note to update
+	 * @param title The title to update to
 	 * @return true if database was updated, false otherwise 
 	 */
 	public boolean updateTitle(int id, String title){
@@ -238,11 +251,11 @@ public class DatabaseHandler {
 		this.close();
 		return b;
 	}
-	
+
 	/**
 	 * 
-	 * @param id id of the note to update
-	 * @param text the text to update to
+	 * @param id Id of the note to update
+	 * @param text The text to update to
 	 * @return true if database was updated, false otherwise 
 	 */
 	public boolean updateText(int id, String text){
@@ -253,11 +266,11 @@ public class DatabaseHandler {
 		this.close();
 		return b;
 	}
-	
+
 	/**
 	 * 
-	 * @param id id of the note to update
-	 * @param l the Location object with the longitude and latitude to update to
+	 * @param id Id of the note to update
+	 * @param l The Location object with the longitude and latitude to update to
 	 * @return true if database was updated, false otherwise 
 	 */
 	public boolean updateLocation(int id, Location l){
@@ -269,11 +282,11 @@ public class DatabaseHandler {
 		this.close();
 		return b;
 	}
-	
+
 	/**
 	 * 
-	 * @param id id of the note to update
-	 * @param path the image path to update to
+	 * @param id Id of the note to update
+	 * @param path The image path to update to
 	 * @return true if database was updated, false otherwise 
 	 */
 	public boolean updateImagePath(int id, String path){
@@ -284,11 +297,11 @@ public class DatabaseHandler {
 		this.close();
 		return b;
 	}
-	
+
 	/**
 	 * 
-	 * @param id id of the note to update
-	 * @param alarm the alarm date to update to
+	 * @param id Id of the note to update
+	 * @param alarm The alarm date to update to
 	 * @return true if database was updated, false otherwise 
 	 */
 	public boolean updateAlarm(int id, String alarm){
@@ -299,7 +312,7 @@ public class DatabaseHandler {
 		this.close();
 		return b;
 	}
-	
+
 	/**
 	 * 
 	 * @param id id of the note which date will be refreshed
@@ -314,12 +327,12 @@ public class DatabaseHandler {
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		return b;
-		
+
 	}
 
 	/**
 	 * 
-	 * @param id id of the row to retrieve data from
+	 * @param id Id of the row to retrieve data from
 	 * @return a Note object containting all data from the selected row
 	 */
 	public Note getNote(int id){
@@ -364,8 +377,8 @@ public class DatabaseHandler {
 	 */
 	public List<Note> search(String s){
 		this.open();
-		Cursor c = this.db.rawQuery("select " + ID + ", * from " 
-				+ TABLE_NOTE + " where " + TABLE_NOTE + " match '*" + s + "*'", null);
+		Cursor c = this.db.rawQuery("select " + ID + ", * from " + TABLE_NOTE 
+				+ " where " + TABLE_NOTE + " match '" + s + "*'", null);
 		List<Note> l = this.createNoteList(c);
 		this.close();
 		return l;
@@ -387,6 +400,12 @@ public class DatabaseHandler {
 			}while(c.moveToNext());
 		}
 		return l;
+	}
+
+	private void insertOldData(List<Note> nlist){
+		for(Note n: nlist)
+			this.insertNote(n.getTitle(), n.getText(), 
+					n.getLocation(), n.getImagePath(), n.getAlarm());
 	}
 
 	private DatabaseHandler open() throws SQLException{
