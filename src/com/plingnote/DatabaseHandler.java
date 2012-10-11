@@ -38,7 +38,7 @@ import android.util.Log;
  *
  */
 public class DatabaseHandler {
-	// Name of database file
+	// Name of database filexe
 	private static final String DB_NAME = "notedb";
 
 	// Table
@@ -192,6 +192,15 @@ public class DatabaseHandler {
 	public boolean deleteAlarm(int id){
 		return this.updateAlarm(id, null);
 	}
+	
+	/**
+	 * Deletes all notes
+	 */
+	public void deleteAllNotes(){
+		List<Note> nlist = this.getNoteList();
+		for(Note n: nlist)
+			this.deleteNote(n.getId());
+	}
 
 	/**
 	 * 
@@ -327,7 +336,6 @@ public class DatabaseHandler {
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		return b;
-
 	}
 
 	/**
