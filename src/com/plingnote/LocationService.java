@@ -63,6 +63,7 @@ public class LocationService extends Service implements LocationListener, Observ
 		this.locationManager.requestLocationUpdates(this.provider, 
 				UPDATE_FREQUENCY_TIME, UPDATE_FREQUENCY_DISTANCE, this);
 		this.pIntentList = new ArrayList<PendingIntent>();
+		DatabaseHandler.getInstance(this).addObserver(this);
 		return START_STICKY;
 	}
 
