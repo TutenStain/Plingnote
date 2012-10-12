@@ -24,13 +24,23 @@ package com.plingnote;
  *
  */
 public enum NoteCategory {
-	NO_CATEGORY,
-	Banking,
-	Lunch,
-	Fun,
-	Chat,
-	Meeting,
-	Shop,
-	Write
+	NO_CATEGORY(null),
+	Banking("bank"),
+	Lunch("lunch"),
+	Fun("fun"),
+	Chat("chat"),
+	Meeting("meeting"),
+	Shop("shop"),
+	Write("write")
 	;
+	private final String imageName;
+	
+	private NoteCategory(final String name){
+		this.imageName = name;
+	}
+	
+	@Override
+	public String toString(){
+		return this.imageName;
+	}
 }
