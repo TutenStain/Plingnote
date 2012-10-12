@@ -1,10 +1,13 @@
 package com.plingnote;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -114,7 +117,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 		@Override
 		public Object getItem(int position) {
-			return imageIds;
+			return null;
 		}
 
 		@Override
@@ -123,8 +126,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		}
 
 		/**
-		 * Returns a View with three view baked into it, these create an image with some 
-		 * text on top.
+		 * Returns a View with two imageviews and two textviews baked into it,
+		 *  these create an image with some text on top.
 		 */
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = new View(getActivity());
@@ -142,7 +145,18 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			tvText.findViewById(R.id.gridview_image_text);
 			tvTitle.setText(notes.get(position).getTitle());
 			tvText.setText(notes.get(position).getText());
-			imgView.setBackgroundResource(imageIds[0]);
+			
+			String imgPath = notes.get(position).getImagePath();
+			//Checking so that the selected ImagePath is not null
+			if(imgPath != null){
+				File imgFile = new File(imgPath);
+				if(imgFile.exists()){
+					Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+					imgView.setImageBitmap(myBitmap);
+				}
+			} else{
+				imgView.setBackgroundResource(R.drawable.category_write);
+			}
 
 			if(abOn){
 				imgViewTop.setBackgroundColor(Color.TRANSPARENT);
@@ -154,13 +168,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			}
 			return v;
 		}
-
-		/**
-		 * stores all the used images.
-		 */
-		private int[] imageIds = new int[]{
-				R.drawable.category_write
-		};
 
 	}
 
