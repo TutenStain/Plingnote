@@ -31,7 +31,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * This class is used for creating, filling and updating the database.
+ * This class is used for creating the database and storing data in it.
  * It also includes full text search.
  * 
  * @author David Grankvist
@@ -53,12 +53,14 @@ public class DatabaseHandler {
 	private static final String KEY_IMAGEPATH = "ImagePath";
 	private static final String KEY_ALARM = "Alarm";
 	private static final String KEY_DATE = "Date";
+	private static final String KEY_CATEGORY = "Categories";
 
 	// SQL statement to create Note table using fts3
 	private static final String CREATE_FTS_TABLE = "create virtual table " + TABLE_NOTE + " using fts3("
 			+ KEY_TITLE + " String, " + KEY_TEXT + " String, " 
 			+ KEY_LONGITUDE +" Double not null, "+ KEY_LATITUDE +" Double not null, " 
-			+ KEY_IMAGEPATH + " String, " + KEY_ALARM + " String, " + KEY_DATE + " String);";
+			+ KEY_IMAGEPATH + " String, " + KEY_ALARM + " String, " 
+			+ KEY_DATE + " String, " + KEY_CATEGORY + " int);";
 
 	private Context context;
 	private DBHelper dbHelp;
@@ -67,8 +69,8 @@ public class DatabaseHandler {
 
 	/**
 	 * 
-	 * @param con the context
-	 * @return the singleton instance
+	 * @param con The context
+	 * @return The singleton instance
 	 */
 	public static DatabaseHandler getInstance(Context con){
 		if(instance == null)
@@ -115,9 +117,11 @@ public class DatabaseHandler {
 	 * @param l Location of the note to insert
 	 * @param path ImagePath of the note to insert
 	 * @param alarm Alarm date of the note to insert
+	 * @param ncat Category of the note to insert
 	 * @return Id or -1 if an error occurred
 	 */
-	public long insertNote(String title, String text, Location l, String path, String alarm){
+	public long insertNote(String title, String text, Location l, 
+			String path, String alarm, NoteCategory ncat){
 		if(l == null)
 			l = new Location(0.0, 0.0);
 		this.open();
@@ -131,6 +135,7 @@ public class DatabaseHandler {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		Date date = new Date();
 		cv.put(KEY_DATE, dateFormat.format(date));
+		cv.put(KEY_CATEGORY, ncat.ordinal());
 		long tmp = this.db.insert(TABLE_NOTE, null, cv);
 		this.close();
 		return tmp;
@@ -192,9 +197,20 @@ public class DatabaseHandler {
 	public boolean deleteAlarm(int id){
 		return this.updateAlarm(id, null);
 	}
-	
+
 	/**
-	 * Deletes all notes
+	 * This method will set the category to 
+	 * NoteCategory.NO_CATEGORY rather than clearing the field
+	 * 
+	 * @param id Id of the note to delete the category from
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean deleteCategory(int id){
+		return this.updateCategory(id, NoteCategory.NO_CATEGORY);
+	}
+
+	/**
+	 * Deletes all notes in the database
 	 */
 	public void deleteAllNotes(){
 		List<Note> nlist = this.getNoteList();
@@ -216,7 +232,8 @@ public class DatabaseHandler {
 
 	private Cursor getAllNotes(){
 		return this.db.query(TABLE_NOTE, new String[]{ ID, KEY_TITLE, KEY_TEXT,
-				KEY_LONGITUDE, KEY_LATITUDE, KEY_IMAGEPATH, KEY_ALARM, KEY_DATE },
+				KEY_LONGITUDE, KEY_LATITUDE, KEY_IMAGEPATH, 
+				KEY_ALARM, KEY_DATE, KEY_CATEGORY },
 				null, null,null, null, null);
 	}
 
@@ -228,9 +245,11 @@ public class DatabaseHandler {
 	 * @param l Location to update to
 	 * @param path ImagePath to update to
 	 * @param alarm Alarm to update to
+	 * @param ncat Category to update to
 	 * @return true if database was updated, false otherwise
 	 */
-	public boolean updateNote(int id, String title, String text, Location l, String path, String alarm){
+	public boolean updateNote(int id, String title, String text, Location l, 
+			String path, String alarm, NoteCategory ncat){
 		if(l == null)
 			l = new Location(0.0, 0.0);
 		this.open();
@@ -241,6 +260,7 @@ public class DatabaseHandler {
 		cv.put(KEY_LATITUDE, l.getLatitude());
 		cv.put(KEY_IMAGEPATH, path);
 		cv.put(KEY_ALARM, alarm);
+		cv.put(KEY_CATEGORY, ncat.ordinal());
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		return b;
@@ -324,7 +344,7 @@ public class DatabaseHandler {
 
 	/**
 	 * 
-	 * @param id id of the note which date will be refreshed
+	 * @param id Id of the note which date will be refreshed
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean refreshDate(int id){
@@ -340,6 +360,20 @@ public class DatabaseHandler {
 
 	/**
 	 * 
+	 * @param id Id of the note which date will be refreshed
+	 * @param ncat The category to update to
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean updateCategory(int id, NoteCategory ncat){
+		this.open();
+		ContentValues cv = new ContentValues();
+		cv.put(KEY_CATEGORY, ncat.ordinal());
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		return b;
+	}
+	/**
+	 * 
 	 * @param id Id of the row to retrieve data from
 	 * @return a Note object containting all data from the selected row
 	 */
@@ -349,12 +383,14 @@ public class DatabaseHandler {
 		c.move(1);
 		String title = c.getString(1);
 		String text = c.getString(2);
-		Double longitude = Double.parseDouble(c.getString(3));
-		Double latitude = Double.parseDouble(c.getString(4));
+		Double longitude = c.getDouble(3);
+		Double latitude = c.getDouble(4);
 		String imagePath = c.getString(5);
 		String alarm = c.getString(6);
 		String date = c.getString(7);
-		Note n = new Note(id, title, text, new Location(longitude, latitude), imagePath, alarm, date);
+		NoteCategory ncat = NoteCategory.values()[c.getInt(8)];
+		Note n = new Note(id, title, text, 
+				new Location(longitude, latitude), imagePath, alarm, date, ncat);
 		this.close();
 		return n;
 	}
@@ -366,7 +402,7 @@ public class DatabaseHandler {
 
 	/**
 	 * 
-	 * @return id of the latest inserted Note
+	 * @return Id of the latest inserted Note
 	 */
 	public int getLastId(){
 		this.open();
@@ -380,8 +416,8 @@ public class DatabaseHandler {
 
 	/**
 	 * 
-	 * @param s the string to search the database with
-	 * @return a list of Note objects with at least one field matching the search
+	 * @param s The string to search the database with
+	 * @return A list of Note objects with at least one field matching the search
 	 */
 	public List<Note> search(String s){
 		this.open();
@@ -399,12 +435,14 @@ public class DatabaseHandler {
 				int id = Integer.parseInt(c.getString(0));
 				String title = c.getString(1);
 				String text = c.getString(2);
-				Double longitude = Double.parseDouble(c.getString(3));
-				Double latitude = Double.parseDouble(c.getString(4));
+				Double longitude = c.getDouble(3);
+				Double latitude = c.getDouble(4);
 				String imagePath = c.getString(5);
 				String alarm = c.getString(6);
 				String date = c.getString(7);
-				l.add(new Note(id, title, text, new Location(longitude, latitude), imagePath, alarm, date));
+				NoteCategory ncat = NoteCategory.values()[c.getInt(8)];
+				l.add(new Note(id, title, text, new Location(longitude, latitude), 
+						imagePath, alarm, date, ncat));
 			}while(c.moveToNext());
 		}
 		return l;
@@ -413,7 +451,7 @@ public class DatabaseHandler {
 	private void insertOldData(List<Note> nlist){
 		for(Note n: nlist)
 			this.insertNote(n.getTitle(), n.getText(), 
-					n.getLocation(), n.getImagePath(), n.getAlarm());
+					n.getLocation(), n.getImagePath(), n.getAlarm(), n.getCategory());
 	}
 
 	private DatabaseHandler open() throws SQLException{

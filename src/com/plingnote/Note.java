@@ -17,6 +17,7 @@
 
 package com.plingnote;
 
+
 /**
  * This class represents a note in the application
  * 
@@ -31,15 +32,17 @@ public class Note {
 	private String imagePath;
 	private String alarm;
 	private String date;
+	private NoteCategory category;
 
 	/**
 	 * 
-	 * @param id id of this Note
-	 * @param ti title of this Note
-	 * @param txt text of this Note
-	 * @param l location of this Note
+	 * @param id Id of this Note
+	 * @param ti Title of this Note
+	 * @param txt Text of this Note
+	 * @param l Location of this Note
 	 */
-	public Note(int id, String ti, String txt, Location l, String path, String alarm, String date){
+	public Note(int id, String ti, String txt, Location l, String path, 
+			String alarm, String date, NoteCategory ncat){
 		this.id = id;
 		this.title = ti;
 		this.text = txt;
@@ -47,18 +50,19 @@ public class Note {
 		this.imagePath = path;
 		this.alarm = alarm;
 		this.date = date;
+		this.category = ncat;
 	}
 	
 	/**
 	 * 
-	 * @return id of this Note
+	 * @return Id of this Note
 	 */
 	public int getId(){
 		return this.id;
 	}
 	/**
 	 * 
-	 * @return title of this Note
+	 * @return Title of this Note
 	 */
 	public String getTitle(){
 		return this.title;
@@ -66,7 +70,7 @@ public class Note {
 
 	/**
 	 * 
-	 * @return text of this Note
+	 * @return Text of this Note
 	 */
 	public String getText(){
 		return this.text;
@@ -74,7 +78,7 @@ public class Note {
 
 	/**
 	 * 
-	 * @return location of this Note
+	 * @return Location of this Note
 	 */
 	public Location getLocation(){
 		return this.location;
@@ -82,7 +86,7 @@ public class Note {
 	
 	/**
 	 * 
-	 * @return image path of the image representing this Note
+	 * @return Image path of the image representing this Note
 	 */
 	public String getImagePath(){
 		return this.imagePath;
@@ -90,7 +94,7 @@ public class Note {
 	
 	/**
 	 * 
-	 * @return date and time when the alarm of this Note will trigger
+	 * @return Date and time when the alarm of this Note will trigger
 	 */
 	public String getAlarm(){
 		return this.alarm;
@@ -98,10 +102,17 @@ public class Note {
 	
 	/**
 	 * 
-	 * @return date and time of which this Note was created
+	 * @return Date and time of which this Note was created
 	 */
 	public String getDate(){
 		return this.date;
 	}
 	
+	/**
+	 * 
+	 * @return Category of this note as an enum cate
+	 */
+	public NoteCategory getCategory(){
+		return this.category;
+	}
 }
