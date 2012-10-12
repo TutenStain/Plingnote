@@ -22,6 +22,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 
@@ -65,6 +66,12 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements 
 		context.startActivity(editNote);
 
 		return true;
+	}
+	
+	@Override
+	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+		//Remove shadow from the markers
+		super.draw(canvas, mapView, false);
 	}
 
 	@Override
