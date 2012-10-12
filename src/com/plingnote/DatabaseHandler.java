@@ -54,8 +54,6 @@ public class DatabaseHandler {
 	private static final String KEY_ALARM = "Alarm";
 	private static final String KEY_DATE = "Date";
 	private static final String KEY_CATEGORY = "Category";
-	//The address column is not part of the insert method since
-	//its value depends on the longitude and latitude columns
 	private static final String KEY_ADDRESS = "Address";
 
 	// SQL statement to create Note table using fts3
