@@ -18,7 +18,6 @@
 package com.plingnote;
 
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -65,19 +64,15 @@ public class SBImageSelector extends Fragment {
 		// Set cursor pointing to SD Card
 		cursor = getSDCursor();
 
-		// Initialize the column index
-		int columnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
-
 		// Create array of bitmaps with the siza of cursor
-		Bitmap[] images = new Bitmap[cursor.getCount()];
+		String[] images = new String[cursor.getCount()];
 
 		// Add images to array.
 		for (int i = 0; i < this.cursor.getCount(); i++) {
 
 			cursor.moveToPosition(i);
-			images[i] = MediaStore.Images.Thumbnails.getThumbnail(getActivity()
-					.getContentResolver(), cursor.getInt(columnIndex),
-					MediaStore.Images.Thumbnails.MICRO_KIND, null);
+			images[i] = cursor.getString(cursor
+					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
 
 		}
 
@@ -116,11 +111,10 @@ public class SBImageSelector extends Fragment {
 	 * @return point to SD Card
 	 */
 	public Cursor getSDCursor() {
-		String[] projection = { MediaStore.Images.Media._ID };
-
+		String[] projection = { MediaStore.Images.Media.DATA };
 		return getActivity().getContentResolver().query(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
-				null, MediaStore.Images.Media._ID);
+				null, null);
 	}
 
 	/**
@@ -131,12 +125,9 @@ public class SBImageSelector extends Fragment {
 	 * @return the path to the selected image
 	 */
 	public String getSelectedImagePath(int position) {
-		String[] projection = { MediaStore.Images.Media.DATA };
-		Cursor anotherCursor = getActivity().getContentResolver().query(
-				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
-				null, null);
-		final int column = anotherCursor
-				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		Cursor anotherCursor = getSDCursor();
+		final int column = getSDCursor().getColumnIndexOrThrow(
+				MediaStore.Images.Media.DATA);
 		anotherCursor.moveToPosition(position);
 
 		return anotherCursor.getString(column);
