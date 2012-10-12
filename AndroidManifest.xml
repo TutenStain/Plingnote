@@ -12,10 +12,8 @@
     <application
         android:icon="@drawable/plingnote_icon2"
         android:label="@string/app_name" >
-        
         <meta-data android:name="android.app.default_searchable"
                    android:value=".ActivitySearch" />
-        
         <provider android:name=".SearchSuggestionsRecentProvider"
               android:exported="false" 
               android:authorities="com.plingnote.SearchSuggestionsRecentProvider" />
@@ -44,21 +42,19 @@
         <activity 
             android:name=".ActivityAppPreference"
             android:exported="false"
-            android:label="@string/app_name" >
+            android:label="@string/plingnote_settings" >
 			<intent-filter>
 				<action android:name="com.plingnote.ActivityAppPreference" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
 
-         <activity
-            android:name=".ActivityNote"
-            android:label="@string/title_activity_note" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.plingnote.ActivityMain" />
-        </activity>
-        
+        <activity
+           android:name=".ActivityNote"
+           android:label="@string/title_activity_note" >
+           <meta-data
+               android:name="android.support.PARENT_ACTIVITY"
+               android:value="com.plingnote.ActivityMain" />
+       	</activity>
     </application>
-    
 </manifest>
