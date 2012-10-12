@@ -26,6 +26,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -131,7 +132,7 @@ public class ActivityMap extends MapActivity implements LocationListener {
 			
 			break;
 			
-		case R.id.button_fit_note_markers:
+		case R.id.button_fit_note_markers:			
 			int minLat = Integer.MAX_VALUE;
 			int maxLat = Integer.MIN_VALUE;
 			int minLon = Integer.MAX_VALUE;
@@ -183,6 +184,22 @@ public class ActivityMap extends MapActivity implements LocationListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		//Check if there are any notes with location in the database
+		boolean notesWithLocationExists = false;
+		for(Note note : DatabaseHandler.getInstance(this).getNoteList()) {
+			if(note.getLocation().getLongitude() != 0 && note.getLocation().getLatitude() != 0) {
+				notesWithLocationExists = true;
+				break;
+			}
+		}
+		
+		//Disable the fit notes to view button if there are no notes with location
+		ImageButton fitToViewButton = (ImageButton) findViewById(R.id.button_fit_note_markers);
+		if(notesWithLocationExists)
+			fitToViewButton.setVisibility(ImageButton.VISIBLE);
+		else
+			fitToViewButton.setVisibility(ImageButton.GONE);
 		
 		//Update our notes overlay if new note have been created with locations
 		mapOverlayPinNotes.update(null);
