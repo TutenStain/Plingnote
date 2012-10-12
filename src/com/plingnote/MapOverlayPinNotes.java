@@ -93,6 +93,7 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements 
 	}
 
 	public void update(Location location) {
+		this.overlays.clear();
 		this.notes.clear();		
 		this.notes = DatabaseHandler.getInstance(context).getNoteList();
 		
@@ -105,8 +106,8 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements 
 			}
 		}
 		
-		this.mapView.invalidate();
 		setLastFocusedIndex(-1);
+		this.mapView.invalidate();
 		populate();
 		
 	}
