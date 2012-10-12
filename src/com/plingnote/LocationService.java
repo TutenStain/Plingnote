@@ -29,7 +29,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.widget.Toast;
 
 /**
  * A service that runs in the bakground to retreive the user's location.
@@ -43,7 +42,7 @@ public class LocationService extends Service implements LocationListener {
 	private LocationManager locationManager;
 	private String provider;
 	private Criteria criteria;
-	private static final long UPDATE_FREQUENCY_TIME = 1000; //milliseconds
+	private static final long UPDATE_FREQUENCY_TIME = 1000 * 60; //milliseconds
 	private static final float UPDATE_FREQUENCY_DISTANCE = 1; //meters
 	private static final int ALERT_RADIUS = 100; //meters
 
@@ -65,7 +64,7 @@ public class LocationService extends Service implements LocationListener {
 	public void onLocationChanged(Location location){
 		this.addAlerts();
 	}
-	
+
 	/**
 	 * This method adds proximity alerts to all locations in the database
 	 * When the alert is triggered, an intent to start NoteNotification is fired
@@ -75,11 +74,13 @@ public class LocationService extends Service implements LocationListener {
 		List<Note> nlist = dbHandler.getNoteList();
 		for(Note n:nlist){
 			com.plingnote.Location loc = n.getLocation();
-			Intent intent = new Intent(this, NoteNotification.class);
-			intent.putExtra(IntentExtra.id.toString(), n.getId());
-			PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-			this.locationManager.addProximityAlert(loc.getLatitude(), 
-					loc.getLongitude(), ALERT_RADIUS, -1, pIntent);
+			if(loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0){
+				Intent intent = new Intent(this, NoteNotification.class);
+				intent.putExtra(IntentExtra.id.toString(), n.getId());
+				PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+				this.locationManager.addProximityAlert(loc.getLatitude(), 
+						loc.getLongitude(), ALERT_RADIUS, -1, pIntent);
+			}
 		}
 	}
 
