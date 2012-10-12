@@ -17,7 +17,10 @@
 
 package com.plingnote;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import android.app.PendingIntent;
 import android.app.Service;
@@ -38,10 +41,11 @@ import android.os.IBinder;
  * @author David Grankvist
  *
  */
-public class LocationService extends Service implements LocationListener {
+public class LocationService extends Service implements LocationListener, Observer {
 	private LocationManager locationManager;
 	private String provider;
 	private Criteria criteria;
+	private List<PendingIntent> pIntentList;
 	private static final long UPDATE_FREQUENCY_TIME = 1000 * 60; //milliseconds
 	private static final float UPDATE_FREQUENCY_DISTANCE = 1; //meters
 	private static final int ALERT_RADIUS = 100; //meters
@@ -58,16 +62,26 @@ public class LocationService extends Service implements LocationListener {
 		this.provider = this.locationManager.getBestProvider(this.criteria, false);
 		this.locationManager.requestLocationUpdates(this.provider, 
 				UPDATE_FREQUENCY_TIME, UPDATE_FREQUENCY_DISTANCE, this);
+		this.pIntentList = new ArrayList<PendingIntent>();
 		return START_STICKY;
 	}
 
 	public void onLocationChanged(Location location){
+		
+	}
+	
+	/**
+	 * Called when the database is updated
+	 */
+	public void update(Observable observable, Object data) {
+		this.removeAlerts();
 		this.addAlerts();
 	}
 
 	/**
-	 * This method adds proximity alerts to all locations in the database
-	 * When the alert is triggered, an intent to start NoteNotification is fired
+	 * This method adds proximity alerts to all locations in the database.
+	 * When the alert is triggered, an intent to start NoteNotification is fired.
+	 * All PendingIntent objects are saved in a list in order to remove the alert later.
 	 */
 	private void addAlerts(){
 		DatabaseHandler dbHandler = DatabaseHandler.getInstance(this);
@@ -80,8 +94,15 @@ public class LocationService extends Service implements LocationListener {
 				PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 				this.locationManager.addProximityAlert(loc.getLatitude(), 
 						loc.getLongitude(), ALERT_RADIUS, -1, pIntent);
+				this.pIntentList.add(pIntent);
 			}
 		}
+	}
+	
+	private void removeAlerts(){
+		for(PendingIntent pIntent:pIntentList)
+			this.locationManager.removeProximityAlert(pIntent);
+		this.pIntentList.clear();
 	}
 
 	public void onProviderDisabled(String provider) {
