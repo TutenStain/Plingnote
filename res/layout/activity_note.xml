@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activitynote"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+
+    <EditText           android:id="@+id/notetitle"
+        android:layout_width="fill_parent"
+        android:layout_height="394dp"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:gravity="top"
+        android:hint="@string/notetitlehint"
+        android:singleLine="false" />
+    
+    <EditText
+        android:id="@+id/notetext"
+        android:layout_width="fill_parent"
+        android:layout_height="394dp"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:gravity="top"
+        android:hint="@string/notetexthint"
+        android:singleLine="false" />
+
+    <LinearLayout
+        android:id="@+id/fragmentcontainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+</LinearLayout>

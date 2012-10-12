@@ -26,13 +26,15 @@
          
         <activity
             android:name=".ActivityMain"
-            android:label="@string/title_activity_main" >
+            android:label="@string/app_name" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         
         <activity 
             android:name=".ActivitySearch"
@@ -65,5 +67,15 @@
       
         <activity android:name=".ActivityMap" 
             android:label="@string/app_name" />
+
+       	  <receiver android:name=".NoteNotification" >          
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" >
+                    <action android:name="android.intent.action.SEND" />
+                </action>
+            </intent-filter>
+        </receiver>
     </application>
+
 </manifest>
+

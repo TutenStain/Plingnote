@@ -84,7 +84,7 @@ public class ActivityMap extends MapActivity implements LocationListener {
 		//Instantiate the overlays for the map
 		this.mapOverlayPin = new MapOverlayPinCurrentPos(this, this.map, point);
 		this.mapOverlayGPSAccuracy = new MapOverlayGPSAccuracy(point, this.location);
-		this.mapOverlayPinNotes = new MapOverlayPinNotes(this, this.getResources().getDrawable(R.drawable.map_note_marker));
+		this.mapOverlayPinNotes = new MapOverlayPinNotes(this, this.getResources().getDrawable(R.drawable.map_note_marker), map);
 		
 		//Add the overlays to the list
 		this.overlayList.add((Overlay) this.mapOverlayPin);
@@ -186,6 +186,7 @@ public class ActivityMap extends MapActivity implements LocationListener {
 		
 		//Update our notes overlay if new note have been created with locations
 		mapOverlayPinNotes.update(null);
+		map.invalidate();
 		
 		if(this.isWantingAFix)
 			this.locationManager.requestLocationUpdates(this.provider, 400, 1, this);

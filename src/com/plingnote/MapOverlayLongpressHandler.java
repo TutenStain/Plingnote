@@ -21,9 +21,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.view.MotionEvent;
-import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
@@ -63,9 +63,12 @@ public class MapOverlayLongpressHandler extends Overlay implements OnMapViewLong
 	 * Runs if the user have long pressed on a location
 	 */
 	public void onLongpress(MotionEvent event) {
-		GeoPoint p = map.getProjection().fromPixels((int)event.getX(), (int)event.getY());
-		Toast.makeText(context, "Location: " + p.getLatitudeE6() / 1E6 + "," + p.getLongitudeE6() / 1E6, Toast.LENGTH_SHORT).show();
-		//TODO Call create new note with the touch coordinates
+		GeoPoint point = map.getProjection().fromPixels((int)event.getX(), (int)event.getY());
+		Intent intent = new Intent(context, ActivityNote.class);
+		intent.putExtra(IntentExtra.longitude.toString(), (double)(point.getLongitudeE6() / 1E6));
+		intent.putExtra(IntentExtra.latitude.toString(), (double)(point.getLatitudeE6() / 1E6));
+		intent.putExtra(IntentExtra.id.toString(), -1);
+		context.startActivity(intent);
 	}
 
 	/**

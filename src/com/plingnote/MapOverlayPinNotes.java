@@ -27,20 +27,23 @@ import android.location.Location;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
+import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
 public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements UpdatableOverlay {
 	private Context context;
 	private List <Note> notes = new ArrayList<Note>(); 
 	private ArrayList<OverlayItem> overlays = new ArrayList<OverlayItem>();
+	private MapView mapView;
 
 	/**
 	 * @param context the context
 	 * @param marker the marker to display on the map
 	 */
-	public MapOverlayPinNotes(Context context, Drawable marker) {
+	public MapOverlayPinNotes(Context context, Drawable marker, MapView map) {
 		super(boundCenterBottom(marker));
 		this.context = context;
+		this.mapView = map;
 
 		//TEST Inserting notes if no notes with location exist in the database
 		//DatabaseHandler.getInstance(context).insertNote("Jul", "Snart", new Location(18.105469, 59.245662), "", "");
@@ -80,10 +83,10 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements 
 	 */
 	private void addOverlay(OverlayItem overlay) {
 	    overlays.add(overlay);
-	    populate();
 	}
 
 	public void update(Location location) {
+		this.notes.clear();		
 		this.notes = DatabaseHandler.getInstance(context).getNoteList();
 		
 		//Add all notes with a valid location to the map
@@ -94,9 +97,10 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements 
 				this.addOverlay(new OverlayItem(point, note.getId() + "", null));
 			}
 		}
-
-		//Make sure that we always call populate if there are no notes with location
-		if(notes.isEmpty())
-			populate();
+		
+		this.mapView.invalidate();
+		setLastFocusedIndex(-1);
+		populate();
+		
 	}
 }

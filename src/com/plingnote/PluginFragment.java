@@ -17,23 +17,19 @@
 package com.plingnote;
 
 /**
- * Containg string constans often usen with intent
+ * An interface representing the 
  * @author Julia Gustafsson
  *
  */
-public enum IntentExtra {
-	id("id"),
-	reminderDone("reminderDone"),
-	longitude("longitude"),
-	latitude("latitude"),
-	;
-	private final String text;
-	private IntentExtra(final String text) {
-		this.text = text;
-	}
+public interface PluginFragment {
 	
-	@Override
-	public String toString() {
-		return text;
-	}
+	public String getValue();
+	
+	public Location getLocation();
+	
+	public NoteExtra getKind();
+	
+	public void replaceBackFragment();
+	
+	
 }
