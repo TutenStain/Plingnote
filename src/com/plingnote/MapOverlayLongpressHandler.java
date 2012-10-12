@@ -23,7 +23,11 @@ import java.util.TimerTask;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.MotionEvent;
+import android.view.Surface;
+import android.view.WindowManager;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
@@ -63,10 +67,31 @@ public class MapOverlayLongpressHandler extends Overlay implements OnMapViewLong
 	 * Runs if the user have long pressed on a location
 	 */
 	public void onLongpress(MotionEvent event) {
-		GeoPoint point = map.getProjection().fromPixels((int)event.getX(), (int)event.getY());
+		Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+		int rotation = display.getRotation();
+		int dp;
+		if(rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
+			//Android 4.0+ default acionbar values:
+			//48dip in portrait
+			//40dip in landscape
+			//
+			//We use 96dip as we also have a tabbed navigation below
+			//the actionbar which is the same height as the actionbar
+			dp = 96;
+		} else {
+			dp = 40;
+		}
+		
+		//Convert DIP to Pixels
+		float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+		
+		//Subtract the pixels from the Y coordinate to compensate for using a map
+		//in a fragment in a tabbed navigation. Otherwise the getY() would return 
+		//wrong
+		GeoPoint point = map.getProjection().fromPixels((int)event.getX(), (int)(event.getY() - px));
 		Intent intent = new Intent(context, ActivityNote.class);
-		intent.putExtra(IntentExtra.longitude.toString(), (double)(point.getLongitudeE6() / 1E6));
-		intent.putExtra(IntentExtra.latitude.toString(), (double)(point.getLatitudeE6() / 1E6));
+		intent.putExtra(IntentExtra.longitude.toString(), point.getLongitudeE6() / 1E6);
+		intent.putExtra(IntentExtra.latitude.toString(), point.getLatitudeE6() / 1E6);
 		intent.putExtra(IntentExtra.id.toString(), -1);
 		context.startActivity(intent);
 	}
