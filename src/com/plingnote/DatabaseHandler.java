@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -37,7 +38,7 @@ import android.util.Log;
  * @author David Grankvist
  *
  */
-public class DatabaseHandler {
+public class DatabaseHandler extends Observable{
 	// Name of database filexe
 	private static final String DB_NAME = "notedb";
 
@@ -141,6 +142,8 @@ public class DatabaseHandler {
 		cv.put(KEY_ADDRESS, adr);
 		long tmp = this.db.insert(TABLE_NOTE, null, cv);
 		this.close();
+		this.setChanged();
+		this.notifyObservers();
 		return tmp;
 	}
 
@@ -153,6 +156,8 @@ public class DatabaseHandler {
 		this.open();
 		boolean b = this.db.delete(TABLE_NOTE, ID + "=" + id, null) > 0;
 		this.close();
+		this.setChanged();
+		this.notifyObservers();
 		return b;
 	}
 
@@ -180,7 +185,10 @@ public class DatabaseHandler {
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteLocation(int id){
-		return this.updateLocation(id, null);
+		boolean b = this.updateLocation(id, null);
+		this.setChanged();
+		this.notifyObservers();
+		return b;
 	}
 
 	/**
@@ -271,6 +279,8 @@ public class DatabaseHandler {
 		cv.put(KEY_ADDRESS, adr);
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
+		this.setChanged();
+		this.notifyObservers();
 		return b;
 	}
 
@@ -317,6 +327,8 @@ public class DatabaseHandler {
 		cv.put(KEY_LATITUDE, l.getLatitude());
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
+		this.setChanged();
+		this.notifyObservers();
 		return b;
 	}
 
