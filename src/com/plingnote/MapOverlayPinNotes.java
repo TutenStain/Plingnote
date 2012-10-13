@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -49,7 +50,7 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements 
 		
 		DatabaseHandler.getInstance(context).addObserver(this);
 				
-		update(null, null);		
+		this.refresh();		
 	}
 	
 	@Override
@@ -88,8 +89,8 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements 
 	private void addOverlay(OverlayItem overlay) {
 	    overlays.add(overlay);
 	}
-		
-	public void update(Observable observable, Object data) {
+	
+	private void refresh(){
 		this.overlays.clear();
 		this.notes.clear();		
 		this.notes = DatabaseHandler.getInstance(context).getNoteList();
@@ -97,7 +98,8 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements 
 		//Add all notes with a valid location to the map
 		for(Note note : notes){
 			if(note.getLocation().getLatitude() != 0 && note.getLocation().getLongitude() != 0) {
-				GeoPoint point = new GeoPoint((int)(note.getLocation().getLatitude() * 1E6), (int)(note.getLocation().getLongitude() * 1E6));
+				GeoPoint point = new GeoPoint((int)(note.getLocation().getLatitude() * 1E6),
+						(int)(note.getLocation().getLongitude() * 1E6));
 				//As a title add the note id
 				this.addOverlay(new OverlayItem(point, note.getId() + "", null));
 			}
@@ -106,5 +108,16 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements 
 		setLastFocusedIndex(-1);
 		this.mapView.invalidate();
 		populate();
+	}
+		
+	public void update(Observable observable, Object data) {
+		if(observable instanceof DatabaseHandler) {
+			if((DatabaseUpdate)data == DatabaseUpdate.UPDATED_LOCATION 
+					|| (DatabaseUpdate)data == DatabaseUpdate.NEW_NOTE 
+					|| (DatabaseUpdate)data == DatabaseUpdate.UPDATED_NOTE 
+					|| (DatabaseUpdate)data == DatabaseUpdate.DELETED_NOTE) {
+				this.refresh();
+			}
+		}
 	}
 }
