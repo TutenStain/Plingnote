@@ -18,7 +18,8 @@
 package com.plingnote;
 
 /**
- * A simple enum with all of the note categories
+ * A simple enum representing all of the note categories.
+ * Each category is associated to an image name for convenience when displaying the images.
  * 
  * @author David Grankvist
  *
