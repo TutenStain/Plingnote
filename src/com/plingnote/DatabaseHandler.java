@@ -112,7 +112,11 @@ public class DatabaseHandler extends Observable{
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			DatabaseHandler dbHandler = DatabaseHandler.getInstance(this.context);
 			List<Note> backup = dbHandler.getNoteList();
-			db.execSQL("drop table if exists " + TABLE_NOTE);
+			try{
+				db.execSQL("drop table if exists " + TABLE_NOTE);
+			} catch(SQLException e){
+				Log.e("SQLException", "while upgrading database");
+			}
 			this.onCreate(db);
 			dbHandler.insertOldData(backup);
 		}
@@ -149,7 +153,7 @@ public class DatabaseHandler extends Observable{
 		long tmp = this.db.insert(TABLE_NOTE, null, cv);
 		this.close();
 		this.setChanged();
-		this.notifyObservers();
+		this.notifyObservers(DatabaseUpdate.NEW_NOTE);
 		return tmp;
 	}
 
@@ -163,7 +167,7 @@ public class DatabaseHandler extends Observable{
 		boolean b = this.db.delete(TABLE_NOTE, ID + "=" + id, null) > 0;
 		this.close();
 		this.setChanged();
-		this.notifyObservers();
+		this.notifyObservers(DatabaseUpdate.DELETED_NOTE);
 		return b;
 	}
 
@@ -173,7 +177,10 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteTitle(int id){
-		return this.updateTitle(id, null);
+		boolean b = this.updateTitle(id, null);
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
+		return b;
 	}
 
 	/**
@@ -182,7 +189,10 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteText(int id){
-		return this.updateTitle(id, null);
+		boolean b = this.updateTitle(id, null);
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
+		return b;
 	}
 
 	/**
@@ -193,7 +203,7 @@ public class DatabaseHandler extends Observable{
 	public boolean deleteLocation(int id){
 		boolean b = this.updateLocation(id, null);
 		this.setChanged();
-		this.notifyObservers();
+		this.notifyObservers(DatabaseUpdate.UPDATED_LOCATION);
 		return b;
 	}
 
@@ -203,7 +213,10 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteImagePath(int id){
-		return this.updateImagePath(id, null);
+		boolean b = this.updateImagePath(id, null);
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
+		return b;
 	}
 
 	/**
@@ -212,7 +225,10 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteAlarm(int id){
-		return this.updateAlarm(id, null);
+		boolean b = this.updateAlarm(id, null);
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
+		return b;
 	}
 
 	/**
@@ -223,11 +239,22 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteCategory(int id){
-		return this.updateCategory(id, NoteCategory.NO_CATEGORY);
+		boolean b = this.updateCategory(id, NoteCategory.NO_CATEGORY);
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
+		return b;
 	}
-
+	
+	/**
+	 * 
+	 * @param id Id of the note to delete the address from
+	 * @return true if database was updated, false otherwise
+	 */
 	public boolean deleteAddress(int id){
-		return this.updateAddress(id, null);
+		boolean b = this.updateAddress(id, null);
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
+		return b;
 	}
 	/**
 	 * Deletes all notes in the database
@@ -286,7 +313,7 @@ public class DatabaseHandler extends Observable{
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		this.setChanged();
-		this.notifyObservers();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
 
@@ -302,6 +329,8 @@ public class DatabaseHandler extends Observable{
 		cv.put(KEY_TITLE, title);
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
 
@@ -317,6 +346,8 @@ public class DatabaseHandler extends Observable{
 		cv.put(KEY_TEXT, text);
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
 
@@ -334,7 +365,7 @@ public class DatabaseHandler extends Observable{
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		this.setChanged();
-		this.notifyObservers();
+		this.notifyObservers(DatabaseUpdate.UPDATED_LOCATION);
 		return b;
 	}
 
@@ -350,6 +381,8 @@ public class DatabaseHandler extends Observable{
 		cv.put(KEY_IMAGEPATH, path);
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
 
@@ -365,6 +398,8 @@ public class DatabaseHandler extends Observable{
 		cv.put(KEY_ALARM, alarm);
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
 
@@ -381,6 +416,8 @@ public class DatabaseHandler extends Observable{
 		cv.put(KEY_DATE, dateFormat.format(date));
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
 
@@ -396,6 +433,8 @@ public class DatabaseHandler extends Observable{
 		cv.put(KEY_CATEGORY, ncat.ordinal());
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
 
@@ -411,6 +450,8 @@ public class DatabaseHandler extends Observable{
 		cv.put(KEY_ADDRESS, adr);
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 
 	}
