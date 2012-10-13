@@ -55,6 +55,7 @@ Thumbs.db
 *.bak
 *.tmp
 *.swp
+*~
 
 # built application files #
 ###########################
