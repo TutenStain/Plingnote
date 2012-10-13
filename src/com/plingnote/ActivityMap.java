@@ -52,7 +52,7 @@ public class ActivityMap extends MapActivity implements LocationListener {
 	private List<Overlay> overlayList;
 	private UpdatableOverlay mapOverlayPin;
 	private UpdatableOverlay mapOverlayGPSAccuracy;
-	private UpdatableOverlay mapOverlayPinNotes;
+	private MapOverlayPinNotes mapOverlayPinNotes;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +91,7 @@ public class ActivityMap extends MapActivity implements LocationListener {
 		this.overlayList.add((Overlay) this.mapOverlayPin);
 		this.overlayList.add((Overlay) this.mapOverlayGPSAccuracy);
 		this.overlayList.add(new MapOverlayLongpressHandler(this, map));
-		this.overlayList.add((Overlay) this.mapOverlayPinNotes);
+		this.overlayList.add(this.mapOverlayPinNotes);
 		
 		//Zoom to the last know position
 		this.zoomToLastKnownPosition();
@@ -202,7 +202,6 @@ public class ActivityMap extends MapActivity implements LocationListener {
 			fitToViewButton.setVisibility(ImageButton.GONE);
 		
 		//Update our notes overlay if new note have been created with locations
-		mapOverlayPinNotes.update(null);
 		map.invalidate();
 		
 		if(this.isWantingAFix)

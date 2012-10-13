@@ -19,19 +19,20 @@ package com.plingnote;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
-public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements UpdatableOverlay {
+public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements Observer {
 	private Context context;
 	private List <Note> notes = new ArrayList<Note>(); 
 	private ArrayList<OverlayItem> overlays = new ArrayList<OverlayItem>();
@@ -45,14 +46,10 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements 
 		super(boundCenterBottom(marker));
 		this.context = context;
 		this.mapView = map;
-
-		//TEST Inserting notes if no notes with location exist in the database
-		//DatabaseHandler.getInstance(context).insertNote("Jul", "Snart", new Location(18.105469, 59.245662), "", "");
-		//DatabaseHandler.getInstance(context).insertNote("Jul2", "Snart2", new Location(12.513428, 57.710604), "", "");
-		//DatabaseHandler.getInstance(context).insertNote("Jul3", "Snart3", new Location(12.282715, 57.516413), "", "");
+		
+		DatabaseHandler.getInstance(context).addObserver(this);
 				
-		this.update(null);
-			
+		update(null, null);		
 	}
 	
 	@Override
@@ -91,8 +88,8 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements 
 	private void addOverlay(OverlayItem overlay) {
 	    overlays.add(overlay);
 	}
-
-	public void update(Location location) {
+		
+	public void update(Observable observable, Object data) {
 		this.overlays.clear();
 		this.notes.clear();		
 		this.notes = DatabaseHandler.getInstance(context).getNoteList();
@@ -109,6 +106,5 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements 
 		setLastFocusedIndex(-1);
 		this.mapView.invalidate();
 		populate();
-		
 	}
 }

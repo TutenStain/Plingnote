@@ -76,16 +76,11 @@ public class DatabaseHandler extends Observable{
 	 * @return The singleton instance
 	 */
 	public static DatabaseHandler getInstance(Context con){
-		//if(instance == null)
+		if(instance == null)
 			instance = new DatabaseHandler(con);
 		return instance;
 	}
 	
-	@Override
-	public void addObserver(Observer obs){
-		instance.addObserver(obs);
-	}
-
 	private DatabaseHandler(Context con){
 		this.context = con;
 		this.dbHelp = new DBHelper(this.context);
@@ -304,7 +299,7 @@ public class DatabaseHandler extends Observable{
 		this.close();
 		return b;
 	}
-
+	
 	/**
 	 * 
 	 * @param id Id of the note to update
