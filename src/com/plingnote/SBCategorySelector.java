@@ -1,9 +1,28 @@
+/**
+ * This file is part of Plingnote.
+ * Copyright (C) 2012 Linus Karlsson
+ *
+ * Plingnote is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.plingnote;
 
 import java.lang.reflect.Field;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,8 +80,13 @@ public class SBCategorySelector extends Fragment {
 		// Place all category images in the array.
 		for (int i = 0; i < categoryDrawables.length; i++) {
 
-			// TODO compare names with category names in util.
-			categoryDrawables[i] = fields[i].getName();
+			// Iterate through NoteCategories and get the drawables that matches
+			// the category names.
+			for (NoteCategory category : NoteCategory.values()) {
+				if (category.toString().equals(fields[i].getName())) {
+					categoryDrawables[i] = fields[i].getName();
+				}
+			}
 		}
 
 		return categoryDrawables;
@@ -91,12 +115,15 @@ public class SBCategorySelector extends Fragment {
 			ImageView imageView;
 
 			if (convertView == null) {
+				float size = TypedValue.applyDimension(
+						TypedValue.COMPLEX_UNIT_DIP, 60, Resources.getSystem()
+								.getDisplayMetrics());
 				imageView = new ImageView(getActivity());
+				imageView.setLayoutParams(new GridView.LayoutParams((int) size,
+						(int) size));
+				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 			} else {
 				imageView = (ImageView) convertView;
-
-				imageView.setLayoutParams(new GridView.LayoutParams(150, 150));
-				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 			}
 
 			imageView.setImageResource(getActivity().getResources()
