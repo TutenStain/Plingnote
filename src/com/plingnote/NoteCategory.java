@@ -18,38 +18,29 @@
 package com.plingnote;
 
 /**
- * This class respresents a location on the map
+ * A simple enum with all of the note categories
  * 
  * @author David Grankvist
  *
  */
-public class Location {
-	private Double longitude;
-	private Double latitude;
-
-	/**
-	 * 
-	 * @param lng longitude of this Location
-	 * @param lat latitude of this Location
-	 */
-	public Location(Double lng, Double lat){
-		this.longitude = lng;
-		this.latitude = lat;
+public enum NoteCategory {
+	NO_CATEGORY(null),
+	Banking("bank"),
+	Lunch("lunch"),
+	Fun("fun"),
+	Chat("chat"),
+	Meeting("meeting"),
+	Shop("shop"),
+	Write("write")
+	;
+	private final String imageName;
+	
+	private NoteCategory(final String name){
+		this.imageName = name;
 	}
-
-	/**
-	 * 
-	 * @return longitude of this Location
-	 */
-	public Double getLongitude(){
-		return this.longitude;
-	}
-
-	/**
-	 * 
-	 * @return latitude of this Location
-	 */
-	public Double getLatitude(){
-		return this.latitude;
+	
+	@Override
+	public String toString(){
+		return this.imageName;
 	}
 }
