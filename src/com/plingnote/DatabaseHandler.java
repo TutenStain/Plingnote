@@ -79,7 +79,7 @@ public class DatabaseHandler extends Observable{
 			instance = new DatabaseHandler(con);
 		return instance;
 	}
-	
+
 	private DatabaseHandler(Context con){
 		this.context = con;
 		this.dbHelp = new DBHelper(this.context);
