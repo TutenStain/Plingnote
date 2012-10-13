@@ -18,42 +18,15 @@
 package com.plingnote;
 
 /**
- * This class respresents a location on the map
+ * A simple enum representing database operations.
  * 
  * @author David Grankvist
  *
  */
-public class Location {
-	private Double longitude;
-	private Double latitude;
-
-	/**
-	 * 
-	 * @param lng Longitude of this Location
-	 * @param lat Latitude of this Location
-	 */
-	public Location(Double lng, Double lat){
-		if(lng == null)
-			lng = 0.0;
-		if(lat == null)
-			lat = 0.0;
-		this.longitude = lng;
-		this.latitude = lat;
-	}
-
-	/**
-	 * 
-	 * @return Longitude of this Location
-	 */
-	public Double getLongitude(){
-		return this.longitude;
-	}
-
-	/**
-	 * 
-	 * @return Latitude of this Location
-	 */
-	public Double getLatitude(){
-		return this.latitude;
-	}
+public enum DatabaseUpdate {
+	NEW_NOTE,
+	DELETED_NOTE,
+	UPDATED_NOTE,
+	UPDATED_LOCATION
+	;
 }

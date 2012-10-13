@@ -35,6 +35,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * Fragment representing a fragment with clickable icons
@@ -81,6 +82,7 @@ public class FragmentSnotebar extends Fragment {
 			this.id = ((ActivityNote) activityNote).getId();
 		}
 		addAndSetIconstoLayout();
+		
 	}	
 	/**
 	 * CLear icons list

@@ -1,6 +1,6 @@
 /**
 * This file is part of Plingnote.
-* Copyright (C) 2012 Julia Gustafsson
+* Copyright (C) 2012 David Grankvist
 *
 * Plingnote is free software: you can redistribute it and/or modify it under
 * the terms of the GNU General Public License as published by the Free Software
@@ -14,27 +14,34 @@
 * You should have received a copy of the GNU General Public License along with
 * this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
 package com.plingnote;
 
 /**
- * Containg string constans often usen with intent
- * @author Julia Gustafsson
+ * A simple enum representing all of the note categories.
+ * Each category is associated to an image name for convenience when displaying the images.
+ * 
+ * @author David Grankvist
  *
  */
-public enum IntentExtra {
-	id("id"),
-	reminderDone("reminderDone"),
-	longitude("longitude"),
-	latitude("latitude"),
-	city("city"),
+public enum NoteCategory {
+	NO_CATEGORY(null),
+	Banking("bank"),
+	Lunch("lunch"),
+	Fun("fun"),
+	Chat("chat"),
+	Meeting("meeting"),
+	Shop("shop"),
+	Write("write")
 	;
-	private final String text;
-	private IntentExtra(final String text) {
-		this.text = text;
+	private final String imageName;
+	
+	private NoteCategory(final String name){
+		this.imageName = name;
 	}
 	
 	@Override
-	public String toString() {
-		return text;
+	public String toString(){
+		return this.imageName;
 	}
 }
