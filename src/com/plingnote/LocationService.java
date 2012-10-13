@@ -68,38 +68,64 @@ public class LocationService extends Service implements LocationListener, Observ
 	}
 
 	public void onLocationChanged(Location location){
-		
+
 	}
-	
+
 	/**
 	 * Called when the database is updated
 	 */
 	public void update(Observable observable, Object data) {
-		this.removeAlerts();
-		this.addAlerts();
+		//We do not know which one was deleted
+		if(data == DatabaseUpdate.UPDATED_LOCATION || data == DatabaseUpdate.DELETED_NOTE){
+			this.removeAlerts();
+			this.addAllAlerts();
+		}
+		if(data == DatabaseUpdate.NEW_NOTE)
+			this.addAlertToLast();
 	}
-
+	
 	/**
-	 * This method adds proximity alerts to all locations in the database.
+	 * This method adds a proximity alert to the location associated to the argument note.
 	 * When the alert is triggered, an intent to start NoteNotification is fired.
 	 * All PendingIntent objects are saved in a list in order to remove the alert later.
+	 * 
+	 * @param n The note that needs an alert to be fired
 	 */
-	private void addAlerts(){
-		DatabaseHandler dbHandler = DatabaseHandler.getInstance(this);
-		List<Note> nlist = dbHandler.getNoteList();
-		for(Note n:nlist){
-			com.plingnote.Location loc = n.getLocation();
-			if(loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0){
-				Intent intent = new Intent(this, NoteNotification.class);
-				intent.putExtra(IntentExtra.id.toString(), n.getId());
-				PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-				this.locationManager.addProximityAlert(loc.getLatitude(), 
-						loc.getLongitude(), ALERT_RADIUS, -1, pIntent);
-				this.pIntentList.add(pIntent);
-			}
+	private void addAlert(Note n){
+		com.plingnote.Location loc = n.getLocation();
+		if(loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0){
+			Intent intent = new Intent(this, NoteNotification.class);
+			intent.putExtra(IntentExtra.id.toString(), n.getId());
+			PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+			this.locationManager.addProximityAlert(loc.getLatitude(), 
+					loc.getLongitude(), ALERT_RADIUS, -1, pIntent);
+			this.pIntentList.add(pIntent);
 		}
 	}
 	
+	/**
+	 * Adds an alert to the location of the note most recently inserted to the database.
+	 */
+	private void addAlertToLast(){
+		DatabaseHandler dbHandler = DatabaseHandler.getInstance(this);
+		Note n = dbHandler.getNote(dbHandler.getLastId());
+		this.addAlert(n);
+	}
+	
+	/**
+	 * Loops through the list of notes retrieved from the database to add alerts to their locations.
+	 */
+	private void addAllAlerts(){
+		DatabaseHandler dbHandler = DatabaseHandler.getInstance(this);
+		List<Note> nlist = dbHandler.getNoteList();
+		for(Note n:nlist){
+			this.addAlert(n);
+		}
+	}
+
+	/**
+	 * Loops through the list of PendingIntents to remove alerts.
+	 */
 	private void removeAlerts(){
 		for(PendingIntent pIntent:pIntentList)
 			this.locationManager.removeProximityAlert(pIntent);
