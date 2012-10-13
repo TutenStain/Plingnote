@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -81,11 +80,6 @@ public class DatabaseHandler extends Observable{
 		return instance;
 	}
 	
-	@Override
-	public void addObserver(Observer obs){
-		instance.addObserver(obs);
-	}
-
 	private DatabaseHandler(Context con){
 		this.context = con;
 		this.dbHelp = new DBHelper(this.context);
