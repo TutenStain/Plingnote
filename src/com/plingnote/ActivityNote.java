@@ -25,6 +25,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -96,6 +97,7 @@ public class ActivityNote extends FragmentActivity {
 				}catch(Exception ek)
 				{
 				}
+				Log.d("llal", "mj" + id);
 				//Made a new snotebar and add an intent with id if this note's id is setted
 				FragmentSnotebar newFragment = new FragmentSnotebar();
 				newFragment.setRetainInstance(true);

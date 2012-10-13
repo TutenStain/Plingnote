@@ -7,8 +7,7 @@
         android:title="@string/menu_settings"/>
     <item
         android:id="@+id/add_new_note"
-        android:icon="@android:drawable/ic_menu_add"
-        android:onClick="addNewNote"
+       android:icon="@android:drawable/ic_menu_add"
         android:showAsAction="always"
         android:title="@string/add_new_note"/>
     <item
