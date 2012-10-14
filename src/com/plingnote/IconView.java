@@ -82,6 +82,8 @@ public class IconView extends View{
 		else{
 			if(text.length()>1)
 			text = text.substring(0,1).toUpperCase() + text.substring(1);
+			if(text.length()>10)
+				text = text.substring(0,10);
 			canvas.drawText(text,0,text.length(),0,160,paint);
 		}
 		canvas.drawBitmap(bit, 0, 10, null);	          

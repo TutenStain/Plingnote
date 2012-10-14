@@ -165,8 +165,8 @@ public class ActivityNote extends FragmentActivity {
 			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h));
 		}
 		else{
-			int h = height/2;
-			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h));
+			int h = height/9;
+			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h*4));
 		}
 	}
 
@@ -214,15 +214,16 @@ public class ActivityNote extends FragmentActivity {
 		setKeyListenertoTitle();
 	}
 
+	/**
+	 * Set the address if it isn't an empty string and if this note has a id bigger than -1.
+	 */
 	public void setNoteAddress(){
-		address = "Göteborg";
-
-		//	if(this.id != -1){
-		//	if(!(address.equals(""))){
-		TextView textView = (TextView) findViewById(R.id.address);
-		textView.setText(address);
-		//	}	
-		//}
+		if(this.id != -1){
+			if(!(this.address.equals(""))){
+				TextView textView = (TextView) findViewById(R.id.address);
+				textView.setText(this.address);
+			}	
+		}
 	}
 
 	/**
@@ -265,7 +266,7 @@ public class ActivityNote extends FragmentActivity {
 		super.onPause();
 		if(deleteNote == false){
 			if(!isNoteEmpty())
-			this.saveToDatabase();
+				this.saveToDatabase();
 		}
 	}
 

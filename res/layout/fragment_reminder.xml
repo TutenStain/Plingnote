@@ -8,17 +8,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
-
+
         <TimePicker
             android:id="@+id/timePicker"
             android:layout_width="257dp"
-            android:layout_height="82dp" />
-
+            android:layout_height="75dp" />
+
         <DatePicker
             android:id="@+id/datePicker"
             android:layout_width="match_parent"
-            android:layout_height="77dp"
+            android:layout_height="76dp"
             android:calendarViewShown="false" />
+
     </LinearLayout>
 
     <LinearLayout
