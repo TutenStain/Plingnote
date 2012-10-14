@@ -118,6 +118,7 @@ public class DatabaseHandler extends Observable{
 				this.onCreate(db);
 			dbHandler.insertOldData(backup);
 		}	
+	}
 
 	/**
 	 * 
@@ -416,7 +417,7 @@ public class DatabaseHandler extends Observable{
 		this.setChanged();
 		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
-
+	}
 
 	/**
 	 * 
@@ -577,7 +578,7 @@ public class DatabaseHandler extends Observable{
 		}
 
 	private DatabaseHandler open() throws SQLException{
-		this.db = this.dbHelp.getWritableDatabase();
+			this.db = this.dbHelp.getWritableDatabase();
 		return this;
 	}
 
@@ -585,3 +586,4 @@ public class DatabaseHandler extends Observable{
 		this.db.close();
 	}
 }
+	

@@ -144,8 +144,8 @@ public class FragmentSnotebar extends Fragment {
 			item.setOnClickListener(new PreviewListener());
 			item.setOnLongClickListener(new PreviewLongListner());
 			LinearLayout relative = new LinearLayout(getActivity());
-			double j = (i*0.1);
-			relative.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.FILL_PARENT,(float) j));
+			//double j = (i*1.0);
+			relative.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.FILL_PARENT,(float) 1));
 			relative.addView(item);
 			linearLayout.addView(relative);
 			i = 2+i;
