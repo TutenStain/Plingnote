@@ -1,12 +1,3 @@
-package com.plingnote;
-
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.provider.SearchRecentSuggestions;
-
 /**
  * This file is part of Plingnote.
  * Copyright (C) 2012 Barnabas Sapan
@@ -23,6 +14,15 @@ import android.provider.SearchRecentSuggestions;
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+package com.plingnote;
+
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.provider.SearchRecentSuggestions;
 
 /**
  * The application preference fragment that shows the settings view.

@@ -288,7 +288,7 @@ public class ActivityNote extends FragmentActivity {
 		else 
 			return false;
 		}catch(Exception e){
-			return false;
+			return true;
 		}
 	}
 
