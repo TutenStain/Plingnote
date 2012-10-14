@@ -83,7 +83,7 @@ public class SBCategorySelector extends Fragment {
 			// Iterate through NoteCategories and get the drawables that matches
 			// the category names.
 			for (NoteCategory category : NoteCategory.values()) {
-				if (category.toString().equals(fields[i].getName())) {
+				if (fields[i].getName().equals(category.toString())) {
 					categoryDrawables[i] = fields[i].getName();
 				}
 			}
