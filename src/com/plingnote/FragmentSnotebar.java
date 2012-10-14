@@ -112,13 +112,17 @@ public class FragmentSnotebar extends Fragment {
 			//	icons.add(new IconView(getActivity(),"",Utils.categoryString, null));
 		}else{
 			//Check if id is set,then it is information to fetch from database else there is no information
-			if(DatabaseHandler.getInstance(getActivity()).getNote(this.id).getAlarm() != null || !(DatabaseHandler.getInstance(getActivity()).getNote(this.id).getAlarm().equals(""))){
-				icons.add(new IconView(getActivity(),DatabaseHandler.getInstance(getActivity()).getNote(id).getAlarm(), Utils.reminderString, new  FragmentReminder()));					
+			if(DatabaseHandler.getInstance(getActivity()).getNote(this.id).getAlarm() != null 
+				|| !(DatabaseHandler.getInstance(getActivity()).getNote(this.id).getAlarm().equals(""))){
+				icons.add(new IconView(getActivity(),DatabaseHandler.getInstance
+				(getActivity()).getNote(id).getAlarm(), Utils.reminderString, new  FragmentReminder()));					
 			}else{
 				icons.add(new IconView(getActivity(),"", Utils.reminderString, new FragmentReminder()));
 			}
-			if(DatabaseHandler.getInstance(getActivity()).getNote(this.id).getImagePath() != null || !(DatabaseHandler.getInstance(getActivity()).getNote(this.id).getImagePath().equals(""))){
-				icons.add(new IconView(getActivity(),"", Utils.imageString, new SBImageSelector(), DatabaseHandler.getInstance(getActivity()).getNote(this.id).getImagePath()));					
+			if(DatabaseHandler.getInstance(getActivity()).getNote(this.id).getImagePath() != null 
+			|| !(DatabaseHandler.getInstance(getActivity()).getNote(this.id).getImagePath().equals(""))){
+				icons.add(new IconView(getActivity(),"", Utils.imageString, new SBImageSelector(),
+					DatabaseHandler.getInstance(getActivity()).getNote(this.id).getImagePath()));					
 			}else{
 				icons.add(new IconView(getActivity(),"", Utils.imageString, new SBImageSelector()));
 			}
