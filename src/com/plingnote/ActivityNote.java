@@ -37,7 +37,6 @@ import android.widget.TextView;
 /**
  * A note fragment activity with a layout holding a fragment. 
  * @author Julia Gustafsson
- *
  */
 public class ActivityNote extends FragmentActivity {
 	private int id = -1;
@@ -46,6 +45,7 @@ public class ActivityNote extends FragmentActivity {
 	private Fragment anotherFragment = null;
 	private boolean deleteNote = false;
 	private String address = "";
+	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(this);
 
 	/**
 	 * Set content view and try to fetch id from saved instance or intent,
@@ -67,33 +67,31 @@ public class ActivityNote extends FragmentActivity {
 						,getIntent().getExtras().getDouble(IntentExtra.latitude.toString()));
 				this.address = getIntent().getExtras().getString(IntentExtra.city.toString());
 			}
-		}catch(Exception o){			
+		}catch(Exception e){			
 		}
 		try{
 			//Try to set id to saved instance. Then fetch this id's values. This happens if the screen is turned.
 			this.id =savedInstanceState.getInt(IntentExtra.id.toString());
-		}catch(Exception eka)
-		{
+		}catch(Exception e){
 		}
 		try { 
 			//Try to set antoherfragment to to fragment saved in savedinstance. 
 			//If turning to phone when when to snotebar 
 			//is replaced with some other fragment this will set antotherfragment to that.
-			this.anotherFragment = getSupportFragmentManager().getFragment(savedInstanceState,"anotherFragment");
+			this.anotherFragment = getSupportFragmentManager().getFragment(savedInstanceState, "anotherFragment");
 		}catch(Exception e){
-			if(snotebarFragment ==null){
+			if(snotebarFragment == null){
 				try{
 					if(this.id == -1){
 						//If an intent with id (that not is -1) the id will be setted here. Fetch values from the id.
 						if(getIntent().getExtras().getInt(IntentExtra.id.toString()) != -1){ 
 							this.id = getIntent().getExtras().getInt(IntentExtra.id.toString());
 						}
-						if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==true){
-							DatabaseHandler.getInstance(this).updateAlarm(this.id, "");
+						if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString()) == true){
+							 dbHandler.updateAlarm(this.id, "");
 						}
 					}
-				}catch(Exception ek)
-				{
+				}catch(Exception el){
 				}
 				//Made a new snotebar and add an intent with id if this note's id is setted
 				FragmentSnotebar newFragment = new FragmentSnotebar();
@@ -122,10 +120,10 @@ public class ActivityNote extends FragmentActivity {
 		int widht = rec.width();	
 		getResources().getConfiguration();
 		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-			noteTitle.setLayoutParams(new LinearLayout.LayoutParams(widht,height/7));
+			noteTitle.setLayoutParams(new LinearLayout.LayoutParams(widht, height/7));
 		}
 		else{
-			noteTitle.setLayoutParams(new LinearLayout.LayoutParams(widht,height/11));
+			noteTitle.setLayoutParams(new LinearLayout.LayoutParams(widht, height/11));
 		}	
 	}
 
@@ -162,11 +160,11 @@ public class ActivityNote extends FragmentActivity {
 		getResources().getConfiguration();
 		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
 			int h = height/3;
-			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h));
+			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht, h));
 		}
 		else{
 			int h = height/9;
-			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht,h*4));
+			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht, h*4));
 		}
 	}
 
@@ -177,7 +175,7 @@ public class ActivityNote extends FragmentActivity {
 		EditText noteText = (EditText)findViewById(R.id.notetext);
 		//If this class was opened with an intent or saved instances, the note text will get the text from the database
 		if(this.id != -1){				
-			String txt = (DatabaseHandler.getInstance(this).getNote(this.id).getText());
+			String txt = dbHandler.getNote(this.id).getText();
 			//The cursor position will be saved
 			//even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
 			noteText.setText(""); 
@@ -193,7 +191,7 @@ public class ActivityNote extends FragmentActivity {
 		EditText noteTitle = (EditText)findViewById(R.id.notetitle);
 		//If this class was opened with an intent or saved instances, the note text will get the text from the database
 		if(this.id != -1){
-			String title = (DatabaseHandler.getInstance(this).getNote(this.id).getTitle());
+			String title =  dbHandler.getNote(this.id).getTitle();
 			noteTitle.setText(title);		
 			noteTitle.invalidate(); 
 		}
@@ -242,20 +240,19 @@ public class ActivityNote extends FragmentActivity {
 	 * Remove the pluginfragment and the new one.
 	 * @param fragment
 	 */
-	public void replaceFragmentBack(PluginFragment fragment){
+	public void replaceFragmentBack(PluginableFragment fragment){
 		if(fragment.getValue() != null){
 			if(fragment.getKind().equals(NoteExtra.REMINDER)){
-				DatabaseHandler.getInstance(this).updateAlarm(this.id,  fragment.getValue());
+				dbHandler.updateAlarm(this.id, fragment.getValue());
 			}
 			if(fragment.getKind().equals(NoteExtra.IMAGE)){
-				DatabaseHandler.getInstance(this).updateImagePath(this.id,  fragment.getValue());
+				dbHandler.updateImagePath(this.id, fragment.getValue());
 			}
 			if(fragment.getKind().equals(NoteExtra.CATEGORY)){
-				DatabaseHandler.getInstance(this).updateCategory(this.id, fragment.getCategory());
+				dbHandler.updateCategory(this.id, fragment.getCategory());
 			}
 		}
 		this.changeToSnotebarFragment();
-
 	}	
 
 	/**
@@ -276,16 +273,15 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public boolean isNoteEmpty(){
 		if(this.id != -1){
-			if(
-					(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals("") 
-							|| DatabaseHandler.getInstance(this).getNote(this.id).getAlarm() == null) &&
-							(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals("") 
-									|| DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() == null) &&
-									(DatabaseHandler.getInstance(this).getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY) &&
-									(DatabaseHandler.getInstance(this).getNote(this.id).getLocation() == null)&&
-									this.getTextofNoteText().equals("") && this.getTextofNoteText().equals(""))
+			if((dbHandler.getNote(this.id).getAlarm().equals("") 
+				|| dbHandler.getNote(this.id).getAlarm() == null)
+				&& (dbHandler.getNote(this.id).getImagePath().equals("") 
+				|| dbHandler.getNote(this.id).getImagePath() == null) 
+				&& (dbHandler.getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY) 
+				&& (dbHandler.getNote(this.id).getLocation() == null)
+				&& this.getTextofNoteText().equals("") && this.getTextofNoteText().equals(""))
 				return true;
-		}
+			}
 		return false;
 	}
 
@@ -305,22 +301,22 @@ public class ActivityNote extends FragmentActivity {
 	public boolean checkIfValueIsSetted(NoteExtra noteExtra){
 		if(this.id != -1){
 			if(noteExtra.equals(NoteExtra.REMINDER)){
-				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals(""))){
+				if(!(dbHandler.getNote(this.id).getAlarm().equals(""))){
 					return true;
 				}
 			}
 			if(noteExtra.equals(NoteExtra.IMAGE)){
-				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals(""))){
+				if(!(dbHandler.getNote(this.id).getImagePath().equals(""))){
 					return true;
 				}
 			}
 			if(noteExtra.equals(NoteExtra.LOCATION)){
-				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getLocation() == null)){
+				if(!(dbHandler.getNote(this.id).getLocation() == null)){
 					return true;
 				}
 			}	
 			if(noteExtra.equals(NoteExtra.CATEGORY)){
-				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getCategory()== NoteCategory.NO_CATEGORY)){
+				if(!(dbHandler.getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY)){
 					return true;
 				}
 			}	
@@ -334,17 +330,17 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public void deleteValue(NoteExtra noteExtra){
 		if(noteExtra.equals(NoteExtra.REMINDER)){
-			DatabaseHandler.getInstance(this).updateAlarm(this.id, "");
+			dbHandler.updateAlarm(this.id, "");
 		}
 		if(noteExtra.equals(NoteExtra.IMAGE)){
-			DatabaseHandler.getInstance(this).updateImagePath(this.id, "");
+			dbHandler.updateImagePath(this.id, "");
 		}
 		if(noteExtra.equals(NoteExtra.LOCATION)){
-			DatabaseHandler.getInstance(this).updateLocation(this.id, null);
-			DatabaseHandler.getInstance(this).updateAddress(this.id, "");
+			dbHandler.updateLocation(this.id, null);
+			dbHandler.updateAddress(this.id, "");
 		}
 		if(noteExtra.equals(NoteExtra.CATEGORY)){
-			DatabaseHandler.getInstance(this).updateCategory(this.id,NoteCategory.NO_CATEGORY);
+			dbHandler.updateCategory(this.id, NoteCategory.NO_CATEGORY);
 		}	
 		this.changeToSnotebarFragment();
 	}
@@ -372,13 +368,13 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public void saveToDatabase(){
 		if(this.id != -1){
-			DatabaseHandler.getInstance(this).updateText(this.id, this.getTextofNoteText());
-			DatabaseHandler.getInstance(this).updateTitle(this.id,this.getTitleofNoteText());
+			dbHandler.updateText(this.id, this.getTextofNoteText());
+			dbHandler.updateTitle(this.id, this.getTitleofNoteText());
 		}
 		//If this class not was opened with an intent or saved instance, it'd id is set to -1 and we are inserting the note in database.
 		else if(this.id == -1){
-			DatabaseHandler.getInstance(this).
-			insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), this.location,"","",NoteCategory.NO_CATEGORY, this.address);
+			dbHandler.
+			insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), this.location, "", "", NoteCategory.NO_CATEGORY, this.address);
 			this.id = DatabaseHandler.getInstance(this).getLastId();
 		}
 	}
@@ -389,7 +385,7 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public String getTitleofNoteText(){
 		EditText noteText = (EditText) findViewById(R.id.notetitle);
-		if(noteText.getText().toString().length()>0){
+		if(noteText.getText().toString().length() > 0){
 			String txt = noteText.getText().toString();
 			String[] txtLines = txt.split("\n");
 			return txtLines[0]+"\n";
@@ -404,7 +400,7 @@ public class ActivityNote extends FragmentActivity {
 	public String getTextofNoteText(){
 		EditText noteText = (EditText) findViewById(R.id.notetext);
 		String txt = noteText.getText().toString();
-		if(txt.length() >0){
+		if(txt.length() > 0){
 			return txt;
 		}else
 			return "";
@@ -451,7 +447,7 @@ public class ActivityNote extends FragmentActivity {
 			return true;
 		case R.id.delete_note:
 			if(this.id!=-1)
-				DatabaseHandler.getInstance(this).deleteNote(this.id);
+				dbHandler.deleteNote(this.id);
 			deleteNote = true;
 			this.finish();
 			return true;
@@ -496,7 +492,7 @@ public class ActivityNote extends FragmentActivity {
 	 * Delete all note extra values location,imagepath,reminder.
 	 */
 	public void deleteAllValues(){					
-		DatabaseHandler.getInstance(this).updateNote(this.id,"", "",null,"","",NoteCategory.NO_CATEGORY, "");	
+		dbHandler.updateNote(this.id, "", "", null, "", "", NoteCategory.NO_CATEGORY, "");	
 		this.snotebarFragment = new FragmentSnotebar();
 		try{
 			Bundle bundleToFrag = new Bundle();

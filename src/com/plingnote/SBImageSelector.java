@@ -37,7 +37,7 @@ import android.widget.Gallery;
  * @author Linus Karlsson
  * 
  */
-public class SBImageSelector extends Fragment implements PluginFragment{
+public class SBImageSelector extends Fragment implements PluginableFragment{
 	private String selectedImage;
 
 	private Cursor cursor;

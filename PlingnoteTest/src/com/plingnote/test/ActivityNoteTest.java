@@ -27,7 +27,7 @@ public class ActivityNoteTest extends ActivityInstrumentationTestCase2<ActivityN
 	 */
 	public void testNoteSettingsCleanNote(){ 
 		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activiy",ActivityNote.class);
+		solo.assertCurrentActivity("wrong activiy", ActivityNote.class);
 		//Clear the edittext fields 'notetext' and 'notetitle' from text
 		solo.clearEditText((EditText)solo.getView(R.id.notetext));
 		solo.clearEditText((EditText)solo.getView(R.id.notetitle));
@@ -49,7 +49,7 @@ public class ActivityNoteTest extends ActivityInstrumentationTestCase2<ActivityN
 	 */
 	public void testGetNoteTitle(){
 		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activiy",ActivityNote.class);
+		solo.assertCurrentActivity("wrong activiy", ActivityNote.class);
 		//Clear edittextfield 'notetitle' from text
 		solo.clearEditText((EditText)solo.getView(R.id.notetitle));
 		String newNoteTitle = "This note title should be getted from method.";
@@ -67,7 +67,7 @@ public class ActivityNoteTest extends ActivityInstrumentationTestCase2<ActivityN
 	 */
 	public void testGetNoteText(){
 		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activiy",ActivityNote.class);
+		solo.assertCurrentActivity("wrong activiy", ActivityNote.class);
 		//Clear edittextfield 'notetext' from text
 		solo.clearEditText((EditText)solo.getView(R.id.notetext));
 		String newNoteText = "This note title should be getted from method.";
@@ -85,7 +85,7 @@ public class ActivityNoteTest extends ActivityInstrumentationTestCase2<ActivityN
 	 */
 	public void testFocusAfterPressEnter() {	
 		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activiy",ActivityNote.class);
+		solo.assertCurrentActivity("wrong activiy", ActivityNote.class);
 		sendKeys(KeyEvent.KEYCODE_ENTER);
 		//Make sure 'notetext' is foucused
 		assertTrue("notetext should be focused",solo.getView(R.id.notetext).isFocusable());

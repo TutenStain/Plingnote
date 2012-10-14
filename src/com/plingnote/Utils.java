@@ -16,10 +16,13 @@ public class Utils {
 	public final static String QUERY_NOTE = "com.plingnote.QUERY_NOTE";
 
 	public final static String reminderString = "Reminder";
+	
 	public final static String imageString = "Image";
+	
 	public final static String categoryString = "Category";
 
 	public static int getDrawable(NoteCategory noteCategory){
+		
 		switch (noteCategory) {
 		case Bank:
 			return R.drawable.bank;

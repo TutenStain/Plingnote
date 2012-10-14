@@ -37,7 +37,7 @@ import android.widget.Toast;
  * @author Julia Gustafsson
  *
  */
-public class FragmentReminder extends Fragment implements PluginFragment{
+public class FragmentReminder extends Fragment implements PluginableFragment{
 	private View view;
 	private String value = "";
 	PendingIntent pendingIntent;
@@ -87,10 +87,9 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
 		pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
-		//pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, 0);
 		Calendar calendar =  Calendar.getInstance();
 		calendar.set(datepicker.getYear(), datepicker.getMonth(),
-				datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
+				datepicker.getDayOfMonth(), timepicker.getCurrentHour(), timepicker.getCurrentMinute(), 0);
 		this.value = calendar.getTime()+"";
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);    

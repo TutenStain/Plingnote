@@ -44,6 +44,7 @@ import android.widget.LinearLayout;
 public class FragmentSnotebar extends Fragment {
 	private View view;
 	private int id = -1;
+	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(getActivity());
 
 	public List<IconView> icons = new ArrayList<IconView>();
 	@Override
@@ -96,7 +97,7 @@ public class FragmentSnotebar extends Fragment {
 	 * @param linearLayout
 	 */
 	public void removeChildren(LinearLayout linearLayout){
-		if(linearLayout.getChildCount()>0){
+		if(linearLayout.getChildCount() > 0){
 			linearLayout.removeAllViews();
 		}
 		linearLayout.invalidate();
@@ -107,29 +108,28 @@ public class FragmentSnotebar extends Fragment {
 	 */
 	public void addIcontoList(){
 		if(this.id == -1){
-			icons.add(new IconView(getActivity(),"", Utils.reminderString, new FragmentReminder()));
-			icons.add(new IconView(getActivity(),"", Utils.imageString, new SBImageSelector()));
-			icons.add(new IconView(getActivity(),"",Utils.categoryString, new SBCategorySelector()));
+			icons.add(new IconView(getActivity(), "", Utils.reminderString, new FragmentReminder()));
+			icons.add(new IconView(getActivity(), "", Utils.imageString, new SBImageSelector()));
+			icons.add(new IconView(getActivity(), "", Utils.categoryString, new SBCategorySelector()));
 		}else{
 			//Check if id is set,then it is information to fetch from database else there is no information
-			if(DatabaseHandler.getInstance(getActivity()).getNote(this.id).getAlarm() != null 
-				|| !(DatabaseHandler.getInstance(getActivity()).getNote(this.id).getAlarm().equals(""))){
-				icons.add(new IconView(getActivity(),DatabaseHandler.getInstance
-				(getActivity()).getNote(id).getAlarm(), Utils.reminderString, new  FragmentReminder()));					
+			if(dbHandler.getNote(this.id).getAlarm() != null 
+				|| !(dbHandler.getNote(this.id).getAlarm().equals(""))){
+				icons.add(new IconView(getActivity(), dbHandler.getNote(id).getAlarm(), Utils.reminderString, new  FragmentReminder()));					
 			}else{
 				icons.add(new IconView(getActivity(),"", Utils.reminderString, new FragmentReminder()));
 			}
-			if(DatabaseHandler.getInstance(getActivity()).getNote(this.id).getImagePath() != null 
-			|| !(DatabaseHandler.getInstance(getActivity()).getNote(this.id).getImagePath().equals(""))){
-				icons.add(new IconView(getActivity(),"", Utils.imageString, new SBImageSelector(),
-					DatabaseHandler.getInstance(getActivity()).getNote(this.id).getImagePath()));					
+			if(dbHandler.getNote(this.id).getImagePath() != null 
+			|| !(dbHandler.getNote(this.id).getImagePath().equals(""))){
+				icons.add(new IconView(getActivity(), "", Utils.imageString, new SBImageSelector(), dbHandler.getNote(this.id).getImagePath()));					
 			}else{
 				icons.add(new IconView(getActivity(),"", Utils.imageString, new SBImageSelector()));
 			}
-			if(DatabaseHandler.getInstance(getActivity()).getNote(id).getCategory() != NoteCategory.NO_CATEGORY){
-				icons.add(new IconView(getActivity(),DatabaseHandler.getInstance(getActivity()).getNote(id).getCategory().toString(), Utils.categoryString, new SBCategorySelector(),Utils.getDrawable(DatabaseHandler.getInstance(getActivity()).getNote(id).getCategory())));					
+			if(dbHandler.getNote(id).getCategory() != NoteCategory.NO_CATEGORY){
+				icons.add(new IconView(getActivity(), dbHandler.getNote(id).getCategory().toString(), Utils.categoryString,
+						new SBCategorySelector(), Utils.getDrawable(dbHandler.getNote(id).getCategory())));					
 			}else{
-				icons.add(new IconView(getActivity(),"",Utils.categoryString, new SBCategorySelector()));
+				icons.add(new IconView(getActivity(), "", Utils.categoryString, new SBCategorySelector()));
 			}
 		}
 	}
@@ -143,7 +143,7 @@ public class FragmentSnotebar extends Fragment {
 			item.setOnClickListener(new PreviewListener());
 			item.setOnLongClickListener(new PreviewLongListner());
 			LinearLayout relative = new LinearLayout(getActivity());
-			relative.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.FILL_PARENT,(float) 1));
+			relative.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.FILL_PARENT, (float) 1));
 			relative.addView(item);
 			linearLayout.addView(relative);
 		}
@@ -202,7 +202,7 @@ public class FragmentSnotebar extends Fragment {
 		IconView icon;
 		public boolean onLongClick(View v) {
 			icon = (IconView)v;
-			PluginFragment pluginFrag = (PluginFragment)icon.getFragment();
+			PluginableFragment pluginFrag = (PluginableFragment)icon.getFragment();
 			if(FragmentSnotebar.this.checkIfValueIsSetted(pluginFrag.getKind())){
 				DialogFragment newFragment = new AskIfReset();
 				newFragment.show(getFragmentManager(), "Reset");
@@ -226,7 +226,7 @@ public class FragmentSnotebar extends Fragment {
 				builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 					//Call methods that will delete the data
 					public void onClick(DialogInterface dialog, int id) {
-						PluginFragment pluginFrag = (PluginFragment)icon.getFragment();
+						PluginableFragment pluginFrag = (PluginableFragment)icon.getFragment();
 						//This code must unfortunalty be in this class or in fragmentsnotebarclass because if the fragmentReminder isn't
 						//in snotebar it's value it's getactivty return null and you can't remove the alarm.
 						if(pluginFrag instanceof FragmentReminder){
