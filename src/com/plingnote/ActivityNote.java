@@ -251,259 +251,258 @@ public class ActivityNote extends FragmentActivity {
 			if(fragment.getKind().equals(NoteExtra.IMAGE)){
 				DatabaseHandler.getInstance(this).updateImagePath(this.id,  fragment.getValue());
 			}
-			if(fragment.getKind().equals(NoteExtra.LOCATION)){
-				DatabaseHandler.getInstance(this).updateLocation(this.id,fragment.getLocation());
+			if(fragment.getKind().equals(NoteExtra.CATEGORY)){
 			}
 		}
-		this.changeToSnotebarFragment();
+			this.changeToSnotebarFragment();
 
-	}	
+		}	
 
-	/**
-	 * if the boolean deletenote is false the information will be saved to the database.
-	 */
-	@Override
-	public void onPause(){
-		super.onPause();
-		if(deleteNote == false || !isNoteEmpty()){
-			this.saveToDatabase();
+		/**
+		 * if the boolean deletenote is false the information will be saved to the database.
+		 */
+		@Override
+		public void onPause(){
+			super.onPause();
+			if(deleteNote == false || !isNoteEmpty()){
+				this.saveToDatabase();
+			}
 		}
-	}
 
-	/**
-	 * A function that checks if all value; text,title,reminder,location,imagepath, is not setted.
-	 * @return
-	 */
-	public boolean isNoteEmpty(){
-		if(this.id != -1){
-		try{
-		if(
-				(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals("") 
-						|| DatabaseHandler.getInstance(this).getNote(this.id).getAlarm() == null) &&
-						(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals("") 
-								|| DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() == null) &&
-								(DatabaseHandler.getInstance(this).getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY) &&
-								(DatabaseHandler.getInstance(this).getNote(this.id).getLocation() == null)&&
-								this.getTextofNoteText().equals("") && this.getTextofNoteText().equals(""))
-			return true;
-		else 
-			return false;
-		}catch(Exception e){
-			return true;
-		}
-		}
-		return true;
-	}
-
-	/**
-	 * Return the id 
-	 * @return id
-	 */
-	public int getId() {
-		return this.id;
-	}
-
-	/**
-	 * Check if extra value is setted by checking the local extra values
-	 * @param noteExtra
-	 * @return
-	 */
-	public boolean checkIfValueIsSetted(NoteExtra noteExtra){
-		if(this.id != -1){
-			if(noteExtra.equals(NoteExtra.REMINDER)){
-				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals(""))
-						|| DatabaseHandler.getInstance(this).getNote(this.id).getAlarm() != null){
+		/**
+		 * A function that checks if all value; text,title,reminder,location,imagepath, is not setted.
+		 * @return
+		 */
+		public boolean isNoteEmpty(){
+			if(this.id != -1){
+				try{
+					if(
+							(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals("") 
+									|| DatabaseHandler.getInstance(this).getNote(this.id).getAlarm() == null) &&
+									(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals("") 
+											|| DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() == null) &&
+											(DatabaseHandler.getInstance(this).getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY) &&
+											(DatabaseHandler.getInstance(this).getNote(this.id).getLocation() == null)&&
+											this.getTextofNoteText().equals("") && this.getTextofNoteText().equals(""))
+						return true;
+					else 
+						return false;
+				}catch(Exception e){
 					return true;
 				}
+			}
+			return true;
+		}
+
+		/**
+		 * Return the id 
+		 * @return id
+		 */
+		public int getId() {
+			return this.id;
+		}
+
+		/**
+		 * Check if extra value is setted by checking the local extra values
+		 * @param noteExtra
+		 * @return
+		 */
+		public boolean checkIfValueIsSetted(NoteExtra noteExtra){
+			if(this.id != -1){
+				if(noteExtra.equals(NoteExtra.REMINDER)){
+					if(!(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals(""))
+							|| DatabaseHandler.getInstance(this).getNote(this.id).getAlarm() != null){
+						return true;
+					}
+				}
+				if(noteExtra.equals(NoteExtra.IMAGE)){
+					if(!(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals("")) 
+							|| DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() != null){
+						return true;
+					}
+				}
+				if(noteExtra.equals(NoteExtra.LOCATION)){
+					if(!(DatabaseHandler.getInstance(this).getNote(this.id).getLocation() == null)){
+						return true;
+					}
+				}	
+			}
+			return false;
+		}
+
+		/**
+		 * Delete value from database
+		 * @param noteExtra
+		 */
+		public void deleteValue(NoteExtra noteExtra){
+			if(noteExtra.equals(NoteExtra.REMINDER)){
+				DatabaseHandler.getInstance(this).updateAlarm(this.id, "");
 			}
 			if(noteExtra.equals(NoteExtra.IMAGE)){
-				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals("")) 
-						|| DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() != null){
-					return true;
-				}
+				DatabaseHandler.getInstance(this).updateImagePath(this.id, "");
 			}
 			if(noteExtra.equals(NoteExtra.LOCATION)){
-				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getLocation() == null)){
-					return true;
-				}
+				DatabaseHandler.getInstance(this).updateLocation(this.id, null);
+				DatabaseHandler.getInstance(this).updateAddress(this.id, "");
 			}	
+			this.changeToSnotebarFragment();
 		}
-		return false;
-	}
 
-	/**
-	 * Delete value from database
-	 * @param noteExtra
-	 */
-	public void deleteValue(NoteExtra noteExtra){
-		if(noteExtra.equals(NoteExtra.REMINDER)){
-			DatabaseHandler.getInstance(this).updateAlarm(this.id, "");
+		/**
+		 * Save to database, remove anotherFragment and replace it with snotbarFragment
+		 */
+		private void changeToSnotebarFragment(){
+			this.saveToDatabase();
+			snotebarFragment = new FragmentSnotebar();
+			try{
+				Bundle bundleToFrag = new Bundle();
+				bundleToFrag.putInt(IntentExtra.id.toString(), this.id);
+				snotebarFragment.setArguments(bundleToFrag);
+			} catch(Exception e){		        	
+			}
+			getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, snotebarFragment).commit();
+			getSupportFragmentManager().beginTransaction().remove(anotherFragment);
+			this.anotherFragment = null;
 		}
-		if(noteExtra.equals(NoteExtra.IMAGE)){
-			DatabaseHandler.getInstance(this).updateImagePath(this.id, "");
-		}
-		if(noteExtra.equals(NoteExtra.LOCATION)){
-			DatabaseHandler.getInstance(this).updateLocation(this.id, null);
-			DatabaseHandler.getInstance(this).updateAddress(this.id, "");
-		}	
-		this.changeToSnotebarFragment();
-	}
 
-	/**
-	 * Save to database, remove anotherFragment and replace it with snotbarFragment
-	 */
-	private void changeToSnotebarFragment(){
-		this.saveToDatabase();
-		snotebarFragment = new FragmentSnotebar();
-		try{
-			Bundle bundleToFrag = new Bundle();
-			bundleToFrag.putInt(IntentExtra.id.toString(), this.id);
-			snotebarFragment.setArguments(bundleToFrag);
-		} catch(Exception e){		        	
-		}
-		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, snotebarFragment).commit();
-		getSupportFragmentManager().beginTransaction().remove(anotherFragment);
-		this.anotherFragment = null;
-	}
-
-	/**
-	 * Get the text from the view noteText. If the id isn't -1the note's value will be updated in the database.
-	 * If not the note will be inserted in the database and the id will be saved. 
-	 */
-	public void saveToDatabase(){
-		if(this.id != -1){
-			DatabaseHandler.getInstance(this).updateText(this.id, this.getTextofNoteText());
-			DatabaseHandler.getInstance(this).updateTitle(this.id,this.getTitleofNoteText());
-		}
-		//If this class not was opened with an intent or saved instance, it'd id is set to -1 and we are inserting the note in database.
-		else if(this.id == -1){
-			DatabaseHandler.getInstance(this).
-			insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), this.location,"","",NoteCategory.NO_CATEGORY, this.address);
-			this.id = DatabaseHandler.getInstance(this).getLastId();
-		}
-	}
-
-	/**
-	 * Find the first line of the text in notetext in the layout and returning it as a string
-	 * @return String
-	 */
-	public String getTitleofNoteText(){
-		EditText noteText = (EditText) findViewById(R.id.notetitle);
-		if(noteText.getText().toString().length()>0){
-			String txt = noteText.getText().toString();
-			String[] txtLines = txt.split("\n");
-			return txtLines[0]+"\n";
-		}else
-			return "";
-	}
-
-	/**
-	 * Find the text(without the title) in notetext in the layout  as a string
-	 * @return String
-	 */
-	public String getTextofNoteText(){
-		EditText noteText = (EditText) findViewById(R.id.notetext);
-		String txt = noteText.getText().toString();
-		if(txt.length() >0){
-			return txt;
-		}else
-			return "";
-	}
-
-	/**
-	 * If the boolean 'deletenote' is false,thismethod will save the id and 'anotherFragment' if it isn't null.
-	 */
-	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {
-		if(deleteNote == false){
-			super.onSaveInstanceState(savedInstanceState);
-			savedInstanceState.putInt(IntentExtra.id.toString(), this.id);
-			//If anotherFragment isn't null is should be saved
-			if(anotherFragment != null){
-				getSupportFragmentManager().putFragment(savedInstanceState, "anotherFragment", anotherFragment);
+		/**
+		 * Get the text from the view noteText. If the id isn't -1the note's value will be updated in the database.
+		 * If not the note will be inserted in the database and the id will be saved. 
+		 */
+		public void saveToDatabase(){
+			if(this.id != -1){
+				DatabaseHandler.getInstance(this).updateText(this.id, this.getTextofNoteText());
+				DatabaseHandler.getInstance(this).updateTitle(this.id,this.getTitleofNoteText());
+			}
+			//If this class not was opened with an intent or saved instance, it'd id is set to -1 and we are inserting the note in database.
+			else if(this.id == -1){
+				DatabaseHandler.getInstance(this).
+				insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), this.location,"","",NoteCategory.NO_CATEGORY, this.address);
+				this.id = DatabaseHandler.getInstance(this).getLastId();
 			}
 		}
-	}
 
-	/**
-	 * Makes the back button behave like the home button. Calling finish() if back button is pressed.
-	 */
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			this.finish();
+		/**
+		 * Find the first line of the text in notetext in the layout and returning it as a string
+		 * @return String
+		 */
+		public String getTitleofNoteText(){
+			EditText noteText = (EditText) findViewById(R.id.notetitle);
+			if(noteText.getText().toString().length()>0){
+				String txt = noteText.getText().toString();
+				String[] txtLines = txt.split("\n");
+				return txtLines[0]+"\n";
+			}else
+				return "";
+		}
+
+		/**
+		 * Find the text(without the title) in notetext in the layout  as a string
+		 * @return String
+		 */
+		public String getTextofNoteText(){
+			EditText noteText = (EditText) findViewById(R.id.notetext);
+			String txt = noteText.getText().toString();
+			if(txt.length() >0){
+				return txt;
+			}else
+				return "";
+		}
+
+		/**
+		 * If the boolean 'deletenote' is false,thismethod will save the id and 'anotherFragment' if it isn't null.
+		 */
+		@Override
+		public void onSaveInstanceState(Bundle savedInstanceState) {
+			if(deleteNote == false){
+				super.onSaveInstanceState(savedInstanceState);
+				savedInstanceState.putInt(IntentExtra.id.toString(), this.id);
+				//If anotherFragment isn't null is should be saved
+				if(anotherFragment != null){
+					getSupportFragmentManager().putFragment(savedInstanceState, "anotherFragment", anotherFragment);
+				}
+			}
+		}
+
+		/**
+		 * Makes the back button behave like the home button. Calling finish() if back button is pressed.
+		 */
+		@Override
+		public boolean onKeyDown(int keyCode, KeyEvent event) {
+			if (keyCode == KeyEvent.KEYCODE_BACK) {
+				this.finish();
+				return true;
+			}
+			return super.onKeyDown(keyCode, event);
+		}
+
+		/**
+		 * If choosing to go back to home, the keyboard will be hided and call finish.
+		 * If choosing to delete note, the current note will be deleted and the note activity will be deleted
+		 */
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {	
+			case android.R.id.home:
+				InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
+				this.finish();
+				return true;
+			case R.id.delete_note:
+				if(this.id!=-1)
+					DatabaseHandler.getInstance(this).deleteNote(this.id);
+				deleteNote = true;
+				this.finish();
+				return true;
+			case R.id.reset_snotebar:
+				this.deleteAllValues();
+				return true;
+			case R.id.clean_notetext:
+				this.deleteNoteTextandTitle();		
+				return true;
+			case R.id.clean_note:
+				this.deleteNoteTextandTitle();
+				this.deleteAllValues();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+		}
+
+		/**
+		 * Create the settings menu
+		 */
+		@Override
+		public boolean onCreateOptionsMenu(Menu menu) {
+			getMenuInflater().inflate(R.menu.activity_note, menu);
 			return true;
 		}
-		return super.onKeyDown(keyCode, event);
-	}
 
-	/**
-	 * If choosing to go back to home, the keyboard will be hided and call finish.
-	 * If choosing to delete note, the current note will be deleted and the note activity will be deleted
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {	
-		case android.R.id.home:
-			InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-			inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
-			this.finish();
-			return true;
-		case R.id.delete_note:
-			if(this.id!=-1)
-				DatabaseHandler.getInstance(this).deleteNote(this.id);
-			deleteNote = true;
-			this.finish();
-			return true;
-		case R.id.reset_snotebar:
-			this.deleteAllValues();
-			return true;
-		case R.id.clean_notetext:
-			this.deleteNoteTextandTitle();		
-			return true;
-		case R.id.clean_note:
-			this.deleteNoteTextandTitle();
-			this.deleteAllValues();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+		/**
+		 * Delete the note's text and title
+		 */
+		public void deleteNoteTextandTitle(){
+			EditText noteText = (EditText)findViewById(R.id.notetext);
+			noteText.setText(""); 
+			noteText.invalidate(); 
+			EditText noteTitle = (EditText)findViewById(R.id.notetitle);
+			noteTitle.setText(""); 
+			noteTitle.invalidate(); 
+			this.saveToDatabase();
+		}
+
+		/**
+		 * Delete all note extra values location,imagepath,reminder.
+		 */
+		public void deleteAllValues(){					
+			DatabaseHandler.getInstance(this).updateNote(this.id,"", "",null,"","",NoteCategory.NO_CATEGORY, "");	
+			this.snotebarFragment = new FragmentSnotebar();
+			try{
+				Bundle bundleToFrag = new Bundle();
+				bundleToFrag.putInt(IntentExtra.id.toString(), this.id);
+				this.snotebarFragment.setArguments(bundleToFrag);
+			} catch(Exception e){		        	
+			}
+			getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, snotebarFragment).commit();
 		}
 	}
-
-	/**
-	 * Create the settings menu
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_note, menu);
-		return true;
-	}
-
-	/**
-	 * Delete the note's text and title
-	 */
-	public void deleteNoteTextandTitle(){
-		EditText noteText = (EditText)findViewById(R.id.notetext);
-		noteText.setText(""); 
-		noteText.invalidate(); 
-		EditText noteTitle = (EditText)findViewById(R.id.notetitle);
-		noteTitle.setText(""); 
-		noteTitle.invalidate(); 
-		this.saveToDatabase();
-	}
-
-	/**
-	 * Delete all note extra values location,imagepath,reminder.
-	 */
-	public void deleteAllValues(){					
-		DatabaseHandler.getInstance(this).updateNote(this.id,"", "",null,"","",NoteCategory.NO_CATEGORY, "");	
-		this.snotebarFragment = new FragmentSnotebar();
-		try{
-			Bundle bundleToFrag = new Bundle();
-			bundleToFrag.putInt(IntentExtra.id.toString(), this.id);
-			this.snotebarFragment.setArguments(bundleToFrag);
-		} catch(Exception e){		        	
-		}
-		getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontainer, snotebarFragment).commit();
-	}
-}

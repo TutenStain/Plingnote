@@ -23,6 +23,6 @@ package com.plingnote;
  */
 public enum NoteExtra {
 
-	REMINDER,LOCATION,IMAGE;
+	REMINDER,LOCATION,IMAGE,CATEGORY;
 
 }

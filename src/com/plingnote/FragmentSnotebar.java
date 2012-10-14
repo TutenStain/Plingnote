@@ -109,7 +109,7 @@ public class FragmentSnotebar extends Fragment {
 		if(this.id == -1){
 			icons.add(new IconView(getActivity(),"", Utils.reminderString, new FragmentReminder()));
 			icons.add(new IconView(getActivity(),"", Utils.imageString, new SBImageSelector()));
-			//	icons.add(new IconView(getActivity(),"",Utils.categoryString, null));
+			icons.add(new IconView(getActivity(),"",Utils.categoryString, new SBCategorySelector()));
 		}else{
 			//Check if id is set,then it is information to fetch from database else there is no information
 			if(DatabaseHandler.getInstance(getActivity()).getNote(this.id).getAlarm() != null 
@@ -127,9 +127,9 @@ public class FragmentSnotebar extends Fragment {
 				icons.add(new IconView(getActivity(),"", Utils.imageString, new SBImageSelector()));
 			}
 			if(DatabaseHandler.getInstance(getActivity()).getNote(id).getCategory() != NoteCategory.NO_CATEGORY){
-				//icons.add(new IconView(getActivity(),"", Utils.imageString, null));					
+				icons.add(new IconView(getActivity(),DatabaseHandler.getInstance(getActivity()).getNote(id).getCategory().toString(), Utils.imageString, new SBCategorySelector()));					
 			}else{
-				//icons.add(new IconView(getActivity(),"",Utils.categoryString, null));
+				icons.add(new IconView(getActivity(),"",Utils.categoryString, new SBCategorySelector()));
 			}
 		}
 	}

@@ -104,12 +104,6 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		return this.value;
 	}
 
-	/**
-	 * Return a location if this fragment is containing one. This one contains 
-	 */
-	public Location getLocation() {
-		return null;
-	}
 
 	/**
 	 * Return which kind of note extra this fragment is
@@ -124,5 +118,12 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 	public void replaceBackFragment() {
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		activityNote.replaceFragmentBack(this);
+	}
+
+	/**
+	 * Return null, because this fragment doesn't have a category
+	 */
+	public NoteCategory getCategory() {
+		return null;
 	}	 
 }

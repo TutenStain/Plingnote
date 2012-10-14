@@ -25,7 +25,7 @@ public interface PluginFragment {
 	
 	public String getValue();
 	
-	public Location getLocation();
+	public NoteCategory getCategory();
 	
 	public NoteExtra getKind();
 	

@@ -161,9 +161,6 @@ public class SBImageSelector extends Fragment implements PluginFragment{
 		return selectedImage;
 	}
 
-	public Location getLocation() {
-		return null;
-	}
 
 	public NoteExtra getKind() {
 		return NoteExtra.IMAGE;
@@ -172,6 +169,10 @@ public class SBImageSelector extends Fragment implements PluginFragment{
 	public void replaceBackFragment() {
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		activityNote.replaceFragmentBack(this);
+	}
+
+	public NoteCategory getCategory() {
+		return null;
 	}
 
 
