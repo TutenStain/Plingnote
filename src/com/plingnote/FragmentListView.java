@@ -66,9 +66,7 @@ public class FragmentListView extends ListFragment {
 		// Get the row ID of the clicked note.
 		int noteId = notes.get(position).getId();
 		editNote.putExtra(IntentExtra.id.toString(), noteId);
-		editNote.putExtra(IntentExtra.longitude.toString(), 0.0);
-		editNote.putExtra(IntentExtra.latitude.toString(), 0.0);
-		editNote.putExtra(IntentExtra.city.toString(),"");
+		editNote.putExtra(IntentExtra.justId.toString(),true);
 		// Start edit view.
 		startActivity(editNote);
 	}

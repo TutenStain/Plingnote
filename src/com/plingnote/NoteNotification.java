@@ -41,6 +41,7 @@ public class NoteNotification extends BroadcastReceiver  {
 		try{
 			i.putExtra(IntentExtra.id.toString(), intent.getExtras().getInt(IntentExtra.id.toString()));
 			i.putExtra(IntentExtra.reminderDone.toString(), true);
+			i.putExtra(IntentExtra.justId.toString(), true);
 		}catch(Exception e){  	
 		}
 		notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

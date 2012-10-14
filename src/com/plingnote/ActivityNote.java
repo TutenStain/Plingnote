@@ -61,7 +61,7 @@ public class ActivityNote extends FragmentActivity {
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		try{
-			if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==false){
+			if(getIntent().getExtras().getBoolean(IntentExtra.justId.toString()) == false){
 				//Try to set location to intent extra values.
 				//If exist a the local location is set to the extra values long and lat
 				this.location = new Location(getIntent().getExtras().getDouble(IntentExtra.longitude.toString())
