@@ -121,12 +121,12 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		//Setting size for all the images used inside the view.
 		imgSize = new Point();
 		int side = getActivity().getResources().getDisplayMetrics().widthPixels / 4 ;
-		setImgSize(side,side);
+		this.setImgSize(side,side);
 
 		//refreshes notes.
-		refreshNotes();
-		
-		checkIfEmpty();
+		this.refreshNotes();
+
+		this.checkIfEmpty();
 
 		return grid;
 	}
@@ -177,7 +177,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			tvText.findViewById(R.id.gridview_image_text);
 			tvTitle.setText(notes.get(position).getTitle());
 			tvText.setText(notes.get(position).getText());
-			
+
 			//Standard image set on icons
 			imgView.setBackgroundResource(R.drawable.category_write);
 
@@ -200,7 +200,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			} else{
 				imgViewTop.setBackgroundColor(Color.TRANSPARENT);
 			}
-			
+
 			return v;
 		}
 
@@ -215,6 +215,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		for(Note n : db.getNoteList()){
 			addNote(n);
 		}
+		
+		this.imgAdapter.notifyDataSetChanged();
 
 	}
 
@@ -385,7 +387,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			}
 		}
 	}
-	
+
 	public void checkIfEmpty(){
 		if(notes.size() < 1){
 			if(getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
@@ -398,4 +400,5 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			gView.setBackgroundColor(Color.BLACK);
 		}
 	}
+
 }
