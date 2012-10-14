@@ -275,6 +275,7 @@ public class ActivityNote extends FragmentActivity {
 	 * @return
 	 */
 	public boolean isNoteEmpty(){
+		if(this.id != -1){
 		try{
 		if(
 				(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals("") 
@@ -290,6 +291,8 @@ public class ActivityNote extends FragmentActivity {
 		}catch(Exception e){
 			return true;
 		}
+		}
+		return true;
 	}
 
 	/**
