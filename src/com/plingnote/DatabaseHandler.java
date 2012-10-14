@@ -68,6 +68,9 @@ public class DatabaseHandler extends Observable{
 	private DBHelper dbHelp;
 	private SQLiteDatabase db;
 	private static DatabaseHandler instance = null;
+	
+	//Change this before upgrading the database
+	private static final int DATABASE_VERSION = 1;
 
 	/**
 	 * 
@@ -89,7 +92,7 @@ public class DatabaseHandler extends Observable{
 		Context context;
 
 		DBHelper(Context con){
-			super(con, DB_NAME, null, 1);
+			super(con, DB_NAME, null, DATABASE_VERSION);
 			this.context = con;
 		}
 
