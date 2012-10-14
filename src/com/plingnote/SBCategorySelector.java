@@ -18,6 +18,8 @@
 package com.plingnote;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -53,7 +55,7 @@ public class SBCategorySelector extends Fragment {
 
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				String clickedCategory = getCategoryDrawables()[position];
+				String clickedCategory = getCategoryDrawables().get(position);
 				System.out.println(clickedCategory);
 			}
 		});
@@ -72,18 +74,18 @@ public class SBCategorySelector extends Fragment {
 	 * 
 	 * @return the file names of all catergories in drawable folder.
 	 */
-	public String[] getCategoryDrawables() {
+	public List<String> getCategoryDrawables() {
 		Field[] fields = R.drawable.class.getFields();
-		String[] categoryDrawables = new String[fields.length];
+		List<String> categoryDrawables = new ArrayList<String>();
 
 		// Place all category images in the array.
-		for (int i = 0; i < categoryDrawables.length; i++) {
+		for (int i = 0; i < fields.length; i++) {
 
 			// Iterate through NoteCategories and get the drawables that matches
 			// the category names.
 			for (NoteCategory category : NoteCategory.values()) {
 				if (fields[i].getName().equals(category.toString())) {
-					categoryDrawables[i] = fields[i].getName();
+					categoryDrawables.add(fields[i].getName());
 				}
 			}
 		}
@@ -93,13 +95,14 @@ public class SBCategorySelector extends Fragment {
 
 	/**
 	 * Private class responsible for adding drawables into Image Views.
+	 * 
 	 * @author Linus Karlsson
 	 * 
 	 */
 	private class CategoryAdapter extends BaseAdapter {
 
 		public int getCount() {
-			return getCategoryDrawables().length;
+			return getCategoryDrawables().size();
 		}
 
 		public Object getItem(int position) {
@@ -114,13 +117,13 @@ public class SBCategorySelector extends Fragment {
 			ImageView imageView;
 
 			if (convertView == null) {
-				
+
 				// Get screen size
 				Display display = getActivity().getWindowManager()
 						.getDefaultDisplay();
-				
+
 				// Set size to width of display.
-				int size = display.getWidth();
+				int size = display.getWidth() / 7;
 				imageView = new ImageView(getActivity());
 				imageView.setLayoutParams(new GridView.LayoutParams((int) size,
 						(int) size));
@@ -131,7 +134,7 @@ public class SBCategorySelector extends Fragment {
 
 			// Set image view to bitmap at current position.
 			imageView.setImageResource(getActivity().getResources()
-					.getIdentifier(getCategoryDrawables()[position],
+					.getIdentifier(getCategoryDrawables().get(position),
 							"drawable", "com.plingnote"));
 			return imageView;
 		}
