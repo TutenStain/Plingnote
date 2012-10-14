@@ -50,7 +50,7 @@ import android.widget.TextView;
  * @author magnushuttu
  *
  */
-public class FragmentImageGridView extends Fragment implements OnItemClickListener{
+public class FragmentImageGridView extends Fragment implements OnItemClickListener, Observer{
 
 	public FragmentImageGridView(){}
 
@@ -84,20 +84,30 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 	}
 
+	/**
+	 * Creating the gridview layout.
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (container == null){
 			return null;
 		}
 		abOn = false;
+		
+		DatabaseHandler.getInstance(getActivity()).addObserver(this);
+		
+		//Getting the database
 		db = DatabaseHandler.getInstance(getActivity());
-		db.addObserver((Observer) this);
+		
+		//Creating the view based on orientation of the screen
 		final View grid;
 		if(getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
 			grid = inflater.inflate(R.layout.fragment_gridview, container, false); 
 		} else{
 			grid = inflater.inflate(R.layout.fragment_gridview_land, container, false); 
 		}
+		
+		//Setting image adapter for the view.
 		this.imgAdapter = new ImageAdapter(getActivity());
 		gView = (GridView) grid.findViewById(R.id.grid);
 		gView.setAdapter(this.imgAdapter);
@@ -108,10 +118,12 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		gView.setMultiChoiceModeListener(new LongPress());
 		layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+		//Setting size for all the images used inside the view.
 		imgSize = new Point();
 		int side = getActivity().getResources().getDisplayMetrics().widthPixels / 4 ;
 		setImgSize(side,side);
 
+		//refreshes notes.
 		refreshNotes();
 
 		return grid;
