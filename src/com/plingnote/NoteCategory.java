@@ -26,7 +26,7 @@ package com.plingnote;
  */
 public enum NoteCategory {
 	NO_CATEGORY(""),
-	Banking("bank"),
+	Bank("bank"),
 	Lunch("lunch"),
 	Fun("fun"),
 	Chat("chat"),

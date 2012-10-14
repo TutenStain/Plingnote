@@ -127,7 +127,7 @@ public class FragmentSnotebar extends Fragment {
 				icons.add(new IconView(getActivity(),"", Utils.imageString, new SBImageSelector()));
 			}
 			if(DatabaseHandler.getInstance(getActivity()).getNote(id).getCategory() != NoteCategory.NO_CATEGORY){
-				icons.add(new IconView(getActivity(),DatabaseHandler.getInstance(getActivity()).getNote(id).getCategory().toString(), Utils.imageString, new SBCategorySelector()));					
+				icons.add(new IconView(getActivity(),DatabaseHandler.getInstance(getActivity()).getNote(id).getCategory().toString(), Utils.categoryString, new SBCategorySelector(),Utils.getDrawable(DatabaseHandler.getInstance(getActivity()).getNote(id).getCategory())));					
 			}else{
 				icons.add(new IconView(getActivity(),"",Utils.categoryString, new SBCategorySelector()));
 			}
@@ -139,16 +139,13 @@ public class FragmentSnotebar extends Fragment {
 	 * @param linearLayout
 	 */
 	public void addIcontoLayout(LinearLayout linearLayout){
-		int i = 1;
 		for(IconView item: icons){
 			item.setOnClickListener(new PreviewListener());
 			item.setOnLongClickListener(new PreviewLongListner());
 			LinearLayout relative = new LinearLayout(getActivity());
-			//double j = (i*1.0);
 			relative.setLayoutParams(new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.FILL_PARENT,(float) 1));
 			relative.addView(item);
 			linearLayout.addView(relative);
-			i = 2+i;
 		}
 		linearLayout.invalidate();
 	}

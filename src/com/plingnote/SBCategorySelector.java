@@ -1,4 +1,4 @@
-/**
+﻿/**
  * This file is part of Plingnote.
  * Copyright (C) 2012 Linus Karlsson
  *
@@ -20,7 +20,6 @@ package com.plingnote;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Display;
@@ -41,6 +40,7 @@ import android.widget.ImageView;
  */
 public class SBCategorySelector extends Fragment implements PluginFragment{
 	private String clickedCategory;
+	private NoteCategory noteCategory;
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -56,8 +56,11 @@ public class SBCategorySelector extends Fragment implements PluginFragment{
 
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				clickedCategory = getCategoryDrawables().get(position);
-				
+
+				String clickedCategory = getCategoryDrawables().get(position);
+				clickedCategory = clickedCategory.substring(0, 1).toUpperCase() + clickedCategory.substring(1);
+				noteCategory = NoteCategory.valueOf(clickedCategory);
+				 replaceBackFragment();
 			}
 		});
 
@@ -142,11 +145,10 @@ public class SBCategorySelector extends Fragment implements PluginFragment{
 	}
 
 	public String getValue() {
-		return this.clickedCategory;
+		return "";
 	}
 
 	public NoteExtra getKind() {
-		// TODO Auto-generated method stub
 		return NoteExtra.CATEGORY;
 	}
 
@@ -156,6 +158,6 @@ public class SBCategorySelector extends Fragment implements PluginFragment{
 	}
 
 	public NoteCategory getCategory() {
-		return null;
+		return noteCategory;
 	}
 }

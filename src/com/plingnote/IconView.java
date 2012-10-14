@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
@@ -35,6 +36,7 @@ public class IconView extends View{
 	private Fragment fragment;
 	private String defaultText = "";
 	private String path = "";
+	private int drawbleId = -1;
 
 	public IconView(Context context,String text,String defaultText, Fragment fragment) {
 		super(context);
@@ -49,6 +51,13 @@ public class IconView extends View{
 		this.fragment = fragment;
 		this.path = path;
 	}
+	public IconView(Context context,String text,String defaultText, Fragment fragment, int drawbleId) {
+		super(context);
+		this.text = text;
+		this.defaultText = defaultText;
+		this.fragment = fragment;
+		this.drawbleId = drawbleId;
+	}
 	/**
 	 * Draw a icon with text under 
 	 */
@@ -59,16 +68,23 @@ public class IconView extends View{
 		paint.setColor(Color.WHITE); 
 		paint.setTextSize(30); 
 		Bitmap bit;
-		if(this.path.equals("")){
+		if(this.drawbleId != -1){
+			bit = BitmapFactory.decodeResource(getResources(), drawbleId);
+			bit = Bitmap.createScaledBitmap(bit, 120, 120, false);
+		}else if(this.path.equals("")){
 			bit = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-		}else{
+		}
+		else{
 			bit = BitmapFactory.decodeFile(this.path,null);
 			bit = Bitmap.createScaledBitmap(bit, 120, 120, false);
 		}			
 		if(this.text.equals(""))
 			canvas.drawText(this.defaultText,0,this.defaultText.length(),0,160, paint);
-		else
-			canvas.drawText(text,0,10,0,130,paint);
+		else{
+			if(text.length()>1)
+			text = text.substring(0,1).toUpperCase() + text.substring(1);
+			canvas.drawText(text,0,text.length(),0,160,paint);
+		}
 		canvas.drawBitmap(bit, 0, 10, null);	          
 	}
 	
