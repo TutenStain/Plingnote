@@ -18,6 +18,8 @@
 package com.plingnote;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import android.content.Context;
 import android.location.Criteria;
@@ -38,7 +40,7 @@ import com.google.android.maps.Overlay;
  * The map activity
  * @author Barnabas Sapan
  */
-public class ActivityMap extends MapActivity implements LocationListener {
+public class ActivityMap extends MapActivity implements LocationListener, Observer {
 	private final int DISABLE_GPS_WITH_ACCURACY_HIGHER_THEN = 100;
 	private final int GPS_SIGNIFICANTLY_BETTER_DATA_IF = 1000 * 60 * 2;
 	
@@ -64,6 +66,10 @@ public class ActivityMap extends MapActivity implements LocationListener {
 		this.overlayList.clear();
 				
 		this.locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		
+		//Add ourself as observers to get notified when things
+		//change in the DB to be able to react accordingly
+		DatabaseHandler.getInstance(this).addObserver(this);
 
 		//Get the last known location from the network and GPS so we 
 		//quickly can zoom to the users position without waiting for a
@@ -102,6 +108,10 @@ public class ActivityMap extends MapActivity implements LocationListener {
 		this.criteria.setAltitudeRequired(false);
 		this.criteria.setBearingRequired(false);
 		this.criteria.setAccuracy(Criteria.ACCURACY_FINE);
+		
+		
+		//Show or hide the FitNotesToView button
+		this.updateFitNotesToViewButton();
 	}
 
 	@Override
@@ -184,25 +194,6 @@ public class ActivityMap extends MapActivity implements LocationListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		//Check if there are any notes with location in the database
-		boolean notesWithLocationExists = false;
-		for(Note note : DatabaseHandler.getInstance(this).getNoteList()) {
-			if(note.getLocation().getLongitude() != 0 && note.getLocation().getLatitude() != 0) {
-				notesWithLocationExists = true;
-				break;
-			}
-		}
-		
-		//Disable the fit notes to view button if there are no notes with location
-		ImageButton fitToViewButton = (ImageButton) findViewById(R.id.button_fit_note_markers);
-		if(notesWithLocationExists)
-			fitToViewButton.setVisibility(ImageButton.VISIBLE);
-		else
-			fitToViewButton.setVisibility(ImageButton.GONE);
-		
-		//Update our notes overlay if new note have been created with locations
-		map.invalidate();
 		
 		if(this.isWantingAFix)
 			this.locationManager.requestLocationUpdates(this.provider, 400, 1, this);
@@ -290,5 +281,44 @@ public class ActivityMap extends MapActivity implements LocationListener {
 			return provider2 == null;
 		}
 		return provider1.equals(provider2);
+	}
+	
+	/**
+	 * This method checks if the button should be enabled
+	 * or disabled
+	 * Enabled if at least 1 note with location exists in the DB
+	 * Disabled otherwise.
+	 */
+	private void updateFitNotesToViewButton() {
+		//Check if there are any notes with location in the database
+		boolean notesWithLocationExists = false;
+		for(Note note : DatabaseHandler.getInstance(this).getNoteList()) {
+			if(note.getLocation().getLongitude() != 0 && note.getLocation().getLatitude() != 0) {
+				notesWithLocationExists = true;
+				break;
+			}
+		}
+
+		//Disable the fit notes to view button if there are no notes with location
+		ImageButton fitToViewButton = (ImageButton) findViewById(R.id.button_fit_note_markers);
+		if(notesWithLocationExists)
+			fitToViewButton.setVisibility(ImageButton.VISIBLE);
+		else
+			fitToViewButton.setVisibility(ImageButton.GONE);
+
+		//Update our notes overlay if new note have been created with locations
+		map.invalidate();
+	}
+
+	public void update(Observable observable, Object data) {
+		if(observable instanceof DatabaseHandler) {
+			if((DatabaseUpdate)data == DatabaseUpdate.UPDATED_LOCATION 
+					|| (DatabaseUpdate)data == DatabaseUpdate.NEW_NOTE 
+					|| (DatabaseUpdate)data == DatabaseUpdate.UPDATED_NOTE 
+					|| (DatabaseUpdate)data == DatabaseUpdate.DELETED_NOTE) {
+				this.updateFitNotesToViewButton();
+			}
+		}
+		
 	}
 }
