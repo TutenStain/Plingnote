@@ -215,9 +215,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		for(Note n : db.getNoteList()){
 			addNote(n);
 		}
-		
-		this.imgAdapter.notifyDataSetChanged();
-
 	}
 
 	/**
@@ -384,6 +381,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 					|| ((DatabaseUpdate)data == DatabaseUpdate.UPDATED_NOTE)
 					|| ((DatabaseUpdate)data == DatabaseUpdate.DELETED_NOTE)) {
 				this.refreshNotes();
+				this.checkIfEmpty();
 				this.imgAdapter.notifyDataSetChanged();
 			}
 		}
