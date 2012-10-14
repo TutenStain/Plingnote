@@ -77,13 +77,13 @@ public class IconView extends View{
 			bit = ImageHelper.decodeSampledBitmapFromUri(path, 120, 120); 
 		}			
 		if(this.text.equals(""))
-			canvas.drawText(this.defaultText, 0, this.defaultText.length(), 0, 160, paint);
+			canvas.drawText(this.defaultText, 0, this.defaultText.length(), 10, 160, paint);
 		else{
 			if(text.length() > 1)
 			text = text.substring(0, 1).toUpperCase() + text.substring(1);
 			if(text.length() > 10)
 				text = text.substring(0, 10);
-			canvas.drawText(text, 0, text.length(), 0, 160, paint);
+			canvas.drawText(text, 0, text.length(), 10, 160, paint);
 		}
 		canvas.drawBitmap(bit, 0, 10, null);	          
 	}
