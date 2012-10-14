@@ -45,7 +45,6 @@ public class ActivityNote extends FragmentActivity {
 	private FragmentSnotebar snotebarFragment = null;
 	private Fragment anotherFragment = null;
 	private boolean deleteNote = false;
-	private boolean reminderDone = false;
 	private String address = "";
 	
 
@@ -61,20 +60,16 @@ public class ActivityNote extends FragmentActivity {
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		try{
+			if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==false){
 			//Try to set location to intent extra values. If exist a the local location is set to the extra values long and lat
 			location = new Location(getIntent().getExtras().getDouble(IntentExtra.longitude.toString()),getIntent().getExtras().getDouble(IntentExtra.latitude.toString()));
 			address = getIntent().getExtras().getString(IntentExtra.city.toString());
-		}catch(Exception o){}
-		try{
-			//Sets local reminder to an empty string. This happend if a alarm is fired.
-			if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==true){
-				reminderDone = true;
 			}
 		}catch(Exception o){}
+	
 		try{
 			//Try to set id to saved instance. Then fetch this id's values. This happens if the screen is turned.
 			id =savedInstanceState.getInt(IntentExtra.id.toString());
-		//	setLocalExtraValues();
 		}catch(Exception eka)
 		{
 		}
@@ -89,7 +84,9 @@ public class ActivityNote extends FragmentActivity {
 						//If an intent with id (that not is -1) the id will be setted here. Fetch values from the id.
 						if(getIntent().getExtras().getInt(IntentExtra.id.toString()) != -1){ 
 							id = getIntent().getExtras().getInt(IntentExtra.id.toString());
-							//setLocalExtraValues();
+						}
+						if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==true){
+								DatabaseHandler.getInstance(this).updateAlarm(this.id, "");
 						}
 					}
 				}catch(Exception ek)
@@ -110,7 +107,6 @@ public class ActivityNote extends FragmentActivity {
 				fragmentTransaction.commit();
 			}
 		}
-		reminderDone = false;
 	}
 
 	/**
