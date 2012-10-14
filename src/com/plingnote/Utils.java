@@ -13,4 +13,8 @@ public class Utils {
 	 * Key for query a note.
 	 */
 	public final static String QUERY_NOTE = "com.plingnote.QUERY_NOTE";
+	
+	public final static String reminderString = "Reminder";
+	public final static String imageString = "Image";
+	public final static String categoryString = "Category";
 }

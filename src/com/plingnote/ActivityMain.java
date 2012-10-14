@@ -75,10 +75,10 @@ public class ActivityMain extends FragmentActivity{
             case R.id.search:
                 onSearchRequested();
                 return true;
-            
+     
             case R.id.menu_settings: 
  			   startActivity(new Intent(this, ActivityAppPreference.class));
- 			   
+
             default:
                 return false;
         }
@@ -98,9 +98,8 @@ public class ActivityMain extends FragmentActivity{
 	
 	/**
 	 * Menu item add new note is pressed.
-	 * @param newNote
 	 */
-	public void addNewNote(MenuItem newNote){
+	public void addNewNote(MenuItem item){
 		Intent intent = new Intent(this, ActivityNote.class);
 		startActivity(intent);
 	}

@@ -113,6 +113,7 @@ public class Note {
 		return this.date;
 	}
 
+
 	/**
 	 * 
 	 * @return Category of this Note as an enum cate

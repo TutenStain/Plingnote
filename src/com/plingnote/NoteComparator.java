@@ -1,6 +1,6 @@
 /**
  * This file is part of Plingnote.
- * Copyright (C) 2012 Barnabas Sapan
+ * Copyright (C) 2012 Linus Karlsson
  * 
  * Plingnote is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -14,22 +14,33 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.plingnote;
 
-import android.content.SearchRecentSuggestionsProvider;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
 
 /**
- * Our content provider class that is needed for 
- * recent query suggestions.
+ * Class comparing the dates of two notes.
  * 
- * @author Barnabas Sapan
+ * @author Linus Karlsson
+ * 
  */
-public class SearchSuggestionsRecentProvider extends SearchRecentSuggestionsProvider {
-	public final static String AUTHORITY = "com.plingnote.SearchSuggestionsRecentProvider";
-	public final static int MODE = DATABASE_MODE_QUERIES;
+public class NoteComparator implements Comparator<Note> {
 
-	public SearchSuggestionsRecentProvider() {
-		setupSuggestions(AUTHORITY, MODE);
+	public int compare(Note n1, Note n2) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss");
+
+		// Cast the strings to Date's. If casting fails, return 0.
+		try {
+			return dateFormat.parse(n2.getDate()).compareTo(
+					dateFormat.parse(n1.getDate()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return 0;
 	}
+
 }

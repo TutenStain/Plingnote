@@ -1,8 +1,3 @@
-package com.plingnote;
-import android.content.Context;
-import android.preference.DialogPreference;
-import android.util.AttributeSet;
-
 /**
  * This file is part of Plingnote.
  * Copyright (C) 2012 Barnabas Sapan
@@ -19,6 +14,12 @@ import android.util.AttributeSet;
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+package com.plingnote;
+
+import android.content.Context;
+import android.preference.DialogPreference;
+import android.util.AttributeSet;
 
 /**
  * A custom dialog that displays a confirmation message
