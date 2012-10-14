@@ -183,7 +183,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 			String imgPath = notes.get(position).getImagePath();
 			//Checking so that the selected ImagePath is not null
-			if(imgPath != null){
+			if(!imgPath.equals("")){
 				File imgFile = new File(imgPath);
 				if(imgFile.exists()){
 					Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
