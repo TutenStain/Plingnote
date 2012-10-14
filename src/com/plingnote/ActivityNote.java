@@ -50,7 +50,7 @@ public class ActivityNote extends FragmentActivity {
 	/**
 	 * Set content view and try to fetch id from saved instance or intent,
 	 * Decide which fragment to be shown 'anotherFragment' or new fragment
-	 *  and if new fragment should be instanced and added again. 
+	 * and if new fragment should be instanced and added again. 
 	 * Fetching values from database.
 	 */
 	@Override
@@ -61,13 +61,14 @@ public class ActivityNote extends FragmentActivity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		try{
 			if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==false){
-			//Try to set location to intent extra values. If exist a the local location is set to the extra values long and lat
-			this.location = new Location(getIntent().getExtras().getDouble(IntentExtra.longitude.toString())
-										,getIntent().getExtras().getDouble(IntentExtra.latitude.toString()));
-			this.address = getIntent().getExtras().getString(IntentExtra.city.toString());
+				//Try to set location to intent extra values.
+				//If exist a the local location is set to the extra values long and lat
+				this.location = new Location(getIntent().getExtras().getDouble(IntentExtra.longitude.toString())
+						,getIntent().getExtras().getDouble(IntentExtra.latitude.toString()));
+				this.address = getIntent().getExtras().getString(IntentExtra.city.toString());
 			}
-		}catch(Exception o){}
-	
+		}catch(Exception o){			
+		}
 		try{
 			//Try to set id to saved instance. Then fetch this id's values. This happens if the screen is turned.
 			this.id =savedInstanceState.getInt(IntentExtra.id.toString());
@@ -76,7 +77,8 @@ public class ActivityNote extends FragmentActivity {
 		}
 		try { 
 			//Try to set antoherfragment to to fragment saved in savedinstance. 
-			//If turning to phone when when to snotebar is replaced with some other fragment this will set antotherfragment to that.
+			//If turning to phone when when to snotebar 
+			//is replaced with some other fragment this will set antotherfragment to that.
 			this.anotherFragment = getSupportFragmentManager().getFragment(savedInstanceState,"anotherFragment");
 		}catch(Exception e){
 			if(snotebarFragment ==null){
@@ -87,7 +89,7 @@ public class ActivityNote extends FragmentActivity {
 							this.id = getIntent().getExtras().getInt(IntentExtra.id.toString());
 						}
 						if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==true){
-								DatabaseHandler.getInstance(this).updateAlarm(this.id, "");
+							DatabaseHandler.getInstance(this).updateAlarm(this.id, "");
 						}
 					}
 				}catch(Exception ek)
@@ -254,7 +256,7 @@ public class ActivityNote extends FragmentActivity {
 		this.changeToSnotebarFragment();
 
 	}	
-	
+
 	/**
 	 * if the boolean deletenote is false the information will be saved to the database.
 	 */
@@ -264,25 +266,25 @@ public class ActivityNote extends FragmentActivity {
 		if(deleteNote == false || !isNoteEmpty())
 			this.saveToDatabase();
 	}
-	
+
 	/**
 	 * A function that checks if all value; text,title,reminder,location,imagepath, is not setted.
 	 * @return
 	 */
 	public boolean isNoteEmpty(){
 		if(
-		(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals("") 
-		|| DatabaseHandler.getInstance(this).getNote(this.id).getAlarm() == null) &&
-		(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals("") 
-		|| DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() == null) &&
-		(DatabaseHandler.getInstance(this).getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY) &&
-		(DatabaseHandler.getInstance(this).getNote(this.id).getLocation() == null)&&
-		this.getTextofNoteText().equals("") && this.getTextofNoteText().equals(""))
+				(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals("") 
+						|| DatabaseHandler.getInstance(this).getNote(this.id).getAlarm() == null) &&
+						(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals("") 
+								|| DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() == null) &&
+								(DatabaseHandler.getInstance(this).getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY) &&
+								(DatabaseHandler.getInstance(this).getNote(this.id).getLocation() == null)&&
+								this.getTextofNoteText().equals("") && this.getTextofNoteText().equals(""))
 			return true;
 		else 
 			return false;
 	}
-	
+
 	/**
 	 * Return the id 
 	 * @return id
@@ -306,7 +308,7 @@ public class ActivityNote extends FragmentActivity {
 			}
 			if(noteExtra.equals(NoteExtra.IMAGE)){
 				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals("")) 
-				|| DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() != null){
+						|| DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() != null){
 					return true;
 				}
 			}
@@ -360,8 +362,8 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public void saveToDatabase(){
 		if(this.id != -1){
-		DatabaseHandler.getInstance(this).updateText(this.id, this.getTextofNoteText());
-		DatabaseHandler.getInstance(this).updateTitle(this.id,this.getTitleofNoteText());
+			DatabaseHandler.getInstance(this).updateText(this.id, this.getTextofNoteText());
+			DatabaseHandler.getInstance(this).updateTitle(this.id,this.getTitleofNoteText());
 		}
 		//If this class not was opened with an intent or saved instance, it'd id is set to -1 and we are inserting the note in database.
 		else if(this.id == -1){
