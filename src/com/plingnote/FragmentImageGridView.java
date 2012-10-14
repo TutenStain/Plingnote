@@ -113,7 +113,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		gView.setAdapter(this.imgAdapter);
 		gView.setOnItemClickListener(this);
 
-
 		// Make it possible for the user to select multiple items.
 		gView.setChoiceMode(gView.CHOICE_MODE_MULTIPLE_MODAL);
 		gView.setMultiChoiceModeListener(new LongPress());
@@ -126,6 +125,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 		//refreshes notes.
 		refreshNotes();
+		
+		checkIfEmpty();
 
 		return grid;
 	}
@@ -210,14 +211,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 		for(Note n : db.getNoteList()){
 			addNote(n);
-		}		
-		
-		if(notes.size() < 1 && getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
-			gView.setBackgroundResource(R.drawable.empty_portrait);
-		} else if(notes.size() < 1 && getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_LANDSCAPE){
-			gView.setBackgroundResource(R.drawable.empty_landscape);
-		} else{
-			gView.setBackgroundColor(Color.BLACK);
 		}
 
 	}
@@ -315,6 +308,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			gView.getCheckedItemPositions().clear();
 			abOn = false;
 			gView.setAdapter(imgAdapter);
+			checkIfEmpty();
 		}
 
 		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -385,6 +379,19 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 					|| ((DatabaseUpdate)data == DatabaseUpdate.DELETED_NOTE)) {
 				this.refreshNotes();
 			}
+		}
+	}
+	
+	public void checkIfEmpty(){
+		if(notes.size() < 1){
+			if(getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
+				gView.setBackgroundResource(R.drawable.empty_portrait);
+			} else{
+				gView.setBackgroundResource(R.drawable.empty_landscape);
+			} 
+		}
+		else{
+			gView.setBackgroundColor(Color.BLACK);
 		}
 	}
 }
