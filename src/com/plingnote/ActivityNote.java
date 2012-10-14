@@ -286,7 +286,7 @@ public class ActivityNote extends FragmentActivity {
 									this.getTextofNoteText().equals("") && this.getTextofNoteText().equals(""))
 				return true;
 		}
-		return true;
+		return false;
 	}
 
 	/**

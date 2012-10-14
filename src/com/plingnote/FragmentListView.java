@@ -20,6 +20,8 @@ package com.plingnote;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import android.content.Context;
 import android.content.Intent;
@@ -42,7 +44,7 @@ import android.widget.ListView;
  * @author Linus Karlsson
  * 
  */
-public class FragmentListView extends ListFragment {
+public class FragmentListView extends ListFragment implements Observer {
 	private DatabaseHandler db;
 	private NoteAdapter noteAdapter;
 	private List<Note> notes = new ArrayList<Note>();
@@ -52,10 +54,11 @@ public class FragmentListView extends ListFragment {
 	public void onActivityCreated(Bundle savedState) {
 		super.onActivityCreated(savedState);
 
-		db = DatabaseHandler.getInstance(getActivity());
+		// Register as listener to database
+		DatabaseHandler.getInstance(getActivity()).addObserver(this);
 
-		// Fill list with data from database
-		refreshNotes();
+		// Get instance of database
+		db = DatabaseHandler.getInstance(getActivity());
 
 		// Make it possible for the user to select multiple items.
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -64,6 +67,9 @@ public class FragmentListView extends ListFragment {
 		noteAdapter = new NoteAdapter(getActivity(),
 				android.R.layout.simple_list_item_activated_2, notes);
 		setListAdapter(noteAdapter);
+
+		// Fill list with data from database
+		refreshNotes();
 	}
 
 	@Override
@@ -173,6 +179,9 @@ public class FragmentListView extends ListFragment {
 
 		// Order notes after when they last were edited.
 		Collections.sort(notes, new NoteComparator());
+
+		// Update the adapter.
+		noteAdapter.notifyDataSetChanged();
 	}
 
 	/**
@@ -202,21 +211,6 @@ public class FragmentListView extends ListFragment {
 
 		// Refresh the note list.
 		refreshNotes();
-
-		// Update the adapter.
-		noteAdapter.notifyDataSetChanged();
-	}
-
-	/**
-	 * Refresh notes when returning to the list view.
-	 */
-	@Override
-	public void onResume() {
-		super.onResume();
-		refreshNotes();
-
-		// Update the adapter after loading new notes.
-		noteAdapter.notifyDataSetChanged();
 	}
 
 	/**
@@ -255,4 +249,20 @@ public class FragmentListView extends ListFragment {
 		notes.clear();
 	}
 
+	/**
+	 * Update the list if database is changed.
+	 */
+	public void update(Observable observable, Object data) {
+		if (observable instanceof DatabaseHandler) {
+			if ((DatabaseUpdate) data == DatabaseUpdate.UPDATED_LOCATION
+					|| (DatabaseUpdate) data == DatabaseUpdate.NEW_NOTE
+					|| (DatabaseUpdate) data == DatabaseUpdate.UPDATED_NOTE
+					|| (DatabaseUpdate) data == DatabaseUpdate.DELETED_NOTE) {
+
+				// Data is changed, refresh list
+				this.refreshNotes();
+			}
+		}
+
+	}
 }
