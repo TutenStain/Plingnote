@@ -9,6 +9,24 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
+
+/**
+ * This file is part of Plingnote.
+ * Copyright (C) 2012 Barnabas Sapan
+ * 
+ * Plingnote is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 public class PreferenceDialogEmail extends DialogPreference {
 	private Context context;
@@ -36,14 +54,16 @@ public class PreferenceDialogEmail extends DialogPreference {
 
 	@Override
 	public void onBindDialogView(View view){
+		final EditText editText = (EditText)view.findViewById(R.id.editText_email);
 		Button sendButton = (Button)view.findViewById(R.id.email_send_button);
 		sendButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				String userText = editText.getText().toString() + "\n\n";
 				Intent intent = new Intent(Intent.ACTION_SEND);
 				intent.setType("message/rfc822");
 				intent.putExtra(Intent.EXTRA_EMAIL,new String[] { "plingnote@plingnote.com" });
 				intent.putExtra(Intent.EXTRA_SUBJECT, appVersionName);
-				intent.putExtra(Intent.EXTRA_TEXT, deviceInfoString);
+				intent.putExtra(Intent.EXTRA_TEXT, userText + deviceInfoString);
 				context.startActivity(Intent.createChooser(intent, "Send with..."));
 			}
 		});

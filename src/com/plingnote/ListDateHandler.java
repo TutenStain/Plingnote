@@ -48,8 +48,8 @@ public class ListDateHandler {
 		Date noteDate = new Date();
 		Date currentDate = new Date();
 
-		// Initiate the string with "null" if the try-catch statement fails
-		String dateText = null;
+		// Initiate the string with "" if the try-catch statement fails
+		String dateText = "";
 
 		Calendar calendar = Calendar.getInstance();
 

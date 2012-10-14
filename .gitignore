@@ -73,3 +73,5 @@ local.properties
 # External tool builders #
 ##########################
 .externalToolBuilders/
+
+src/com/plingnote/FragmentNoteText.java

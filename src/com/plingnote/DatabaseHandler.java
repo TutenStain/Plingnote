@@ -75,7 +75,7 @@ public class DatabaseHandler extends Observable{
 	 * @return The singleton instance
 	 */
 	public static DatabaseHandler getInstance(Context con){
-		//if(instance == null)
+		if(instance == null)
 			instance = new DatabaseHandler(con);
 		return instance;
 	}
@@ -238,7 +238,7 @@ public class DatabaseHandler extends Observable{
 		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
-	
+
 	/**
 	 * 
 	 * @param id Id of the note to delete the address from

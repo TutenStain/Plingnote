@@ -89,7 +89,7 @@ public class FragmentListView extends ListFragment implements Observer {
 		// Get the row ID of the clicked note.
 		int noteId = notes.get(position).getId();
 		editNote.putExtra(IntentExtra.id.toString(), noteId);
-
+		editNote.putExtra(IntentExtra.justId.toString(),true);
 		// Start edit view.
 		startActivity(editNote);
 	}

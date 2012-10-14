@@ -6,8 +6,30 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.provider.SearchRecentSuggestions;
-import android.util.Log;
 
+/**
+ * This file is part of Plingnote.
+ * Copyright (C) 2012 Barnabas Sapan
+ * 
+ * Plingnote is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * The application preference fragment that shows the settings view.
+ * This class listens to changes in the settings view so this
+ * class is also responsible for responding to the user requested
+ * new settings. 
+ */
 public class FragmentAppPreference extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -19,14 +41,14 @@ public class FragmentAppPreference extends PreferenceFragment implements OnShare
 	@Override
 	public void onResume() {
 	    super.onResume();
-	    // Set up a listener whenever a key changes
+	    //Set up a listener whenever a key changes
 	    getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	}
 	
 	@Override
 	public void onPause() {
 	    super.onPause();
-	    // Unregister the listener whenever a key changes
+	    //Unregister the listener whenever a key changes
 	    getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
 	}
 
@@ -40,6 +62,8 @@ public class FragmentAppPreference extends PreferenceFragment implements OnShare
 			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(getActivity(), 
 					SearchSuggestionsRecentProvider.AUTHORITY, SearchSuggestionsRecentProvider.MODE);
 			suggestions.clearHistory();
+			
+			//Set the setting to false once we have cleared the search
 			sharedPreferences.edit().putBoolean(key, false).commit();
 		}
 	}

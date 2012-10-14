@@ -17,25 +17,12 @@
 package com.plingnote;
 
 /**
- * Containg string constans often usen with intent
+ * An Enum representing the note extra categorys that exist
  * @author Julia Gustafsson
  *
  */
-public enum IntentExtra {
-	id("id"),
-	reminderDone("reminderDone"),
-	longitude("longitude"),
-	latitude("latitude"),
-	city("city"),
-	justId("justID"),
-	;
-	private final String text;
-	private IntentExtra(final String text) {
-		this.text = text;
-	}
-	
-	@Override
-	public String toString() {
-		return text;
-	}
+public enum NoteExtra {
+
+	REMINDER,LOCATION,IMAGE;
+
 }
