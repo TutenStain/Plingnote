@@ -93,12 +93,12 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			return null;
 		}
 		abOn = false;
-		
+
 		DatabaseHandler.getInstance(getActivity()).addObserver(this);
-		
+
 		//Getting the database
 		db = DatabaseHandler.getInstance(getActivity());
-		
+
 		//Creating the view based on orientation of the screen
 		final View grid;
 		if(getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
@@ -106,12 +106,13 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		} else{
 			grid = inflater.inflate(R.layout.fragment_gridview_land, container, false); 
 		}
-		
+
 		//Setting image adapter for the view.
 		this.imgAdapter = new ImageAdapter(getActivity());
 		gView = (GridView) grid.findViewById(R.id.grid);
 		gView.setAdapter(this.imgAdapter);
 		gView.setOnItemClickListener(this);
+
 
 		// Make it possible for the user to select multiple items.
 		gView.setChoiceMode(gView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -195,6 +196,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			} else{
 				imgViewTop.setBackgroundColor(Color.TRANSPARENT);
 			}
+
 			return v;
 		}
 
@@ -208,7 +210,16 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 		for(Note n : db.getNoteList()){
 			addNote(n);
+		}		
+		
+		if(notes.size() < 1 && getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
+			gView.setBackgroundResource(R.drawable.empty_portrait);
+		} else if(notes.size() < 1 && getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_LANDSCAPE){
+			gView.setBackgroundResource(R.drawable.empty_landscape);
+		} else{
+			gView.setBackgroundColor(Color.BLACK);
 		}
+
 	}
 
 	/**
@@ -240,6 +251,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		// Get the ID of the clicked note.
 		int noteId = notes.get(position).getId();
 		editNote.putExtra(IntentExtra.id.toString(), noteId);
+		editNote.putExtra(IntentExtra.justId.toString(),true);
 
 		startActivity(editNote);		
 	}
@@ -308,8 +320,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
 			return true;
 		}
-		
-		
+
+
 
 		/**
 		 * Called everytime the state of the list is changed, for example when a
@@ -355,7 +367,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			}
 		}
 	}
-	
+
 	/**
 	 * Refresh notes when returning to the gridview.
 	 */
@@ -364,13 +376,13 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		super.onResume();
 		this.refreshNotes();
 	}
-	
+
 	public void update(Observable observable, Object data){
 		if(observable instanceof DatabaseHandler){
 			if(((DatabaseUpdate)data == DatabaseUpdate.UPDATED_LOCATION) 
-				|| ((DatabaseUpdate)data == DatabaseUpdate.NEW_NOTE)
-				|| ((DatabaseUpdate)data == DatabaseUpdate.UPDATED_NOTE)
-				|| ((DatabaseUpdate)data == DatabaseUpdate.DELETED_NOTE)) {
+					|| ((DatabaseUpdate)data == DatabaseUpdate.NEW_NOTE)
+					|| ((DatabaseUpdate)data == DatabaseUpdate.UPDATED_NOTE)
+					|| ((DatabaseUpdate)data == DatabaseUpdate.DELETED_NOTE)) {
 				this.refreshNotes();
 			}
 		}
