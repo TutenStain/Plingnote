@@ -58,17 +58,18 @@ public class DatabaseHandler extends Observable{
 	private static final String KEY_ADDRESS = "Address";
 
 	// SQL statement to create Note table using fts3
-	private static final String CREATE_FTS_TABLE = "create virtual table " + TABLE_NOTE + " using fts3("
-			+ KEY_TITLE + " String, " + KEY_TEXT + " String, " 
-			+ KEY_LONGITUDE +" Double not null, "+ KEY_LATITUDE +" Double not null, " 
-			+ KEY_IMAGEPATH + " String, " + KEY_ALARM + " String, " 
-			+ KEY_DATE + " String, " + KEY_CATEGORY + " int, " + KEY_ADDRESS + " String);";
+	private static final String CREATE_FTS_TABLE = "create virtual table " 
+			+ TABLE_NOTE + " using fts3("+ KEY_TITLE + " String, " 
+			+ KEY_TEXT + " String, " + KEY_LONGITUDE +" Double not null, "
+			+ KEY_LATITUDE +" Double not null, " + KEY_IMAGEPATH + " String, " 
+			+ KEY_ALARM + " String, " + KEY_DATE + " String, " 
+			+ KEY_CATEGORY + " int, " + KEY_ADDRESS + " String);";
 
 	private Context context;
 	private DBHelper dbHelp;
 	private SQLiteDatabase db;
 	private static DatabaseHandler instance = null;
-	
+
 	//Change this before upgrading the database
 	private static final int DATABASE_VERSION = 1;
 
@@ -241,7 +242,7 @@ public class DatabaseHandler extends Observable{
 		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
-	
+
 	/**
 	 * 
 	 * @param id Id of the note to delete the address from
@@ -470,8 +471,8 @@ public class DatabaseHandler extends Observable{
 		String date = c.getString(7);
 		NoteCategory ncat = NoteCategory.values()[c.getInt(8)];
 		String address = c.getString(9);
-		Note n = new Note(id, title, text, 
-				new Location(longitude, latitude), imagePath, alarm, date, ncat, address);
+		Note n = new Note(id, title, text, new Location(longitude, latitude), 
+				imagePath, alarm, date, ncat, address);
 		this.close();
 		return n;
 	}
