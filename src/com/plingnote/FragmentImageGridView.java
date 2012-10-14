@@ -266,8 +266,9 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 				db.deleteNote(notes.get(i).getId());
 			}
 		}
-		// Refresh the note list.
-		refreshNotes();
+		// Refresh the note list and the view
+		this.refreshNotes();
+		this.imgAdapter.notifyDataSetChanged();
 	}
 
 
