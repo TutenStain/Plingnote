@@ -54,6 +54,10 @@ public class FragmentListView extends ListFragment implements Observer {
 	public void onActivityCreated(Bundle savedState) {
 		super.onActivityCreated(savedState);
 
+		// Register as listener to database
+		DatabaseHandler.getInstance(getActivity()).addObserver(this);
+
+		// Get instance of database
 		db = DatabaseHandler.getInstance(getActivity());
 
 		// Fill list with data from database

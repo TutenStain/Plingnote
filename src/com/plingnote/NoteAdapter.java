@@ -64,7 +64,8 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 			TextView title = (TextView) view.findViewById(R.id.title);
 			TextView text = (TextView) view.findViewById(R.id.text);
 			TextView date = (TextView) view.findViewById(R.id.date);
-			LinearLayout iconField = (LinearLayout) view.findViewById(R.id.icons);
+			LinearLayout iconField = (LinearLayout) view
+					.findViewById(R.id.icons);
 
 			// If the views exists, assign text to it.
 			if (title != null) {
@@ -82,7 +83,8 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 			}
 
 			if (iconField != null) {
-				iconField.removeAllViews(); // Clear the view to erase previous images
+				iconField.removeAllViews(); // Clear the view to erase previous
+											// images
 				addItemIcons(n, iconField);
 			}
 		}

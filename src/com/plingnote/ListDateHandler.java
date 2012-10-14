@@ -121,7 +121,8 @@ public class ListDateHandler {
 		int weekOfCreation = calendar.get(Calendar.WEEK_OF_MONTH);
 		int yearOfCreation = calendar.get(Calendar.YEAR);
 
-		return (currentWeek == weekOfCreation) && (currentYear == yearOfCreation);
+		return (currentWeek == weekOfCreation)
+				&& (currentYear == yearOfCreation);
 	}
 
 	/**
@@ -146,7 +147,7 @@ public class ListDateHandler {
 	 * @return the weekdays in an array
 	 */
 	public static String[] getWeekdays() {
-		return new String[] { "sunday", "monday", "tuesday", "wednesday", "thursday",
-				"friday", "saturday" };
+		return new String[] { "sunday", "monday", "tuesday", "wednesday",
+				"thursday", "friday", "saturday" };
 	}
 }
