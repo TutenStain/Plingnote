@@ -62,23 +62,22 @@ public class IconView extends View{
 		if(this.path.equals("")){
 			bit = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 		}else{
-			bit = BitmapFactory.decodeFile(path,null);
+			bit = BitmapFactory.decodeFile(this.path,null);
 			bit = Bitmap.createScaledBitmap(bit, 120, 120, false);
-		}
-			
+		}			
 		if(this.text.equals(""))
-			canvas.drawText(defaultText,0,defaultText.length(),0,160, paint);
+			canvas.drawText(this.defaultText,0,this.defaultText.length(),0,160, paint);
 		else
 			canvas.drawText(text,0,10,0,130,paint);
 		canvas.drawBitmap(bit, 0, 10, null);	          
 	}
 	
 	public String getText() {
-		return text;
+		return this.text;
 	}
 	
 	public String getDefaultText() {
-		return defaultText;
+		return this.defaultText;
 	}
 
 	/**
@@ -86,6 +85,6 @@ public class IconView extends View{
 	 * @return
 	 */
 	public Fragment getFragment(){
-		return fragment;
+		return this.fragment;
 	}
 }

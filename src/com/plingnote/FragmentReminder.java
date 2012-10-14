@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,16 +43,16 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.fragment_reminder, container, false);		
-		return view;		
+		this.view = inflater.inflate(R.layout.fragment_reminder, container, false);		
+		return this.view;		
 	}
 	/**
 	 * Set on click listers to the button
 	 */
 	public void onStart(){
 		super.onStart();
-		Button okey = (Button) view.findViewById(R.id.ok);
-		Button cancel = (Button) view.findViewById(R.id.cancel);
+		Button okey = (Button) this.view.findViewById(R.id.ok);
+		Button cancel = (Button) this.view.findViewById(R.id.cancel);
 
 		cancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {	  			
@@ -79,7 +78,6 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		Intent intent = new Intent(getActivity(), NoteNotification.class);
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
-		Log.d("IDSave", activityNote.getId() +"");
 		pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
 		//pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, 0);
 		Calendar calendar =  Calendar.getInstance();
