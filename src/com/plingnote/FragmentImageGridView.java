@@ -168,6 +168,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			} else {
 				v = convertView;
 			}
+			//initiating the views in the gridview item.
 			ImageView imgView = (ImageView) v.findViewById(R.id.gridview_image);
 			ImageView imgViewTop = (ImageView) v.findViewById(R.id.gridview_image_top);
 			TextView tvTitle = (TextView) v.findViewById(R.id.gridview_image_title);
@@ -176,6 +177,9 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			tvText.findViewById(R.id.gridview_image_text);
 			tvTitle.setText(notes.get(position).getTitle());
 			tvText.setText(notes.get(position).getText());
+			
+			//Standard image set on icons
+			imgView.setBackgroundResource(R.drawable.category_write);
 
 			String imgPath = notes.get(position).getImagePath();
 			//Checking so that the selected ImagePath is not null
@@ -183,10 +187,9 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 				File imgFile = new File(imgPath);
 				if(imgFile.exists()){
 					Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+					imgView.setBackgroundColor(Color.BLACK);
 					imgView.setImageBitmap(myBitmap);
 				}
-			} else{
-				imgView.setBackgroundResource(R.drawable.category_write);
 			}
 
 			if(abOn){
@@ -197,7 +200,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			} else{
 				imgViewTop.setBackgroundColor(Color.TRANSPARENT);
 			}
-
+			
 			return v;
 		}
 
