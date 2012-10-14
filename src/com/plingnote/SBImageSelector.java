@@ -94,7 +94,7 @@ public class SBImageSelector extends Fragment implements PluginFragment{
 		// Place first gallery image at far left
 		DisplayMetrics metrics = new DisplayMetrics();
 		getActivity().getWindowManager().getDefaultDisplay()
-				.getMetrics(metrics);
+		.getMetrics(metrics);
 
 		MarginLayoutParams mlp = (MarginLayoutParams) gallery.getLayoutParams();
 		mlp.setMargins(-(metrics.widthPixels / 2 + IMAGE_WIDTH), mlp.topMargin,
@@ -105,20 +105,10 @@ public class SBImageSelector extends Fragment implements PluginFragment{
 
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-
-
-
 				// The path to the selected image
 				selectedImage = 
 						getSelectedImagePath(position);
 				replaceBackFragment();
-			
-
-				// Intent snoteBar = new Intent(getActivity(),
-				// FragmentSnoteBar.class);
-				// snoteBar.putExtra("MEDDELANDE",
-				// getSelectedImagePath(position));
-
 			}
 
 		});
@@ -156,20 +146,31 @@ public class SBImageSelector extends Fragment implements PluginFragment{
 		return anotherCursor.getString(column);
 	}
 
+	/**
+	 * Return the imagepath
+	 */
 	public String getValue() {
 		return selectedImage;
 	}
 
-
+	/**
+	 * The kind of this fragment
+	 */
 	public NoteExtra getKind() {
 		return NoteExtra.IMAGE;
 	}
 
+	/**
+	 * Replace this fragment
+	 */
 	public void replaceBackFragment() {
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		activityNote.replaceFragmentBack(this);
 	}
 
+	/**
+	 * This class has not any category
+	 */
 	public NoteCategory getCategory() {
 		return null;
 	}

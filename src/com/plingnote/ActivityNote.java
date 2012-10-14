@@ -305,19 +305,22 @@ public class ActivityNote extends FragmentActivity {
 	public boolean checkIfValueIsSetted(NoteExtra noteExtra){
 		if(this.id != -1){
 			if(noteExtra.equals(NoteExtra.REMINDER)){
-				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals(""))
-						|| DatabaseHandler.getInstance(this).getNote(this.id).getAlarm() != null){
+				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals(""))){
 					return true;
 				}
 			}
 			if(noteExtra.equals(NoteExtra.IMAGE)){
-				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals("")) 
-						|| DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() != null){
+				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals(""))){
 					return true;
 				}
 			}
 			if(noteExtra.equals(NoteExtra.LOCATION)){
 				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getLocation() == null)){
+					return true;
+				}
+			}	
+			if(noteExtra.equals(NoteExtra.CATEGORY)){
+				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getCategory()== NoteCategory.NO_CATEGORY)){
 					return true;
 				}
 			}	
@@ -339,6 +342,9 @@ public class ActivityNote extends FragmentActivity {
 		if(noteExtra.equals(NoteExtra.LOCATION)){
 			DatabaseHandler.getInstance(this).updateLocation(this.id, null);
 			DatabaseHandler.getInstance(this).updateAddress(this.id, "");
+		}
+		if(noteExtra.equals(NoteExtra.CATEGORY)){
+			DatabaseHandler.getInstance(this).updateCategory(this.id,NoteCategory.NO_CATEGORY);
 		}	
 		this.changeToSnotebarFragment();
 	}
