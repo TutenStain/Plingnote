@@ -216,11 +216,9 @@ public class ActivityNote extends FragmentActivity {
 	 * Set the address if it isn't an empty string and if this note has a id bigger than -1.
 	 */
 	public void setNoteAddress(){
-		if(this.id != -1){
 			if(!(this.address.equals(""))){
 				TextView textView = (TextView) findViewById(R.id.address);
 				textView.setText(this.address);
-			}	
 		}
 	}
 
