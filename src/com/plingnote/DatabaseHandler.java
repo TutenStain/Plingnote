@@ -58,16 +58,20 @@ public class DatabaseHandler extends Observable{
 	private static final String KEY_ADDRESS = "Address";
 
 	// SQL statement to create Note table using fts3
-	private static final String CREATE_FTS_TABLE = "create virtual table " + TABLE_NOTE + " using fts3("
-			+ KEY_TITLE + " String, " + KEY_TEXT + " String, " 
-			+ KEY_LONGITUDE +" Double not null, "+ KEY_LATITUDE +" Double not null, " 
-			+ KEY_IMAGEPATH + " String, " + KEY_ALARM + " String, " 
-			+ KEY_DATE + " String, " + KEY_CATEGORY + " int, " + KEY_ADDRESS + " String);";
+	private static final String CREATE_FTS_TABLE = "create virtual table " 
+			+ TABLE_NOTE + " using fts3("+ KEY_TITLE + " String, " 
+			+ KEY_TEXT + " String, " + KEY_LONGITUDE +" Double not null, "
+			+ KEY_LATITUDE +" Double not null, " + KEY_IMAGEPATH + " String, " 
+			+ KEY_ALARM + " String, " + KEY_DATE + " String, " 
+			+ KEY_CATEGORY + " int, " + KEY_ADDRESS + " String);";
 
 	private Context context;
 	private DBHelper dbHelp;
 	private SQLiteDatabase db;
 	private static DatabaseHandler instance = null;
+
+	//Change this before upgrading the database
+	private static final int DATABASE_VERSION = 1;
 
 	/**
 	 * 
@@ -89,7 +93,7 @@ public class DatabaseHandler extends Observable{
 		Context context;
 
 		DBHelper(Context con){
-			super(con, DB_NAME, null, 1);
+			super(con, DB_NAME, null, DATABASE_VERSION);
 			this.context = con;
 		}
 
@@ -102,19 +106,18 @@ public class DatabaseHandler extends Observable{
 			}
 		}
 
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			DatabaseHandler dbHandler = DatabaseHandler.getInstance(this.context);
-			List<Note> backup = dbHandler.getNoteList();
-			try{
-				db.execSQL("drop table if exists " + TABLE_NOTE);
-			} catch(SQLException e){
+			@Override
+			public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+				DatabaseHandler dbHandler = DatabaseHandler.getInstance(this.context);
+				List<Note> backup = dbHandler.getNoteList();
+				try{
+					db.execSQL("drop table if exists " + TABLE_NOTE);
+				}	 catch(SQLException e){
 				Log.e("SQLException", "while upgrading database");
-			}
-			this.onCreate(db);
+				}	
+				this.onCreate(db);
 			dbHandler.insertOldData(backup);
-		}
-	}
+		}	
 
 	/**
 	 * 
@@ -129,8 +132,21 @@ public class DatabaseHandler extends Observable{
 	 */
 	public long insertNote(String title, String text, Location l, 
 			String path, String alarm, NoteCategory ncat, String adr){
+		//Set default values to prevent null in database
+		if(title == null)
+			title = "";
+		if(text == null)
+			text = "";
 		if(l == null)
 			l = new Location(0.0, 0.0);
+		if(path == null)
+			path = "";
+		if(alarm == null)
+			alarm = "";
+		if(ncat == null)
+			ncat = NoteCategory.NO_CATEGORY;
+		if(adr == null)
+			adr = "";
 		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_TITLE, title);
@@ -171,7 +187,7 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteTitle(int id){
-		boolean b = this.updateTitle(id, null);
+		boolean b = this.updateTitle(id, "");
 		this.setChanged();
 		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
@@ -183,19 +199,20 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteText(int id){
-		boolean b = this.updateTitle(id, null);
+		boolean b = this.updateTitle(id, "");
 		this.setChanged();
 		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
 
 	/**
+	 * Sets the location to default (0.0, 0.0) rather than deleting it
 	 * 
 	 * @param id Id of the note to delete the location from
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteLocation(int id){
-		boolean b = this.updateLocation(id, null);
+		boolean b = this.updateLocation(id, new Location(0.0, 0.0));
 		this.setChanged();
 		this.notifyObservers(DatabaseUpdate.UPDATED_LOCATION);
 		return b;
@@ -207,7 +224,7 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteImagePath(int id){
-		boolean b = this.updateImagePath(id, null);
+		boolean b = this.updateImagePath(id, "");
 		this.setChanged();
 		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
@@ -219,7 +236,7 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteAlarm(int id){
-		boolean b = this.updateAlarm(id, null);
+		boolean b = this.updateAlarm(id, "");
 		this.setChanged();
 		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
@@ -245,7 +262,7 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean deleteAddress(int id){
-		boolean b = this.updateAddress(id, null);
+		boolean b = this.updateAddress(id, "");
 		this.setChanged();
 		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
@@ -292,8 +309,21 @@ public class DatabaseHandler extends Observable{
 	 */
 	public boolean updateNote(int id, String title, String text, Location l, 
 			String path, String alarm, NoteCategory ncat, String adr){
+		//Set default values to prevent null in database
+		if(title == null)
+			title = "";
+		if(text == null)
+			text = "";
 		if(l == null)
 			l = new Location(0.0, 0.0);
+		if(path == null)
+			path = "";
+		if(alarm == null)
+			alarm = "";
+		if(ncat == null)
+			ncat = NoteCategory.NO_CATEGORY;
+		if(adr == null)
+			adr = "";
 		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_TITLE, title);
@@ -318,6 +348,8 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise 
 	 */
 	public boolean updateTitle(int id, String title){
+		if(title == null)
+			title = "";
 		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_TITLE, title);
@@ -335,6 +367,8 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise 
 	 */
 	public boolean updateText(int id, String text){
+		if(text == null)
+			text = "";
 		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_TEXT, text);
@@ -352,6 +386,8 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise 
 	 */
 	public boolean updateLocation(int id, Location l){
+		if(l == null)
+			l = new Location(0.0, 0.0);
 		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_LONGITUDE, l.getLongitude());
@@ -370,6 +406,8 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise 
 	 */
 	public boolean updateImagePath(int id, String path){
+		if(path == null)
+			path = "";
 		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_IMAGEPATH, path);
@@ -378,7 +416,7 @@ public class DatabaseHandler extends Observable{
 		this.setChanged();
 		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
-	}
+
 
 	/**
 	 * 
@@ -387,6 +425,8 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise 
 	 */
 	public boolean updateAlarm(int id, String alarm){
+		if(alarm == null)
+			alarm = "";
 		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_ALARM, alarm);
@@ -422,6 +462,8 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean updateCategory(int id, NoteCategory ncat){
+		if(ncat == null)
+			ncat = NoteCategory.NO_CATEGORY;
 		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_CATEGORY, ncat.ordinal());
@@ -439,6 +481,8 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean updateAddress(int id, String adr){
+		if(adr == null)
+			adr = "";
 		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_ADDRESS, adr);
@@ -467,8 +511,8 @@ public class DatabaseHandler extends Observable{
 		String date = c.getString(7);
 		NoteCategory ncat = NoteCategory.values()[c.getInt(8)];
 		String address = c.getString(9);
-		Note n = new Note(id, title, text, 
-				new Location(longitude, latitude), imagePath, alarm, date, ncat, address);
+		Note n = new Note(id, title, text, new Location(longitude, latitude), 
+				imagePath, alarm, date, ncat, address);
 		this.close();
 		return n;
 	}
@@ -499,8 +543,8 @@ public class DatabaseHandler extends Observable{
 	 */
 	public List<Note> search(String s){
 		this.open();
-		Cursor c = this.db.rawQuery("select " + ID + ", * from " + TABLE_NOTE 
-				+ " where " + TABLE_NOTE + " match '" + s + "*'", null);
+		Cursor c = this.db.rawQuery("select " + ID + ", * from " + TABLE_NOTE
+		+ " where " + TABLE_NOTE + " match '" + s + "*'", null);
 		List<Note> l = this.createNoteList(c);
 		this.close();
 		return l;
@@ -526,12 +570,11 @@ public class DatabaseHandler extends Observable{
 		}
 		return l;
 	}
-
-	private void insertOldData(List<Note> nlist){
-		for(Note n: nlist)
-			this.insertNote(n.getTitle(), n.getText(), n.getLocation(), 
-					n.getImagePath(), n.getAlarm(), n.getCategory(), n.getAddress());
-	}
+		private void insertOldData(List<Note> nlist){
+			for(Note n: nlist)	
+			this.insertNote(n.getTitle(), n.getText(), n.getLocation(),
+			n.getImagePath(), n.getAlarm(), n.getCategory(), n.getAddress());
+		}
 
 	private DatabaseHandler open() throws SQLException{
 		this.db = this.dbHelp.getWritableDatabase();
