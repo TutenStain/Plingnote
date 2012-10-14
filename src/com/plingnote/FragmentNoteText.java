@@ -87,12 +87,12 @@ public class FragmentNoteText extends Fragment {
 		super.onPause();
 		//If this class was opened with an intent or saved instance we are updating that note.
 		if(isExisting && (getTitleofNoteText().length() >0 || getTextofNoteText().length() > 0)){
-			DatabaseHandler.getInstance(this.getActivity()).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null);
+			DatabaseHandler.getInstance(this.getActivity()).updateNote(this.id,this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null, null, null);
 		}
 		//If this class not was opened with an intent o saved instance we are inserting the note in database.
 		else if(!isExisting){
 			if(getTitleofNoteText().length() >0 || getTextofNoteText().length() > 0){
-				DatabaseHandler.getInstance(this.getActivity()).insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null);
+				DatabaseHandler.getInstance(this.getActivity()).insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), null,null,null, null, null);
 				id = DatabaseHandler.getInstance(this.getActivity()).getLastId();
 				isExisting=true;
 			}
