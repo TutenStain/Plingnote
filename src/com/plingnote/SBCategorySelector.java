@@ -19,10 +19,9 @@ package com.plingnote;
 
 import java.lang.reflect.Field;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,11 +82,9 @@ public class SBCategorySelector extends Fragment {
 			// Iterate through NoteCategories and get the drawables that matches
 			// the category names.
 			for (NoteCategory category : NoteCategory.values()) {
-//				if (fields[i].getName().equals(category.toString())) {
-//					System.out.println("category.toString()");
-//					
-//				}
-				categoryDrawables[i] = fields[i].getName();
+				if (fields[i].getName().equals(category.toString())) {
+					categoryDrawables[i] = fields[i].getName();
+				}
 			}
 		}
 
@@ -95,7 +92,7 @@ public class SBCategorySelector extends Fragment {
 	}
 
 	/**
-	 * 
+	 * Private class responsible for adding drawables into Image Views.
 	 * @author Linus Karlsson
 	 * 
 	 */
@@ -117,9 +114,13 @@ public class SBCategorySelector extends Fragment {
 			ImageView imageView;
 
 			if (convertView == null) {
-				float size = TypedValue.applyDimension(
-						TypedValue.COMPLEX_UNIT_DIP, 60, Resources.getSystem()
-								.getDisplayMetrics());
+				
+				// Get screen size
+				Display display = getActivity().getWindowManager()
+						.getDefaultDisplay();
+				
+				// Set size to width of display.
+				int size = display.getWidth();
 				imageView = new ImageView(getActivity());
 				imageView.setLayoutParams(new GridView.LayoutParams((int) size,
 						(int) size));
@@ -128,6 +129,7 @@ public class SBCategorySelector extends Fragment {
 				imageView = (ImageView) convertView;
 			}
 
+			// Set image view to bitmap at current position.
 			imageView.setImageResource(getActivity().getResources()
 					.getIdentifier(getCategoryDrawables()[position],
 							"drawable", "com.plingnote"));
