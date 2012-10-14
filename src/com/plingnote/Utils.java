@@ -1,7 +1,5 @@
 package com.plingnote;
 
-import com.plingnote.R.drawable;
-
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;

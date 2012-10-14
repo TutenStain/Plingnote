@@ -39,7 +39,6 @@ import android.widget.ImageView;
  * 
  */
 public class SBCategorySelector extends Fragment implements PluginFragment{
-	private String clickedCategory;
 	private NoteCategory noteCategory;
 	
 	@Override
