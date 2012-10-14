@@ -56,7 +56,9 @@ public class SBCategorySelector extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				String clickedCategory = getCategoryDrawables().get(position);
-				System.out.println(clickedCategory);
+
+				// DETTA ÄR ENUM-VARDET IAAAAAAAAAAAAA!
+				NoteCategory.valueOf(clickedCategory);
 			}
 		});
 
