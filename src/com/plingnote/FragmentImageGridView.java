@@ -181,17 +181,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			//Standard image set on icons
 			imgView.setBackgroundResource(R.drawable.category_write);
 
-			String imgPath = notes.get(position).getImagePath();
-			//Checking so that the selected ImagePath is not null
-			if(!imgPath.equals("")){
-				File imgFile = new File(imgPath);
-				if(imgFile.exists()){
-					Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-					imgView.setBackgroundColor(Color.BLACK);
-					imgView.setImageBitmap(myBitmap);
-				}
-			}
-
 			if(abOn){
 				imgViewTop.setBackgroundColor(Color.TRANSPARENT);
 				if(gView.getCheckedItemPositions().get(position)){
