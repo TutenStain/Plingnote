@@ -21,6 +21,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -43,7 +44,12 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
-		this.view = inflater.inflate(R.layout.fragment_reminder, container, false);		
+		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+			this.view = inflater.inflate(R.layout.fragment_reminder_landscape, container, false);		
+		}else{
+			this.view = inflater.inflate(R.layout.fragment_reminder, container, false);		
+		}
+
 		return this.view;		
 	}
 	

@@ -25,6 +25,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -263,8 +264,9 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public void onPause(){
 		super.onPause();
-		if(deleteNote == false || !isNoteEmpty())
+		if(deleteNote == false || !isNoteEmpty()){
 			this.saveToDatabase();
+		}
 	}
 
 	/**
