@@ -19,8 +19,6 @@ package com.plingnote;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -57,50 +55,14 @@ public class SBImageAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ImageView view = (ImageView) convertView;
-
-		if (view == null) {
-			view = new ImageView(context.getApplicationContext());
-			view.setImageBitmap(shrinkImage(images[position],
-					SBImageSelector.IMAGE_WIDTH));
-
-		} else {
-			view.setImageBitmap(shrinkImage(images[position],
-					SBImageSelector.IMAGE_WIDTH));
-		}
-
+		ImageView view = new ImageView(context.getApplicationContext());
+		
+		view.setTag(images[position]);
+		new SBLoadImage(view).execute();
+		
 		return view;
 	}
+	
 
-	/**
-	 * Method used to shrink an image to given size. Inspiration taken from
-	 * http: //stackoverflow.com/questions/477572/android-strange-out-of-memory-
-	 * issue -while-loading-an-image-to-a-bitmap-object
-	 * 
-	 * @param s
-	 *            the filepath of the image
-	 * @return created bitmap
-	 */
-	private Bitmap shrinkImage(String s, int size) {
-
-		// Decode image
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		BitmapFactory.decodeFile(s, options);
-
-		// Find appropriate scale
-		int scale = 1;
-		while (options.outWidth / scale / 2 >= size
-				&& options.outHeight / scale / 2 >= size) {
-			scale *= 2;
-		}
-
-		// Decode with inSampleSize
-		BitmapFactory.Options secondOptions = new BitmapFactory.Options();
-		secondOptions.inSampleSize = scale;
-
-		return BitmapFactory.decodeFile(s, secondOptions);
-
-	}
 
 }
