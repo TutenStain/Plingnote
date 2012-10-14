@@ -209,6 +209,7 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public void onStart(){
 		super.onStart();
+		Log.d("id", this.id + "");
 		setNoteTitleLayoutParam();
 		setNoteTextLayoutParam();
 		setNoteText();	
@@ -274,6 +275,7 @@ public class ActivityNote extends FragmentActivity {
 	 * @return
 	 */
 	public boolean isNoteEmpty(){
+		try{
 		if(
 				(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals("") 
 						|| DatabaseHandler.getInstance(this).getNote(this.id).getAlarm() == null) &&
@@ -285,6 +287,9 @@ public class ActivityNote extends FragmentActivity {
 			return true;
 		else 
 			return false;
+		}catch(Exception e){
+			return false;
+		}
 	}
 
 	/**

@@ -9,7 +9,7 @@
     <string name="title_activity_main">Plingnote</string>
     <string name="title_activity_note">Note</string>
     <string name="search_hint">Search notes</string>
-    <string name="button_okey">Okey</string>
+    <string name="button_okey">Ok</string>
     <string name="button_send">Send</string>
     <string name="button_cancel">Cancel</string>
     <string name="send_feedback_hint">Your feedback including comments, request or error reports</string>
@@ -20,5 +20,6 @@
     <string name="resetsnotebar">Reset snotebar</string>
     <string name="cleannotetext">Clean note text and title </string>
     <string name="cleannote">Clean note and snotebar</string>
+    
 </resources>
 
