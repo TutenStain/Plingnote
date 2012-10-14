@@ -17,12 +17,18 @@
 
 package com.plingnote;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -89,6 +95,23 @@ public class MapOverlayLongpressHandler extends Overlay implements OnMapViewLong
 		//in a fragment in a tabbed navigation. Otherwise the getY() would return 
 		//wrong
 		GeoPoint point = map.getProjection().fromPixels((int)event.getX(), (int)(event.getY() - px));
+		
+		//Get the adress of the touched poistion
+		Geocoder geoCoder = new Geocoder(this.context, Locale.getDefault());
+		try {
+			List<Address> addresses = geoCoder.getFromLocation(point.getLatitudeE6() / 1E6, point.getLongitudeE6() / 1E6, 1);
+			String add = "";
+			if (addresses.size() > 0) {
+				for (int i = 0; i < addresses.get(0).getMaxAddressLineIndex();
+						i++)
+					add += addresses.get(0).getAddressLine(i) + ";";
+			}
+			//Log.d("hej", "hej " +  add);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		Intent intent = new Intent(context, ActivityNote.class);
 		intent.putExtra(IntentExtra.longitude.toString(), point.getLongitudeE6() / 1E6);
 		intent.putExtra(IntentExtra.latitude.toString(), point.getLatitudeE6() / 1E6);
