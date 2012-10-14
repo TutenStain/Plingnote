@@ -18,7 +18,7 @@
     <string name="add_new_note">Add new note</string>
     <string name="deletenote">Delete this note</string>
     <string name="resetsnotebar">Reset snotebar</string>
-    <string name="cleannotetext">Clean note text</string>
+    <string name="cleannotetext">Clean note text and title </string>
     <string name="cleannote">Clean note and snotebar</string>
 </resources>
 
