@@ -131,12 +131,13 @@ public class SBImageSelector extends Fragment implements PluginableFragment{
 	 */
 	public String getSelectedImagePath(int position) {
 		Cursor anotherCursor = getSDCursor();
-		final int column = anotherCursor.getColumnIndexOrThrow(
-				MediaStore.Images.Media.DATA);
+		final int column = anotherCursor
+				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 		anotherCursor.moveToPosition(position);
 
 		return anotherCursor.getString(column);
 	}
+
 
 	/**
 	 * Return the imagepath
@@ -169,3 +170,4 @@ public class SBImageSelector extends Fragment implements PluginableFragment{
 
 
 }
+
