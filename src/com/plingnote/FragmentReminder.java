@@ -46,6 +46,7 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		this.view = inflater.inflate(R.layout.fragment_reminder, container, false);		
 		return this.view;		
 	}
+	
 	/**
 	 * Set on click listers to the button
 	 */
@@ -59,6 +60,7 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 				replaceBackFragment();
 			}
 		});	
+		
 		okey.setOnClickListener(new View.OnClickListener() {
 			//Save the time and the the alarm in the method savetime
 			public void onClick(View v) {
@@ -81,7 +83,8 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
 		//pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, 0);
 		Calendar calendar =  Calendar.getInstance();
-		calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
+		calendar.set(datepicker.getYear(), datepicker.getMonth(),
+				datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
 		this.value = calendar.getTime()+"";
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);    
@@ -116,5 +119,4 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		activityNote.replaceFragmentBack(this);
 	}	 
-
 }

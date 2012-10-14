@@ -49,7 +49,8 @@ public class ActivityNote extends FragmentActivity {
 
 	/**
 	 * Set content view and try to fetch id from saved instance or intent,
-	 * Decide which fragment to be shown 'anotherFragment' or new fragment and if new fragment should be instanced and added again. 
+	 * Decide which fragment to be shown 'anotherFragment' or new fragment
+	 *  and if new fragment should be instanced and added again. 
 	 * Fetching values from database.
 	 */
 	@Override
@@ -61,7 +62,8 @@ public class ActivityNote extends FragmentActivity {
 		try{
 			if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString())==false){
 			//Try to set location to intent extra values. If exist a the local location is set to the extra values long and lat
-			this.location = new Location(getIntent().getExtras().getDouble(IntentExtra.longitude.toString()),getIntent().getExtras().getDouble(IntentExtra.latitude.toString()));
+			this.location = new Location(getIntent().getExtras().getDouble(IntentExtra.longitude.toString())
+										,getIntent().getExtras().getDouble(IntentExtra.latitude.toString()));
 			this.address = getIntent().getExtras().getString(IntentExtra.city.toString());
 			}
 		}catch(Exception o){}
@@ -176,7 +178,8 @@ public class ActivityNote extends FragmentActivity {
 		//If this class was opened with an intent or saved instances, the note text will get the text from the database
 		if(this.id != -1){				
 			String txt = (DatabaseHandler.getInstance(this).getNote(this.id).getText());
-			//The cursor position will be saved even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
+			//The cursor position will be saved
+			//even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
 			noteText.setText(""); 
 			noteText.append(txt);
 			noteText.invalidate(); 
@@ -268,8 +271,10 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public boolean isNoteEmpty(){
 		if(
-		(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals("") || DatabaseHandler.getInstance(this).getNote(this.id).getAlarm() == null) &&
-		(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals("") || DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() == null) &&
+		(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals("") 
+		|| DatabaseHandler.getInstance(this).getNote(this.id).getAlarm() == null) &&
+		(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals("") 
+		|| DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() == null) &&
 		(DatabaseHandler.getInstance(this).getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY) &&
 		(DatabaseHandler.getInstance(this).getNote(this.id).getLocation() == null)&&
 		this.getTextofNoteText().equals("") && this.getTextofNoteText().equals(""))
@@ -294,12 +299,14 @@ public class ActivityNote extends FragmentActivity {
 	public boolean checkIfValueIsSetted(NoteExtra noteExtra){
 		if(this.id != -1){
 			if(noteExtra.equals(NoteExtra.REMINDER)){
-				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals("")) || DatabaseHandler.getInstance(this).getNote(this.id).getAlarm() != null){
+				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getAlarm().equals(""))
+						|| DatabaseHandler.getInstance(this).getNote(this.id).getAlarm() != null){
 					return true;
 				}
 			}
 			if(noteExtra.equals(NoteExtra.IMAGE)){
-				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals("")) || DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() != null){
+				if(!(DatabaseHandler.getInstance(this).getNote(this.id).getImagePath().equals("")) 
+				|| DatabaseHandler.getInstance(this).getNote(this.id).getImagePath() != null){
 					return true;
 				}
 			}
@@ -358,7 +365,8 @@ public class ActivityNote extends FragmentActivity {
 		}
 		//If this class not was opened with an intent or saved instance, it'd id is set to -1 and we are inserting the note in database.
 		else if(this.id == -1){
-			DatabaseHandler.getInstance(this).insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), this.location,"","",NoteCategory.NO_CATEGORY, this.address);
+			DatabaseHandler.getInstance(this).
+			insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), this.location,"","",NoteCategory.NO_CATEGORY, this.address);
 			this.id = DatabaseHandler.getInstance(this).getLastId();
 		}
 	}
