@@ -80,15 +80,14 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		} else{
 			grid = inflater.inflate(R.layout.fragment_gridview_land, container, false); 
 		}
-		imgAdapter = new ImageAdapter(getActivity());
+		this.imgAdapter = new ImageAdapter(getActivity());
 		gView = (GridView) grid.findViewById(R.id.grid);
-		gView.setAdapter(imgAdapter);
+		gView.setAdapter(this.imgAdapter);
 		gView.setOnItemClickListener(this);
 
 		// Make it possible for the user to select multiple items.
 		gView.setChoiceMode(gView.CHOICE_MODE_MULTIPLE_MODAL);
 		gView.setMultiChoiceModeListener(new LongPress());
-
 		layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		imgSize = new Point();
@@ -145,7 +144,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			tvText.findViewById(R.id.gridview_image_text);
 			tvTitle.setText(notes.get(position).getTitle());
 			tvText.setText(notes.get(position).getText());
-			
+
 			String imgPath = notes.get(position).getImagePath();
 			//Checking so that the selected ImagePath is not null
 			if(imgPath != null){
