@@ -47,7 +47,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 /**
  * a public class that shows a list of notes in a gridview.
- * @author magnushuttu
+ * @author Magnus Huttu
  *
  */
 public class FragmentImageGridView extends Fragment implements OnItemClickListener, Observer{

@@ -19,10 +19,12 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo = new Solo(getInstrumentation(), getActivity());
 	}
 
+	//Tests if the correct tab is available for use
 	public void test1GoToGridTab(){
 		solo.clickOnImage(5);
 	}
-
+	
+	//Tests if you can add a new note, and if it's viewable in gridview
 	public void test2AddNewNote(){
 		solo.clickOnImage(5);
 		solo.clickOnImage(1);
@@ -31,12 +33,15 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.goBack();
 	}
 
+	//Tests if you can delete a note in gridview
 	public void test3DeleteNote(){
 		solo.clickOnImage(5);
 		solo.clickLongOnScreen(150, 400);
 		solo.clickOnImage(1);
 	}
 
+	//Tests if you can edit a note through gridview by first creating
+	//one and then editing it
 	public void test4EditNote(){
 		solo.clickOnImage(5);
 		solo.clickOnImage(1);
@@ -48,6 +53,7 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.goBack();
 	}
 
+	//Tests if you can select multiple notes and then delete them
 	public void test5DeleteMultipleNotes(){
 		solo.clickOnImage(5);
 		for(int i = 1; i < 6; i++){
@@ -65,6 +71,7 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.clickOnImage(1);
 	}
 	
+	//Tests if you can swipe to the gridview
 	public void test6swipe(){
 		solo.drag(719, 1, 500, 500, 25);
 		solo.drag(719, 1, 500, 500, 25);
