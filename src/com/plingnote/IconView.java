@@ -74,8 +74,7 @@ public class IconView extends View{
 			bit = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 		}
 		else{
-			bit = BitmapFactory.decodeFile(this.path,null);
-			bit = Bitmap.createScaledBitmap(bit, 120, 120, false);
+			bit = ImageHelper.decodeSampledBitmapFromUri(path, 120, 120); 
 		}			
 		if(this.text.equals(""))
 			canvas.drawText(this.defaultText,0,this.defaultText.length(),0,160, paint);
