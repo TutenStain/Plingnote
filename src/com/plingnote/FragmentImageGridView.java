@@ -141,17 +141,17 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			mContext = context;
 		}
 
-		@Override
+		//@Override
 		public int getCount() {
 			return numberOfNotes();
 		}
 
-		@Override
+		//@Override
 		public Object getItem(int position) {
 			return null;
 		}
 
-		@Override
+		//@Override
 		public long getItemId(int position) {
 			return position;
 		}
@@ -242,7 +242,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		return notes.size();
 	}
 
-	@Override
+	//@Override
 	public void onItemClick(AdapterView parent, View v, int position, long id) {
 		Intent editNote = new Intent(getActivity(), ActivityNote.class);
 
@@ -384,6 +384,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 					|| ((DatabaseUpdate)data == DatabaseUpdate.UPDATED_NOTE)
 					|| ((DatabaseUpdate)data == DatabaseUpdate.DELETED_NOTE)) {
 				this.refreshNotes();
+				this.imgAdapter.notifyDataSetChanged();
 			}
 		}
 	}
