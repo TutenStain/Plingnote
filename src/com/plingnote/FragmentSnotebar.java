@@ -45,8 +45,9 @@ import android.widget.TextView;
 public class FragmentSnotebar extends Fragment {
 	private View view;
 	private int id = -1;
-	public String reminderString = "Reminder";
-	public String imageString = "Image";
+	private String reminderString = "Reminder";
+	private String imageString = "Image";
+	private String categoryString = "Category";
 
 	public List<IconView> icons = new ArrayList<IconView>();
 	@Override
@@ -121,7 +122,12 @@ public class FragmentSnotebar extends Fragment {
 			if(DatabaseHandler.getInstance(getActivity()).getNote(id).getImagePath() != null || !(DatabaseHandler.getInstance(getActivity()).getNote(id).getImagePath().equals(""))){
 				icons.add(new IconView(getActivity(),"", imageString, new SBImageSelector(), DatabaseHandler.getInstance(getActivity()).getNote(id).getImagePath()));					
 			}else{
-				icons.add(new IconView(getActivity(),DatabaseHandler.getInstance(getActivity()).getNote(id).getImagePath(), imageString, new SBImageSelector()));
+				icons.add(new IconView(getActivity(),"", imageString, new SBImageSelector()));
+			}
+			if(DatabaseHandler.getInstance(getActivity()).getNote(id).getCategory() != NoteCategory.NO_CATEGORY){
+				icons.add(new IconView(getActivity(),"", imageString, null));					
+			}else{
+				icons.add(new IconView(getActivity(),"", categoryString, new SBImageSelector()));
 			}
 		}
 	}
