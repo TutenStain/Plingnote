@@ -60,9 +60,6 @@ public class FragmentListView extends ListFragment implements Observer {
 		// Get instance of database
 		db = DatabaseHandler.getInstance(getActivity());
 
-		// Fill list with data from database
-		refreshNotes();
-
 		// Make it possible for the user to select multiple items.
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setMultiChoiceModeListener(new LongPress());
@@ -70,6 +67,9 @@ public class FragmentListView extends ListFragment implements Observer {
 		noteAdapter = new NoteAdapter(getActivity(),
 				android.R.layout.simple_list_item_activated_2, notes);
 		setListAdapter(noteAdapter);
+
+		// Fill list with data from database
+		refreshNotes();
 	}
 
 	@Override
@@ -179,6 +179,9 @@ public class FragmentListView extends ListFragment implements Observer {
 
 		// Order notes after when they last were edited.
 		Collections.sort(notes, new NoteComparator());
+
+		// Update the adapter.
+		noteAdapter.notifyDataSetChanged();
 	}
 
 	/**
@@ -208,9 +211,6 @@ public class FragmentListView extends ListFragment implements Observer {
 
 		// Refresh the note list.
 		refreshNotes();
-
-		// Update the adapter.
-		noteAdapter.notifyDataSetChanged();
 	}
 
 	/**
@@ -259,6 +259,7 @@ public class FragmentListView extends ListFragment implements Observer {
 					|| (DatabaseUpdate) data == DatabaseUpdate.UPDATED_NOTE
 					|| (DatabaseUpdate) data == DatabaseUpdate.DELETED_NOTE) {
 
+				// Data is changed, refresh list
 				this.refreshNotes();
 			}
 		}
