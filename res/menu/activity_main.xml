@@ -11,12 +11,6 @@
  		android:onClick="addNewNote"
         android:showAsAction="always"/>
     
-    <item 
-       android:icon="@android:drawable/ic_menu_add"
-        android:showAsAction="always"
-        android:onClick="addNewNote"
-        android:title="@string/add_new_note"/>
-    
     <item
         android:id="@+id/search"
         android:actionViewClass="android.widget.SearchView"
