@@ -35,6 +35,7 @@ import android.widget.TextView;
  * 
  */
 public class NoteAdapter extends ArrayAdapter<Note> {
+	
 	private List<Note> notes;
 	private Context context;
 
@@ -46,7 +47,6 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
-
 		// If view is empty, render it.
 		if (view == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext()
@@ -57,7 +57,7 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 		/**
 		 * Reference to the current Note object.
 		 */
-		Note n = notes.get(position);
+		Note n = this.notes.get(position);
 
 		if (n != null) {
 			// Create textviews in defined XML files.
@@ -68,13 +68,11 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 					.findViewById(R.id.icons);
 
 			// If the views exists, assign text to it.
-			if (title != null) {
+			if (title != null) 
 				title.setText(n.getTitle());
-			}
 
-			if (text != null) {
+			if (text != null) 
 				text.setText(n.getText());
-			}
 
 			if (date != null) {
 				String dateFormat = ListDateHandler.customDateFormat(n
@@ -83,8 +81,8 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 			}
 
 			if (iconField != null) {
-				iconField.removeAllViews(); // Clear the view to erase previous
-											// images
+				// Clear the view and replace with new content.
+				iconField.removeAllViews(); 
 				addItemIcons(n, iconField);
 			}
 		}
@@ -99,10 +97,9 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 	 *            a note object
 	 */
 	public void addItemIcons(Note n, LinearLayout iconField) {
-
 		// If the note has an image attached to it, add image icon
 		if (!n.getImagePath().equals("")) {
-			ImageView imageIcon = new ImageView(context);
+			ImageView imageIcon = new ImageView(this.context);
 			imageIcon.setImageResource(R.drawable.ic_image_icon);
 			imageIcon.setLayoutParams(new ViewGroup.LayoutParams(28, 28));
 
@@ -111,13 +108,11 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 
 		// If the note has an alarm set, add alarm icon
 		if (!n.getAlarm().equals("")) {
-			ImageView alarmIcon = new ImageView(context);
+			ImageView alarmIcon = new ImageView(this.context);
 			alarmIcon.setImageResource(R.drawable.ic_alarm_icon);
 			alarmIcon.setLayoutParams(new ViewGroup.LayoutParams(28, 28));
 
 			iconField.addView(alarmIcon);
 		}
-
 	}
-
 }

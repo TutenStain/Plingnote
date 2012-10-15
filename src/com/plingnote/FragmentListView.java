@@ -261,6 +261,5 @@ public class FragmentListView extends ListFragment implements Observer {
 				this.refreshNotes();
 			}
 		}
-
 	}
 }
