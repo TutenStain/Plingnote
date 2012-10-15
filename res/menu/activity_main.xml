@@ -7,10 +7,10 @@
         android:title="@string/menu_settings"/>
     <item
         android:id="@+id/add_new_note"
-       android:icon="@android:drawable/ic_menu_add"
-        android:showAsAction="always"
-        android:onClick="addNewNote"
-        android:title="@string/add_new_note"/>
+        android:icon="@android:drawable/ic_menu_add"
+ 		android:onClick="addNewNote"
+        android:showAsAction="always"/>
+    
     <item
         android:id="@+id/search"
         android:actionViewClass="android.widget.SearchView"
