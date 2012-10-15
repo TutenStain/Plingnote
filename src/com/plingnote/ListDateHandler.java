@@ -40,17 +40,16 @@ public class ListDateHandler {
 	 * @return the format of the date
 	 */
 	public static String customDateFormat(String date) {
-
 		// The supposed format of the incoming string
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
 				"yyyy-MM-dd HH:mm:ss");
-
 		Date noteDate = new Date();
 		Date currentDate = new Date();
 
 		// Initiate the string with "" if the try-catch statement fails
 		String dateText = "";
 
+		// Get calendar
 		Calendar calendar = Calendar.getInstance();
 
 		try {
@@ -59,19 +58,16 @@ public class ListDateHandler {
 			calendar.setTime(noteDate);
 
 			// If note is created on current date
-			if (isCreatedThisDay(currentDate, noteDate)) {
+			if (isCreatedThisDay(currentDate, noteDate))
 				dateText = new SimpleDateFormat("HH:mm").format(noteDate);
-			}
 
 			// If note is created this week
-			else if (isCreatedThisWeek(currentDate, noteDate)) {
+			else if (isCreatedThisWeek(currentDate, noteDate))
 				dateText = getDayOfWeek(noteDate);
-			}
 
 			// If none of the previous statements were true.
-			else {
+			else
 				dateText = new SimpleDateFormat("yyyy-MM-dd").format(noteDate);
-			}
 
 		} catch (java.text.ParseException e) {
 			e.printStackTrace();
@@ -92,7 +88,6 @@ public class ListDateHandler {
 	 * @return true if the note is created on the current day.
 	 */
 	public static boolean isCreatedThisDay(Date currentDate, Date noteDate) {
-
 		// Change date format to exclude time
 		SimpleDateFormat temp = new SimpleDateFormat("yyyyMMdd");
 		return temp.format(currentDate).equals(temp.format(noteDate));
