@@ -90,11 +90,9 @@ public class DatabaseHandler extends Observable{
 	}
 
 	private static class DBHelper extends SQLiteOpenHelper{
-		Context context;
 
 		DBHelper(Context con){
 			super(con, DB_NAME, null, DATABASE_VERSION);
-			this.context = con;
 		}
 
 		@Override
@@ -108,15 +106,12 @@ public class DatabaseHandler extends Observable{
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			DatabaseHandler dbHandler = DatabaseHandler.getInstance(this.context);
-			List<Note> backup = dbHandler.getNoteList();
 			try{
 				db.execSQL("drop table if exists " + TABLE_NOTE);
 			} catch(SQLException e){
 				Log.e("SQLException", "while upgrading database");
 			}
 			this.onCreate(db);
-			dbHandler.insertOldData(backup);
 		}
 	}
 
@@ -570,12 +565,6 @@ public class DatabaseHandler extends Observable{
 			}while(c.moveToNext());
 		}
 		return l;
-	}
-
-	private void insertOldData(List<Note> nlist){
-		for(Note n: nlist)
-			this.insertNote(n.getTitle(), n.getText(), n.getLocation(), 
-					n.getImagePath(), n.getAlarm(), n.getCategory(), n.getAddress());
 	}
 
 	private DatabaseHandler open() throws SQLException{
