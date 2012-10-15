@@ -288,10 +288,16 @@ public class ActivityNote extends FragmentActivity {
 				|| this.dbHandler.getNote(this.id).getImagePath() == null) 
 				&& (this.dbHandler.getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY) 
 				&& (this.dbHandler.getNote(this.id).getLocation() == null)
-				&& this.getTextofNoteText().equals("") && this.getTextofNoteText().equals(""))
+				&& this.getTitleofNoteText().equals("") && this.getTextofNoteText().equals("")){
 				return true;
+			}else{
+				return false;
 			}
-		return false;
+			}else if(this.getTitleofNoteText().equals("") && this.getTextofNoteText().equals("")){
+				return true;
+			}else{
+				return false;
+			}
 	}
 
 	/**
@@ -394,12 +400,11 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public String getTitleofNoteText(){
 		EditText noteText = (EditText) findViewById(R.id.notetitle);
-		if(noteText.getText().toString().length() > 0){
 			String txt = noteText.getText().toString();
-			String[] txtLines = txt.split("\n");
-			return txtLines[0]+"\n";
-		}else
-			return "";
+			if(txt.length() > 0){
+				return txt;
+			}else
+				return "";
 	}
 
 	/**
