@@ -103,11 +103,13 @@ public class MapOverlayLongpressHandler extends Overlay implements OnMapViewLong
 			List<Address> addresses = geoCoder.getFromLocation(point.getLatitudeE6() / 1E6, point.getLongitudeE6() / 1E6, 1);
 			
 			if (addresses.size() > 0) {
-				for (int i = 0; i < addresses.get(0).getMaxAddressLineIndex();
-						i++)
-					add += addresses.get(0).getAddressLine(i) + ";";
+				for (int i = 0; i < addresses.get(0).getMaxAddressLineIndex(); i++) {					
+					if(i ==  addresses.get(0).getMaxAddressLineIndex() - 1)
+						add += addresses.get(0).getAddressLine(i);
+					else 
+						add += addresses.get(0).getAddressLine(i) + ", ";
+				}
 			}
-			Log.d("hej", "hej " +  add);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -116,6 +118,7 @@ public class MapOverlayLongpressHandler extends Overlay implements OnMapViewLong
 		Intent intent = new Intent(context, ActivityNote.class);
 		intent.putExtra(IntentExtra.longitude.toString(), point.getLongitudeE6() / 1E6);
 		intent.putExtra(IntentExtra.latitude.toString(), point.getLatitudeE6() / 1E6);
+		intent.putExtra(IntentExtra.city.toString(), add);
 		intent.putExtra(IntentExtra.id.toString(), -1);
 		context.startActivity(intent);
 	}
