@@ -11,7 +11,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
@@ -29,6 +31,8 @@ public class ActivityMain extends FragmentActivity{
 		this.viewPager = new ScrollableViewPager(this);
 		this.viewPager.setId(R.id.viewPager);
 		setContentView(viewPager);
+		
+		
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
@@ -36,6 +40,8 @@ public class ActivityMain extends FragmentActivity{
 		tabsAdapter = new TabsAdapter(this, viewPager);
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_mapmode), FragmentMapView.class, null);
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_sort_by_size), FragmentListView.class, null);
+		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_gallery), FragmentImageGridView.class, null);
+		
 		if (savedInstanceState != null) {
 			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 		}

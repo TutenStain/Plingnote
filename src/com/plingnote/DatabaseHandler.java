@@ -360,7 +360,7 @@ public class DatabaseHandler extends Observable{
 		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
-
+	
 	/**
 	 * 
 	 * @param id Id of the note to update
