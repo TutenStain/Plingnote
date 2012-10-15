@@ -64,7 +64,8 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 			TextView title = (TextView) view.findViewById(R.id.title);
 			TextView text = (TextView) view.findViewById(R.id.text);
 			TextView date = (TextView) view.findViewById(R.id.date);
-			LinearLayout iconField = (LinearLayout) view.findViewById(R.id.icons);
+			LinearLayout iconField = (LinearLayout) view
+					.findViewById(R.id.icons);
 
 			// If the views exists, assign text to it.
 			if (title != null) {
@@ -82,7 +83,8 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 			}
 
 			if (iconField != null) {
-				iconField.removeAllViews(); // Clear the view to erase previous images
+				iconField.removeAllViews(); // Clear the view to erase previous
+											// images
 				addItemIcons(n, iconField);
 			}
 		}
@@ -99,7 +101,7 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 	public void addItemIcons(Note n, LinearLayout iconField) {
 
 		// If the note has an image attached to it, add image icon
-		if (n.getImagePath() != null) {
+		if (!n.getImagePath().equals("")) {
 			ImageView imageIcon = new ImageView(context);
 			imageIcon.setImageResource(R.drawable.ic_image_icon);
 			imageIcon.setLayoutParams(new ViewGroup.LayoutParams(28, 28));
@@ -108,7 +110,7 @@ public class NoteAdapter extends ArrayAdapter<Note> {
 		}
 
 		// If the note has an alarm set, add alarm icon
-		if (n.getAlarm() != null) {
+		if (!n.getAlarm().equals("")) {
 			ImageView alarmIcon = new ImageView(context);
 			alarmIcon.setImageResource(R.drawable.ic_alarm_icon);
 			alarmIcon.setLayoutParams(new ViewGroup.LayoutParams(28, 28));
