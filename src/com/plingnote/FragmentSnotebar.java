@@ -115,21 +115,21 @@ public class FragmentSnotebar extends Fragment {
 			icons.add(new IconView(getActivity(), "", Utils.categoryString, new SBCategorySelector()));
 		}else{
 			//Check if id is set,then it is information to fetch from database else there is no information
-			if(dbHandler.getNote(this.id).getAlarm() != null 
-				|| !(dbHandler.getNote(this.id).getAlarm().equals(""))){
-				icons.add(new IconView(getActivity(), dbHandler.getNote(id).getAlarm(), Utils.reminderString, new  FragmentReminder()));					
+			if(this.dbHandler.getNote(this.id).getAlarm() != null 
+				|| !(this.dbHandler.getNote(this.id).getAlarm().equals(""))){
+				icons.add(new IconView(getActivity(), this.dbHandler.getNote(id).getAlarm(), Utils.reminderString, new  FragmentReminder()));					
 			}else{
 				icons.add(new IconView(getActivity(),"", Utils.reminderString, new FragmentReminder()));
 			}
-			if(dbHandler.getNote(this.id).getImagePath() != null 
-			|| !(dbHandler.getNote(this.id).getImagePath().equals(""))){
-				icons.add(new IconView(getActivity(), "", Utils.imageString, new SBImageSelector(), dbHandler.getNote(this.id).getImagePath()));					
+			if(this.dbHandler.getNote(this.id).getImagePath() != null 
+			|| !(this.dbHandler.getNote(this.id).getImagePath().equals(""))){
+				icons.add(new IconView(getActivity(), "", Utils.imageString, new SBImageSelector(), this.dbHandler.getNote(this.id).getImagePath()));					
 			}else{
 				icons.add(new IconView(getActivity(),"", Utils.imageString, new SBImageSelector()));
 			}
-			if(dbHandler.getNote(id).getCategory() != NoteCategory.NO_CATEGORY){
-				icons.add(new IconView(getActivity(), dbHandler.getNote(id).getCategory().toString(), Utils.categoryString,
-						new SBCategorySelector(), Utils.getDrawable(dbHandler.getNote(id).getCategory())));					
+			if(this.dbHandler.getNote(id).getCategory() != NoteCategory.NO_CATEGORY){
+				icons.add(new IconView(getActivity(), this.dbHandler.getNote(id).getCategory().toString(), Utils.categoryString,
+						new SBCategorySelector(), Utils.getDrawable(this.dbHandler.getNote(id).getCategory())));					
 			}else{
 				icons.add(new IconView(getActivity(), "", Utils.categoryString, new SBCategorySelector()));
 			}

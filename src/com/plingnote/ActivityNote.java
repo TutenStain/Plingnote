@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
@@ -88,7 +89,7 @@ public class ActivityNote extends FragmentActivity {
 							this.id = getIntent().getExtras().getInt(IntentExtra.id.toString());
 						}
 						if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString()) == true){
-							 dbHandler.updateAlarm(this.id, "");
+							 this.dbHandler.updateAlarm(this.id, "");
 						}
 					}
 				}catch(Exception el){
@@ -159,7 +160,7 @@ public class ActivityNote extends FragmentActivity {
 		int widht = rec.width();	
 		getResources().getConfiguration();
 		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-			int h = height/3;
+			int h = height/4;
 			noteText.setLayoutParams(new LinearLayout.LayoutParams(widht, h));
 		}
 		else{
@@ -175,7 +176,7 @@ public class ActivityNote extends FragmentActivity {
 		EditText noteText = (EditText)findViewById(R.id.notetext);
 		//If this class was opened with an intent or saved instances, the note text will get the text from the database
 		if(this.id != -1){				
-			String txt = dbHandler.getNote(this.id).getText();
+			String txt = this.dbHandler.getNote(this.id).getText();
 			//The cursor position will be saved
 			//even if turning the phone horizontal. Doesn't work with just setText or setSelection(noteText.getText().length()) if turning phone horizontal.
 			noteText.setText(""); 
@@ -191,7 +192,7 @@ public class ActivityNote extends FragmentActivity {
 		EditText noteTitle = (EditText)findViewById(R.id.notetitle);
 		//If this class was opened with an intent or saved instances, the note text will get the text from the database
 		if(this.id != -1){
-			String title =  dbHandler.getNote(this.id).getTitle();
+			String title =  this.dbHandler.getNote(this.id).getTitle();
 			noteTitle.setText(title);		
 			noteTitle.invalidate(); 
 		}
@@ -216,9 +217,19 @@ public class ActivityNote extends FragmentActivity {
 	 * Set the address if it isn't an empty string and if this note has a id bigger than -1.
 	 */
 	public void setNoteAddress(){
-			if(!(this.address.equals(""))){
-				TextView textView = (TextView) findViewById(R.id.address);
-				textView.setText(this.address);	
+		TextView textView = (TextView) findViewById(R.id.address);
+			if(!(this.address.equals(""))){			
+				textView.setText(this.address);
+		}else if(this.id != -1){
+			if(!(this.dbHandler.getNote(this.id).getAddress().equals(""))){
+				textView.setText(this.dbHandler.getNote(this.id).getAddress());
+			}
+			else{
+				textView.setText("No location");
+			}		
+		}
+		else{
+			textView.setText("No location");
 		}
 	}
 
@@ -241,13 +252,13 @@ public class ActivityNote extends FragmentActivity {
 	public void replaceFragmentBack(PluginableFragment fragment){
 		if(fragment.getValue() != null){
 			if(fragment.getKind().equals(NoteExtra.REMINDER)){
-				dbHandler.updateAlarm(this.id, fragment.getValue());
+				this.dbHandler.updateAlarm(this.id, fragment.getValue());
 			}
 			if(fragment.getKind().equals(NoteExtra.IMAGE)){
-				dbHandler.updateImagePath(this.id, fragment.getValue());
+				this.dbHandler.updateImagePath(this.id, fragment.getValue());
 			}
 			if(fragment.getKind().equals(NoteExtra.CATEGORY)){
-				dbHandler.updateCategory(this.id, fragment.getCategory());
+				this.dbHandler.updateCategory(this.id, fragment.getCategory());
 			}
 		}
 		this.changeToSnotebarFragment();
@@ -271,12 +282,12 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public boolean isNoteEmpty(){
 		if(this.id != -1){
-			if((dbHandler.getNote(this.id).getAlarm().equals("") 
-				|| dbHandler.getNote(this.id).getAlarm() == null)
-				&& (dbHandler.getNote(this.id).getImagePath().equals("") 
-				|| dbHandler.getNote(this.id).getImagePath() == null) 
-				&& (dbHandler.getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY) 
-				&& (dbHandler.getNote(this.id).getLocation() == null)
+			if((this.dbHandler.getNote(this.id).getAlarm().equals("") 
+				|| this.dbHandler.getNote(this.id).getAlarm() == null)
+				&& (this.dbHandler.getNote(this.id).getImagePath().equals("") 
+				|| this.dbHandler.getNote(this.id).getImagePath() == null) 
+				&& (this.dbHandler.getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY) 
+				&& (this.dbHandler.getNote(this.id).getLocation() == null)
 				&& this.getTextofNoteText().equals("") && this.getTextofNoteText().equals(""))
 				return true;
 			}
@@ -299,22 +310,22 @@ public class ActivityNote extends FragmentActivity {
 	public boolean checkIfValueIsSetted(NoteExtra noteExtra){
 		if(this.id != -1){
 			if(noteExtra.equals(NoteExtra.REMINDER)){
-				if(!(dbHandler.getNote(this.id).getAlarm().equals(""))){
+				if(!(this.dbHandler.getNote(this.id).getAlarm().equals(""))){
 					return true;
 				}
 			}
 			if(noteExtra.equals(NoteExtra.IMAGE)){
-				if(!(dbHandler.getNote(this.id).getImagePath().equals(""))){
+				if(!(this.dbHandler.getNote(this.id).getImagePath().equals(""))){
 					return true;
 				}
 			}
 			if(noteExtra.equals(NoteExtra.LOCATION)){
-				if(!(dbHandler.getNote(this.id).getLocation() == null)){
+				if(!(this.dbHandler.getNote(this.id).getLocation() == null)){
 					return true;
 				}
 			}	
 			if(noteExtra.equals(NoteExtra.CATEGORY)){
-				if(!(dbHandler.getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY)){
+				if(!(this.dbHandler.getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY)){
 					return true;
 				}
 			}	
@@ -328,17 +339,17 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public void deleteValue(NoteExtra noteExtra){
 		if(noteExtra.equals(NoteExtra.REMINDER)){
-			dbHandler.updateAlarm(this.id, "");
+			this.dbHandler.updateAlarm(this.id, "");
 		}
 		if(noteExtra.equals(NoteExtra.IMAGE)){
-			dbHandler.updateImagePath(this.id, "");
+			this.dbHandler.updateImagePath(this.id, "");
 		}
 		if(noteExtra.equals(NoteExtra.LOCATION)){
-			dbHandler.updateLocation(this.id, null);
-			dbHandler.updateAddress(this.id, "");
+			this.dbHandler.updateLocation(this.id, null);
+			this.dbHandler.updateAddress(this.id, "");
 		}
 		if(noteExtra.equals(NoteExtra.CATEGORY)){
-			dbHandler.updateCategory(this.id, NoteCategory.NO_CATEGORY);
+			this.dbHandler.updateCategory(this.id, NoteCategory.NO_CATEGORY);
 		}	
 		this.changeToSnotebarFragment();
 	}
@@ -366,14 +377,14 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public void saveToDatabase(){
 		if(this.id != -1){
-			dbHandler.updateText(this.id, this.getTextofNoteText());
-			dbHandler.updateTitle(this.id, this.getTitleofNoteText());
+			this.dbHandler.updateText(this.id, this.getTextofNoteText());
+			this.dbHandler.updateTitle(this.id, this.getTitleofNoteText());
 		}
 		//If this class not was opened with an intent or saved instance, it'd id is set to -1 and we are inserting the note in database.
 		else if(this.id == -1){
-			dbHandler.
+			this.dbHandler.
 			insertNote(this.getTitleofNoteText(), this.getTextofNoteText(), this.location, "", "", NoteCategory.NO_CATEGORY, this.address);
-			this.id = DatabaseHandler.getInstance(this).getLastId();
+			this.id = this.dbHandler.getLastId();
 		}
 	}
 
@@ -490,7 +501,7 @@ public class ActivityNote extends FragmentActivity {
 	 * Delete all note extra values location,imagepath,reminder.
 	 */
 	public void deleteAllValues(){					
-		dbHandler.updateNote(this.id, "", "", null, "", "", NoteCategory.NO_CATEGORY, "");	
+		this.dbHandler.updateNote(this.id, "", "", null, "", "", NoteCategory.NO_CATEGORY, "");	
 		this.snotebarFragment = new FragmentSnotebar();
 		try{
 			Bundle bundleToFrag = new Bundle();

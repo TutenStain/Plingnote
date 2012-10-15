@@ -59,6 +59,7 @@ public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements 
 		
 		Intent editNote = new Intent(context, ActivityNote.class);
 		editNote.putExtra(IntentExtra.id.toString(), Integer.parseInt(item.getTitle()));
+		editNote.putExtra(IntentExtra.justId.toString(), true);
 
 		//Start the edit view.
 		context.startActivity(editNote);
