@@ -273,6 +273,9 @@ public class ActivityNote extends FragmentActivity {
 		if(deleteNote == false){
 			if(!isNoteEmpty())
 				this.saveToDatabase();
+			else if(this.id != -1){
+				dbHandler.deleteNote(this.id);
+			}
 		}
 	}
 
@@ -281,23 +284,11 @@ public class ActivityNote extends FragmentActivity {
 	 * @return
 	 */
 	public boolean isNoteEmpty(){
-		if(this.id != -1){
-			if((this.dbHandler.getNote(this.id).getAlarm().equals("") 
-				|| this.dbHandler.getNote(this.id).getAlarm() == null)
-				&& (this.dbHandler.getNote(this.id).getImagePath().equals("") 
-				|| this.dbHandler.getNote(this.id).getImagePath() == null) 
-				&& (this.dbHandler.getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY) 
-				&& (this.dbHandler.getNote(this.id).getLocation() == null)
-				&& this.getTitleofNoteText().equals("") && this.getTextofNoteText().equals("")){
-				return true;
-			}else{
-				return false;
-			}
-			}else if(this.getTitleofNoteText().equals("") && this.getTextofNoteText().equals("")){
-				return true;
-			}else{
-				return false;
-			}
+		 if(this.getTitleofNoteText().equals("") && this.getTextofNoteText().equals("")){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	/**
