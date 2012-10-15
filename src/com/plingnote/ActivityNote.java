@@ -222,7 +222,7 @@ public class ActivityNote extends FragmentActivity {
 				textView.setText(this.address);
 		}else if(this.id != -1){
 			if(!(this.dbHandler.getNote(this.id).getAddress().equals(""))){
-				textView.setText(this.address);
+				textView.setText(this.dbHandler.getNote(this.id).getAddress());
 			}
 			else{
 				textView.setText("No location");
@@ -379,8 +379,6 @@ public class ActivityNote extends FragmentActivity {
 		if(this.id != -1){
 			this.dbHandler.updateText(this.id, this.getTextofNoteText());
 			this.dbHandler.updateTitle(this.id, this.getTitleofNoteText());
-			this.dbHandler.updateLocation(this.id, this.location);
-			this.dbHandler.updateAddress(this.id, this.address);
 		}
 		//If this class not was opened with an intent or saved instance, it'd id is set to -1 and we are inserting the note in database.
 		else if(this.id == -1){
