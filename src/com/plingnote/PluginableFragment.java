@@ -21,11 +21,11 @@ package com.plingnote;
  * @author Julia Gustafsson
  *
  */
-public interface PluginFragment {
+public interface PluginableFragment {
 	
 	public String getValue();
 	
-	public Location getLocation();
+	public NoteCategory getCategory();
 	
 	public NoteExtra getKind();
 	

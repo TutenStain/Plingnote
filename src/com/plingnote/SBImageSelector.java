@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,7 @@ import android.widget.Gallery;
  * @author Linus Karlsson
  * 
  */
-public class SBImageSelector extends Fragment implements PluginFragment{
+public class SBImageSelector extends Fragment implements PluginableFragment{
 	private String selectedImage;
 
 	private Cursor cursor;
@@ -95,7 +94,7 @@ public class SBImageSelector extends Fragment implements PluginFragment{
 		// Place first gallery image at far left
 		DisplayMetrics metrics = new DisplayMetrics();
 		getActivity().getWindowManager().getDefaultDisplay()
-				.getMetrics(metrics);
+		.getMetrics(metrics);
 
 		MarginLayoutParams mlp = (MarginLayoutParams) gallery.getLayoutParams();
 		mlp.setMargins(-(metrics.widthPixels / 2 + IMAGE_WIDTH), mlp.topMargin,
@@ -106,20 +105,10 @@ public class SBImageSelector extends Fragment implements PluginFragment{
 
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-
-
-
 				// The path to the selected image
 				selectedImage = 
 						getSelectedImagePath(position);
 				replaceBackFragment();
-			
-
-				// Intent snoteBar = new Intent(getActivity(),
-				// FragmentSnoteBar.class);
-				// snoteBar.putExtra("MEDDELANDE",
-				// getSelectedImagePath(position));
-
 			}
 
 		});
@@ -157,21 +146,33 @@ public class SBImageSelector extends Fragment implements PluginFragment{
 		return anotherCursor.getString(column);
 	}
 
+	/**
+	 * Return the imagepath
+	 */
 	public String getValue() {
 		return selectedImage;
 	}
 
-	public Location getLocation() {
-		return null;
-	}
-
+	/**
+	 * The kind of this fragment
+	 */
 	public NoteExtra getKind() {
 		return NoteExtra.IMAGE;
 	}
 
+	/**
+	 * Replace this fragment
+	 */
 	public void replaceBackFragment() {
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		activityNote.replaceFragmentBack(this);
+	}
+
+	/**
+	 * This class has not any category
+	 */
+	public NoteCategory getCategory() {
+		return null;
 	}
 
 

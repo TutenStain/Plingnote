@@ -21,9 +21,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,29 +37,36 @@ import android.widget.Toast;
  * @author Julia Gustafsson
  *
  */
-public class FragmentReminder extends Fragment implements PluginFragment{
+public class FragmentReminder extends Fragment implements PluginableFragment{
 	private View view;
 	private String value = "";
 	PendingIntent pendingIntent;
 
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.fragment_reminder, container, false);		
-		return view;		
+		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+			this.view = inflater.inflate(R.layout.fragment_reminder_landscape, container, false);		
+		}else{
+			this.view = inflater.inflate(R.layout.fragment_reminder, container, false);		
+		}
+
+		return this.view;		
 	}
+	
 	/**
 	 * Set on click listers to the button
 	 */
 	public void onStart(){
 		super.onStart();
-		Button okey = (Button) view.findViewById(R.id.ok);
-		Button cancel = (Button) view.findViewById(R.id.cancel);
+		Button okey = (Button) this.view.findViewById(R.id.ok);
+		Button cancel = (Button) this.view.findViewById(R.id.cancel);
 
 		cancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {	  			
 				replaceBackFragment();
 			}
 		});	
+		
 		okey.setOnClickListener(new View.OnClickListener() {
 			//Save the time and the the alarm in the method savetime
 			public void onClick(View v) {
@@ -79,11 +86,10 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		Intent intent = new Intent(getActivity(), NoteNotification.class);
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
-		Log.d("IDSave", activityNote.getId() +"");
 		pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
-		//pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, 0);
 		Calendar calendar =  Calendar.getInstance();
-		calendar.set(datepicker.getYear(), datepicker.getMonth(), datepicker.getDayOfMonth(), timepicker.getCurrentHour(),timepicker.getCurrentMinute(), 0);
+		calendar.set(datepicker.getYear(), datepicker.getMonth(),
+				datepicker.getDayOfMonth(), timepicker.getCurrentHour(), timepicker.getCurrentMinute(), 0);
 		this.value = calendar.getTime()+"";
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);    
@@ -97,12 +103,6 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 		return this.value;
 	}
 
-	/**
-	 * Return a location if this fragment is containing one. This one contains 
-	 */
-	public Location getLocation() {
-		return null;
-	}
 
 	/**
 	 * Return which kind of note extra this fragment is
@@ -117,6 +117,12 @@ public class FragmentReminder extends Fragment implements PluginFragment{
 	public void replaceBackFragment() {
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		activityNote.replaceFragmentBack(this);
-	}	 
+	}
 
+	/**
+	 * Return null, because this fragment doesn't have a category
+	 */
+	public NoteCategory getCategory() {
+		return null;
+	}	 
 }

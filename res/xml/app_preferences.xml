@@ -15,8 +15,8 @@
     <PreferenceCategory android:title="About">
         <com.plingnote.PreferenceDialogInfo
         	android:title="Plingnote" 
-            android:summary="Plingnote Android version 0.1"
-            android:dialogMessage="Placeholder"  
+            android:summary="Plingnote Android Release 1"
+            android:dialogMessage="Plingnote Android Release 1\nThis is the first release of the Plingnote application."  
             android:dialogIcon="@android:drawable/ic_dialog_info" />
         <com.plingnote.PreferenceDialogEmail
         	android:title="Send feedback" 
@@ -26,12 +26,12 @@
         <com.plingnote.PreferenceDialogInfo
         	android:title="Terms of Use" 
             android:summary="Know your rights"
-            android:dialogMessage="Placeholder"  
+            android:dialogMessage="We take no responsibility for your important notes in case of data loss or corruption."  
             android:dialogIcon="@android:drawable/ic_dialog_info" />
     	<com.plingnote.PreferenceDialogInfo
         	android:title="Open Source Licenses" 
             android:summary="Modules used by Plingnote"
-            android:dialogMessage="Placeholder"         
+            android:dialogMessage="	Big thanks to:\n*Ievgenii Nazaruk for map-fragment. Allowed us to use the MapView in a fragment, for tabbed navigation."
             android:dialogIcon="@android:drawable/ic_dialog_info" />
     </PreferenceCategory>                               
 </PreferenceScreen>

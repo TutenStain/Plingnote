@@ -98,15 +98,16 @@ public class MapOverlayLongpressHandler extends Overlay implements OnMapViewLong
 		
 		//Get the adress of the touched poistion
 		Geocoder geoCoder = new Geocoder(this.context, Locale.getDefault());
+		String add = "";
 		try {
 			List<Address> addresses = geoCoder.getFromLocation(point.getLatitudeE6() / 1E6, point.getLongitudeE6() / 1E6, 1);
-			String add = "";
+			
 			if (addresses.size() > 0) {
 				for (int i = 0; i < addresses.get(0).getMaxAddressLineIndex();
 						i++)
 					add += addresses.get(0).getAddressLine(i) + ";";
 			}
-			//Log.d("hej", "hej " +  add);
+			Log.d("hej", "hej " +  add);
 		}
 		catch (IOException e) {
 			e.printStackTrace();

@@ -12,3 +12,12 @@ This can be achieved by going to Window -> Preferences -> Android -> Build
 and selecting the debug.keystore file supplied from us from the "Custom debug keystore"
 option. You will need to clean the project before it will work (Project -> Clean..). 
 If it does not work, restart Eclipse and Clean again.
+
+How to run test
+=========
+Navigate to PlingnoteTest folder and run "ant debug install test"
+
+How to run the application
+=========
+Navigate to the root folder (Plingnote) and run "ant debug install"
+

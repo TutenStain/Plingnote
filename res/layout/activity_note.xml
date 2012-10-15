@@ -5,22 +5,23 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-
-    <EditText           android:id="@+id/notetitle"
+    <EditText
+        android:id="@+id/notetitle"
         android:layout_width="fill_parent"
-        android:layout_height="394dp"
+        android:layout_height="56dp"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
         android:gravity="top"
         android:hint="@string/notetitlehint"
         android:singleLine="false" />
-    
+
     <EditText
         android:id="@+id/notetext"
-        android:layout_width="fill_parent"
-        android:layout_height="394dp"
+        android:layout_width="332dp"
+        android:layout_height="120dp"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
+        android:ems="10"
         android:gravity="top"
         android:hint="@string/notetexthint"
         android:singleLine="false" />
@@ -29,7 +30,25 @@
         android:id="@+id/fragmentcontainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="10dip"
         android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" 
+          />
+
     </LinearLayout>
 
 </LinearLayout>

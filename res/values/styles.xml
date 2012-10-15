@@ -4,5 +4,7 @@
     <color name="list_item_text_color">#666666</color>
     <color name="list_item_date_color">#4a7dff</color>
     <color name="selected_color">#80cce8</color>
+    <color name="divider_color">#dedede</color>
+    <color name="no_notes_color">#000000</color>
     <style name="AppTheme" parent="android:Theme.Light" />
 </resources>
