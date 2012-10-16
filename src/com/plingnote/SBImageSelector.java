@@ -42,11 +42,6 @@ public class SBImageSelector extends Fragment implements PluginableFragment {
 	private String selectedImage;
 	private Cursor cursor;
 
-	/**
-	 * The width of the gallery image
-	 */
-	public static final int IMAGE_WIDTH = 120;
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -94,7 +89,7 @@ public class SBImageSelector extends Fragment implements PluginableFragment {
 				.getMetrics(metrics);
 
 		MarginLayoutParams mlp = (MarginLayoutParams) gallery.getLayoutParams();
-		mlp.setMargins(-(metrics.widthPixels / 2 + IMAGE_WIDTH), mlp.topMargin,
+		mlp.setMargins(-(metrics.widthPixels / 2 + Utils.SNOTEBAR_IMAGE_WIDTH), mlp.topMargin,
 				mlp.rightMargin, mlp.bottomMargin);
 
 		// Get user click

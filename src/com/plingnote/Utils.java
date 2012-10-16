@@ -42,4 +42,9 @@ public class Utils {
 			return -1;
 		}
 	}
+	
+	/**
+	 * The width of the gallery image
+	 */
+	public static final int SNOTEBAR_IMAGE_WIDTH = 120;
 }

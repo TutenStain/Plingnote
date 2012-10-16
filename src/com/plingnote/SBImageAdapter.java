@@ -65,7 +65,7 @@ public class SBImageAdapter extends BaseAdapter {
 			
 			// Set size on gallery images
 			view.setLayoutParams(new Gallery.LayoutParams(
-					SBImageSelector.IMAGE_WIDTH, SBImageSelector.IMAGE_WIDTH));
+					Utils.SNOTEBAR_IMAGE_WIDTH, Utils.SNOTEBAR_IMAGE_WIDTH));
 		} else {
 			// Place bitmaps in Image View.
 			view.setImageBitmap(this.images[position]);
