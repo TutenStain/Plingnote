@@ -9,6 +9,7 @@ import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityNote;
 
 /**
+ * Test gui in class ActivityNote
  * @author Julia Gustafsson
  *
  */

@@ -17,7 +17,10 @@
 package com.plingnote;
 
 import android.app.ActionBar;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -273,7 +276,24 @@ public class ActivityNote extends FragmentActivity {
 		if(deleteNote == false){
 			if(!isNoteEmpty())
 				this.saveToDatabase();
+			else if(this.id != -1){
+				if(!(dbHandler.getNote(this.id).getAlarm().equals("")))
+					removeReminder();
+				dbHandler.deleteNote(this.id);
+			}
 		}
+	}
+	
+	/**
+	 * This code must unfortunalty be in this class because if the fragmentReminder isn't
+	 * replacing the snotebar, getActivity() in fragmentReminder will return null and you can't remove the alarm.
+	 */
+	public void removeReminder(){
+		Intent intent = new Intent(this, NoteNotification.class);
+		intent.putExtra(IntentExtra.id.toString(),this.id); 
+		PendingIntent sender = PendingIntent.getBroadcast(this, 0,intent,PendingIntent.FLAG_ONE_SHOT);
+		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		alarmManager.cancel(sender);
 	}
 
 	/**
@@ -281,23 +301,11 @@ public class ActivityNote extends FragmentActivity {
 	 * @return
 	 */
 	public boolean isNoteEmpty(){
-		if(this.id != -1){
-			if((this.dbHandler.getNote(this.id).getAlarm().equals("") 
-				|| this.dbHandler.getNote(this.id).getAlarm() == null)
-				&& (this.dbHandler.getNote(this.id).getImagePath().equals("") 
-				|| this.dbHandler.getNote(this.id).getImagePath() == null) 
-				&& (this.dbHandler.getNote(this.id).getCategory() == NoteCategory.NO_CATEGORY) 
-				&& (this.dbHandler.getNote(this.id).getLocation() == null)
-				&& this.getTitleofNoteText().equals("") && this.getTextofNoteText().equals("")){
-				return true;
-			}else{
-				return false;
-			}
-			}else if(this.getTitleofNoteText().equals("") && this.getTextofNoteText().equals("")){
-				return true;
-			}else{
-				return false;
-			}
+		 if(this.getTitleofNoteText().equals("") && this.getTextofNoteText().equals("")){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	/**
@@ -345,6 +353,7 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public void deleteValue(NoteExtra noteExtra){
 		if(noteExtra.equals(NoteExtra.REMINDER)){
+			removeReminder();
 			this.dbHandler.updateAlarm(this.id, "");
 		}
 		if(noteExtra.equals(NoteExtra.IMAGE)){
@@ -460,12 +469,17 @@ public class ActivityNote extends FragmentActivity {
 			this.finish();
 			return true;
 		case R.id.delete_note:
-			if(this.id!=-1)
+			if(this.id!=-1){
+				if(!(this.dbHandler.getNote(this.id).getAlarm().equals("")))
+					this.removeReminder();
 				dbHandler.deleteNote(this.id);
+			}
+			
 			deleteNote = true;
 			this.finish();
 			return true;
 		case R.id.reset_snotebar:
+			if(this.id != -1)
 			this.deleteAllValues();
 			return true;
 		case R.id.clean_notetext:
@@ -505,7 +519,10 @@ public class ActivityNote extends FragmentActivity {
 	/**
 	 * Delete all note extra values location,imagepath,reminder.
 	 */
-	public void deleteAllValues(){					
+	public void deleteAllValues(){	
+		if(!(this.dbHandler.getNote(this.id).getAlarm().equals(""))){
+			this.removeReminder();
+		}
 		this.dbHandler.updateNote(this.id, "", "", null, "", "", NoteCategory.NO_CATEGORY, "");	
 		this.snotebarFragment = new FragmentSnotebar();
 		try{

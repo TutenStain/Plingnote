@@ -233,11 +233,7 @@ public class FragmentSnotebar extends Fragment {
 						//in snotebar it's value it's getactivty return null and you can't remove the alarm.
 						if(pluginFrag instanceof FragmentReminder){
 							ActivityNote activityNote = (ActivityNote)getActivity();
-							Intent intent = new Intent(getActivity(), NoteNotification.class);
-							intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
-							PendingIntent sender = PendingIntent.getBroadcast(getActivity(), 0,intent,PendingIntent.FLAG_ONE_SHOT);
-							AlarmManager alarmManager = (AlarmManager)  getActivity().getSystemService(Context.ALARM_SERVICE);
-							alarmManager.cancel(sender);
+							activityNote.removeReminder();
 						}
 						FragmentSnotebar.this.deleteFragmentValue(pluginFrag.getKind());
 					}
