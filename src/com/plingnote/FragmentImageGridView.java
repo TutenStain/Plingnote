@@ -16,6 +16,7 @@ package com.plingnote;
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -84,6 +85,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 	}
 
+	private List<Integer> imgIds = new ArrayList<Integer>();
+
 	/**
 	 * Creating the gridview layout.
 	 */
@@ -95,7 +98,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		abOn = false;
 
 		DatabaseHandler.getInstance(getActivity()).addObserver(this);
-
 		//Getting the database
 		db = DatabaseHandler.getInstance(getActivity());
 
@@ -179,7 +181,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			tvText.setText(notes.get(position).getText());
 
 			//Standard image set on icons
-			imgView.setBackgroundResource(R.drawable.category_write);
+			imgView.setBackgroundResource(imgIds.get(position));
 
 			if(abOn){
 				imgViewTop.setBackgroundColor(Color.TRANSPARENT);
@@ -201,6 +203,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 	public void refreshNotes(){
 		clearNotes();
 
+		imgIds.clear();
 		for(Note n : db.getNoteList()){
 			addNote(n);
 		}
@@ -212,6 +215,24 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 	 */
 	public void addNote(Note note){
 		notes.add(note);
+		
+		String category = note.getCategory().toString();
+		
+		if(category.equals(NoteCategory.Bank.toString())){
+			imgIds.add(R.drawable.category_banking);	
+		} else if(category.equals(NoteCategory.Chat.toString())){
+			imgIds.add(R.drawable.category_chat);
+		} else if(category.equals(NoteCategory.Fun.toString())){
+			imgIds.add(R.drawable.category_fun);
+		} else if(category.equals(NoteCategory.Lunch.toString())){
+			imgIds.add(R.drawable.category_lunch);
+		} else if(category.equals(NoteCategory.Meeting.toString())){
+			imgIds.add(R.drawable.category_meeting);
+		} else if(category.equals(NoteCategory.Shop.toString())){
+			imgIds.add(R.drawable.category_shop);
+		} else{
+			imgIds.add(R.drawable.category_write);
+		}
 	}
 
 	/**
@@ -388,5 +409,27 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			gView.setBackgroundColor(Color.BLACK);
 		}
 	}
+	/**
+	 * Get an array with file names of all category images in drawable folder.
+	 * 
+	 * @return the file names of all catergories in drawable folder.
+	 */
+	public List<String> getCategoryDrawables() {
+		Field[] fields = R.drawable.class.getFields();
+		List<String> categoryDrawables = new ArrayList<String>();
 
+		// Place all category images in the array.
+		for (int i = 0; i < fields.length; i++) {
+
+			// Iterate through NoteCategories and get the drawables that matches
+			// the category names.
+			for (NoteCategory category : NoteCategory.values()) {
+				if (fields[i].getName().equals(category.toString())) {
+					categoryDrawables.add(fields[i].getName());
+				}
+			}
+		}
+
+		return categoryDrawables;
+	}
 }

@@ -31,14 +31,6 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.drag(100, 500, 500, 500, 50);
 	}
 	
-	//Tests if the map is zoomable
-	public void test3MapZoom(){
-		solo.clickOnScreen(500, 500);
-		solo.clickOnImageButton(1);
-		solo.clickOnImageButton(0);
-	}
-
-
 	@Override
 	protected void tearDown() throws Exception {
 		solo.finishOpenedActivities();
