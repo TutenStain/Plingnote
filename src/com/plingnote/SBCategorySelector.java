@@ -1,4 +1,4 @@
-﻿/**
+/**
  * This file is part of Plingnote.
  * Copyright (C) 2012 Linus Karlsson
  *
