@@ -1,4 +1,3 @@
-package com.plingnote;
 /**
  * This file is part of Plingnote.
  * Copyright (C) 2012 Magnus Huttu
@@ -15,6 +14,9 @@ package com.plingnote;
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+package com.plingnote;
+
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
