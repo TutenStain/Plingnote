@@ -44,10 +44,10 @@ import android.widget.TextView;
 public class ActivityNote extends FragmentActivity {
 	private int id = -1;
 	private Location location= new Location(0.0,0.0);
+	private String address = "";
 	private FragmentSnotebar snotebarFragment = null;
 	private Fragment anotherFragment = null;
-	private boolean deleteNote = false;
-	private String address = "";
+	private boolean deleteNote = false;	
 	private DatabaseHandler dbHandler = DatabaseHandler.getInstance(this);
 
 	/**
@@ -450,7 +450,11 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			this.finish();
+			if(anotherFragment != null){
+				changeToSnotebarFragment();
+			}else{
+				this.finish();
+			}
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -459,6 +463,10 @@ public class ActivityNote extends FragmentActivity {
 	/**
 	 * If choosing to go back to home, the keyboard will be hided and call finish.
 	 * If choosing to delete note, the current note will be deleted and the note activity will be deleted
+	 * If choosing to reset snotebar, the current notes "extra values"  (alarm,image,category) will be reseted.
+	 * If choosing to clean notetext, the current note text and title will be deleted
+	 * If choosing to clean note, the current note text,title and "extra values" will be deleted
+	 * If choosing to clean location, the current location will be deleted
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -489,10 +497,23 @@ public class ActivityNote extends FragmentActivity {
 			this.deleteNoteTextandTitle();
 			this.deleteAllValues();
 			return true;
+		case R.id.clean_location:
+			if(id != -1){
+			deleteValue(NoteExtra.LOCATION);
+			saveToDatabase();
+			setNoteAddress();
+			}
+			else{
+				location= new Location(0.0,0.0);
+				address = "";
+				setNoteAddress();
+			}
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
 
 	/**
 	 * Create the settings menu
