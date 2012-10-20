@@ -91,7 +91,7 @@ public class ActivityNote extends FragmentActivity {
 							this.id = getIntent().getExtras().getInt(IntentExtra.id.toString());
 						}
 						if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString()) == true){
-							 this.dbHandler.updateAlarm(this.id, "");
+							this.dbHandler.updateAlarm(this.id, "");
 						}
 					}
 				}catch(Exception el){
@@ -220,12 +220,12 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public void setNoteAddress(){
 		TextView textView = (TextView) findViewById(R.id.address);
-			if(!(this.address.equals(""))){			
-				textView.setText(this.address);
+		if(!(this.address.equals(""))){			
+			textView.setText(this.address);
 		}else if(this.id != -1){
 			if(!(this.dbHandler.getNote(this.id).getAddress().equals(""))){
 				textView.setText(this.dbHandler.getNote(this.id).getAddress());
-				
+
 			}
 			else{
 				textView.setText("No location");
@@ -235,7 +235,7 @@ public class ActivityNote extends FragmentActivity {
 			textView.setText("No location");
 		}
 	}
-			
+
 	/**
 	 * Remove snotebarFragment and replace with the param fragment.
 	 * @param fragment
@@ -273,10 +273,13 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public void onPause(){
 		super.onPause();
-		if(deleteNote == false)
-			this.saveToDatabase();
+
+		if(deleteNote == false){
+				this.saveToDatabase();
+		}
+
 	}
-	
+
 	/**
 	 * This code must unfortunalty be in this class because if the fragmentReminder isn't
 	 * replacing the snotebar, getActivity() in fragmentReminder will return null and you can't remove the alarm.
@@ -294,7 +297,7 @@ public class ActivityNote extends FragmentActivity {
 	 * @return
 	 */
 	public boolean isNoteEmpty(){
-		 if(this.getTitleofNoteText().equals("") && this.getTextofNoteText().equals("")){
+		if(this.getTitleofNoteText().equals("") && this.getTextofNoteText().equals("")){
 			return true;
 		}else{
 			return false;
@@ -402,11 +405,11 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	public String getTitleofNoteText(){
 		EditText noteText = (EditText) findViewById(R.id.notetitle);
-			String txt = noteText.getText().toString();
-			if(txt.length() > 0){
-				return txt;
-			}else
-				return "";
+		String txt = noteText.getText().toString();
+		if(txt.length() > 0){
+			return txt;
+		}else
+			return "";
 	}
 
 	/**
@@ -427,14 +430,14 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
-		if(deleteNote == false){
+	
 			super.onSaveInstanceState(savedInstanceState);
 			savedInstanceState.putInt(IntentExtra.id.toString(), this.id);
 			//If anotherFragment isn't null is should be saved
 			if(anotherFragment != null){
 				getSupportFragmentManager().putFragment(savedInstanceState, "anotherFragment", anotherFragment);
 			}
-		}
+		
 	}
 
 	/**
@@ -443,11 +446,12 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if(anotherFragment != null){
-				changeToSnotebarFragment();
-			}else{
+
+			if(anotherFragment != null)
+				this.changeToSnotebarFragment();
+			else
 				this.finish();
-			}
+
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -464,44 +468,49 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {	
+
 		case android.R.id.home:
 			InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 			inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
 			this.finish();
 			return true;
+
 		case R.id.delete_note:
 			if(this.id!=-1){
 				if(!(this.dbHandler.getNote(this.id).getAlarm().equals("")))
 					this.removeReminder();
 				dbHandler.deleteNote(this.id);
 			}
-			
+
 			deleteNote = true;
 			this.finish();
 			return true;
+
 		case R.id.reset_snotebar:
 			if(this.id != -1)
-			this.deleteAllValues();
+				this.deleteAllValues();
 			return true;
+
 		case R.id.clean_notetext:
 			this.deleteNoteTextandTitle();		
 			return true;
+
 		case R.id.clean_note:
 			this.deleteNoteTextandTitle();
 			this.deleteAllValues();
 			return true;
+
+
 		case R.id.clean_location:
-			if(id != -1){
-			deleteValue(NoteExtra.LOCATION);
-			saveToDatabase();
-			setNoteAddress();
+			if(this.id != -1){
+				this.deleteValue(NoteExtra.LOCATION);	
+			}else{
+				this.location = new Location(0.0,0.0);
+				this.address = "";
 			}
-			else{
-				location= new Location(0.0,0.0);
-				address = "";
-				setNoteAddress();
-			}
+			this.setNoteAddress();
 			return true;
+
 		default:
 			return super.onOptionsItemSelected(item);
 		}

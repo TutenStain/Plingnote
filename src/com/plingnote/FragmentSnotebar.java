@@ -210,7 +210,7 @@ public class FragmentSnotebar extends Fragment {
 
 		/**
 		 * A dialogfragment that ask if the user wants to reset the data of the icon from the note
-		 * @author Julia
+		 * @author Julia 
 		 *
 		 */
 		private class AskIfReset extends DialogFragment {
