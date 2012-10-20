@@ -26,6 +26,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+/**
+ * A custom class for displaying basic info with a
+ * dismiss button. To be used in Preferences.
+ * @author Barnabas Sapan
+ */
 public class PreferenceDialogInfo extends DialogPreference{
 	private String dialogeMessage;
 	

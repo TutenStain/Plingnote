@@ -24,6 +24,8 @@ import android.util.AttributeSet;
 /**
  * A custom dialog that displays a confirmation message
  * before the value is persisted.
+ * 
+ * @author Barnabas Sapan
  */
 public class PreferenceDialogOption extends DialogPreference {
 
