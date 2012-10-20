@@ -411,27 +411,4 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			gView.setBackgroundColor(Color.BLACK);
 		}
 	}
-	/**
-	 * Get an array with file names of all category images in drawable folder.
-	 * 
-	 * @return the file names of all catergories in drawable folder.
-	 */
-	public List<String> getCategoryDrawables() {
-		Field[] fields = R.drawable.class.getFields();
-		List<String> categoryDrawables = new ArrayList<String>();
-
-		// Place all category images in the array.
-		for (int i = 0; i < fields.length; i++) {
-
-			// Iterate through NoteCategories and get the drawables that matches
-			// the category names.
-			for (NoteCategory category : NoteCategory.values()) {
-				if (fields[i].getName().equals(category.toString())) {
-					categoryDrawables.add(fields[i].getName());
-				}
-			}
-		}
-
-		return categoryDrawables;
-	}
 }
