@@ -134,4 +134,5 @@ public class Note {
 	public String getAddress() {
 		return this.address;
 	}
+
 }

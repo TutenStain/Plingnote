@@ -27,7 +27,8 @@ public class ActivityMain extends FragmentActivity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	
+		Intent service = new Intent(this, LocationService.class);
+		startService(service);
 		this.viewPager = new ScrollableViewPager(this);
 		this.viewPager.setId(R.id.viewPager);
 		setContentView(viewPager);
@@ -45,6 +46,7 @@ public class ActivityMain extends FragmentActivity{
 		if (savedInstanceState != null) {
 			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 		}
+		this.startService(new Intent(this, LocationService.class));
 	}
 
 	@Override

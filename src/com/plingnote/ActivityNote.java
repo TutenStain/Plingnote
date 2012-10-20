@@ -32,10 +32,10 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
@@ -223,9 +223,11 @@ public class ActivityNote extends FragmentActivity {
 		TextView textView = (TextView) findViewById(R.id.address);
 			if(!(this.address.equals(""))){			
 				textView.setText(this.address);
+				textView.setOnClickListener(new locationTextListener());
 		}else if(this.id != -1){
 			if(!(this.dbHandler.getNote(this.id).getAddress().equals(""))){
 				textView.setText(this.dbHandler.getNote(this.id).getAddress());
+				textView.setOnClickListener(new locationTextListener());
 			}
 			else{
 				textView.setText("No location");
@@ -233,6 +235,18 @@ public class ActivityNote extends FragmentActivity {
 		}
 		else{
 			textView.setText("No location");
+		}
+			
+	}
+	private class locationTextListener implements OnClickListener{
+		public locationTextListener(){	
+		}
+
+		/**
+		 * Cast view IconView and call the fragment snotebar method 'openNewFragment'
+		 */
+		public void onClick(View v) {		
+			startActivityForResult(new Intent(ActivityNote.this,ActivityMain.class),1);
 		}
 	}
 
