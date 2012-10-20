@@ -1,6 +1,6 @@
 /**
  * This file is part of Plingnote.
- * Copyright (C) 2012 Linus Karlsson
+ * Copyright (C) 2012 Linus Karlsson, Barnabas Sapan
  * 
  * Plingnote is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
