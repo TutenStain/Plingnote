@@ -28,5 +28,6 @@
     <string name="resetsnotebar">Reset snotebar</string>
     <string name="cleannotetext">Clean note text and title </string>
     <string name="cleannote">Clean note and snotebar</string>
+    <string name="cleanlocation">Clean Location</string>
     <string name="plingnote_settings">Plingnote Settings</string>   
 </resources>
