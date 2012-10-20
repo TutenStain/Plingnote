@@ -41,6 +41,7 @@ import android.widget.GridView;
  */
 
 public class SBImageSelector extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+	@SuppressWarnings("unused")
 	private String selectedImage;
 	private SimpleCursorAdapter adapter;
 
