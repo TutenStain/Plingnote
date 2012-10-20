@@ -18,40 +18,37 @@
 package com.plingnote;
 
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Gallery;
+import android.widget.GridView;
 
 /**
- * Fragment showing pictures in a horizontal scrollable gallery.
+ * Fragment showing pictures in a gridview
  * 
- * @author Linus Karlsson
+ * @author First version: Linus Karlsson; Second version with asynchronous loading: Barnabas Sapan
  * 
  */
-public class SBImageSelector extends Fragment implements PluginableFragment{
+
+public class SBImageSelector extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 	private String selectedImage;
+	private SimpleCursorAdapter adapter;
 
-	private Cursor cursor;
-
-	/**
-	 * The width of the gallery image
-	 */
-	public static final int IMAGE_WIDTH = 120;
 
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.snotebar_image_browser, container,
-				false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_snotebar_image_selector, container, false); 
 	}
 
 	@Override
@@ -64,78 +61,45 @@ public class SBImageSelector extends Fragment implements PluginableFragment{
 		super.onActivityCreated(savedInstanceState);
 
 
-
-		// Set cursor pointing to SD Card
-		cursor = getSDCursor();
+		GridView gridView = (GridView) getActivity().findViewById(R.id.gridview);
 
 
+		adapter = new SimpleCursorAdapter(
+				getActivity().getApplicationContext(), R.layout.fragment_snotebar_grid_image,
+				null, new String[] { MediaStore.Images.Thumbnails.DATA }, new int[] { R.id.img }, 0);
 
-		// Create array of bitmaps with the siza of cursor
-		String[] images = new String[cursor.getCount()];
+		gridView.setAdapter(adapter);
 
-		// Add images to array.
-		for (int i = 0; i < this.cursor.getCount(); i++) {
 
-			cursor.moveToPosition(i);
-			images[i] = cursor.getString(cursor
-					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
-
-		}
-
-		// Create gallery using ImageAdapter.
-		Gallery gallery = (Gallery) getView().findViewById(
-				R.id.snotebar_image_browser);
-		//gallery.setAdapter(new SBImageAdapter(getActivity(), cursor, images));
-
-		// Place first gallery image at far left
-		DisplayMetrics metrics = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay()
-		.getMetrics(metrics);
-
-		MarginLayoutParams mlp = (MarginLayoutParams) gallery.getLayoutParams();
-		mlp.setMargins(-(metrics.widthPixels / 2 + IMAGE_WIDTH), mlp.topMargin,
-				mlp.rightMargin, mlp.bottomMargin);
-
-		// Get user click
-		gallery.setOnItemClickListener(new OnItemClickListener() {
-
-			public void onItemClick(AdapterView<?> parent, View v,
-					int position, long id) {
-				// The path to the selected image
-				selectedImage = 
-						getSelectedImagePath(position);
-				replaceBackFragment();
+		gridView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+				Cursor cursor = ((SimpleCursorAdapter) adapter).getCursor();
+				cursor.moveToPosition(position);
+				final int column = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+				selectedImage = cursor.getString(column);
+				
+				//replaceBackFragment();
 			}
 
 		});
+		getLoaderManager().initLoader(0, null, this);
+
+
 	}
 
-	/**
-	 * Get cursor pointing to SD Card
-	 * 
-	 * @return point to SD Card
-	 */
-	public Cursor getSDCursor() {
-		String[] projection = { MediaStore.Images.Media.DATA };
-		return getActivity().getContentResolver().query(
-				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
-				null, null);
+	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+		Uri uri = MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI;
+
+
+		return new CursorLoader(getActivity(), uri, null, null, null, null);
 	}
 
-	/**
-	 * The path to the selected image in the browser.
-	 * 
-	 * @param position
-	 *            the selected image from image browser
-	 * @return the path to the selected image
-	 */
-	public String getSelectedImagePath(int position) {
-		Cursor anotherCursor = getSDCursor();
-		final int column = anotherCursor
-				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-		anotherCursor.moveToPosition(position);
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+		adapter.swapCursor(cursor);
+	}
 
-		return anotherCursor.getString(column);
+	public void onLoaderReset(Loader<Cursor> loader) {
+		adapter.swapCursor(null);
 	}
 
 
@@ -158,7 +122,7 @@ public class SBImageSelector extends Fragment implements PluginableFragment{
 	 */
 	public void replaceBackFragment() {
 		ActivityNote activityNote = (ActivityNote)getActivity();
-		activityNote.replaceFragmentBack(this);
+		//activityNote.replaceFragmentBack(this);
 	}
 
 	/**
