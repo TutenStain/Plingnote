@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen 
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Search">
+    	<com.plingnote.PreferenceDialogOption
+       		android:key="resetSearchHistory"
+       		android:defaultValue="false"
+            android:dialogIcon="@android:drawable/ic_dialog_alert"
+            android:title="Clear Search History"
+            android:summary="Clear recent search history"
+            android:dialogMessage="Are you sure you wish to reset your search history? This action cannot be undone!"
+            android:positiveButtonText="Clear History"
+            android:negativeButtonText="Cancel"/>
+    </PreferenceCategory>   
+    <PreferenceCategory android:title="About">
+        <com.plingnote.PreferenceDialogInfo
+        	android:title="Plingnote" 
+            android:summary="Plingnote Android Release 1"
+            android:dialogMessage="Plingnote Android Release 1\nThis is the first release of the Plingnote application."  
+            android:dialogIcon="@android:drawable/ic_dialog_info" />
+        <com.plingnote.PreferenceDialogEmail
+        	android:title="Send feedback" 
+        	android:summary="Send comments, request, or error reports to Plingnote"
+        	android:dialogMessage="Placeholder"     	
+            android:dialogIcon="@android:drawable/ic_dialog_info" />
+        <com.plingnote.PreferenceDialogInfo
+        	android:title="Terms of Use" 
+            android:summary="Know your rights"
+            android:dialogMessage="We take no responsibility for your important notes in case of data loss or corruption."  
+            android:dialogIcon="@android:drawable/ic_dialog_info" />
+    	<com.plingnote.PreferenceDialogInfo
+        	android:title="Open Source Licenses" 
+            android:summary="Modules used by Plingnote"
+            android:dialogMessage="	Big thanks to:\n*Ievgenii Nazaruk for map-fragment. Allowed us to use the MapView in a fragment, for tabbed navigation."
+            android:dialogIcon="@android:drawable/ic_dialog_info" />
+    </PreferenceCategory>                               
+</PreferenceScreen>

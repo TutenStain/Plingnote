@@ -33,7 +33,7 @@ import android.widget.LinearLayout.LayoutParams;
  * 
  * @author Barnabas Sapan
  */
-public class ActivitySearch extends FragmentActivity{
+public class ActivitySearch extends FragmentActivity {
 	FragmentListViewSearch fragment;
 	
 	/**

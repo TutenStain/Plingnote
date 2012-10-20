@@ -29,6 +29,8 @@ public class ActivityMain extends FragmentActivity{
 		this.viewPager = new ScrollableViewPager(this);
 		this.viewPager.setId(R.id.viewPager);
 		setContentView(viewPager);
+		
+		
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
@@ -36,6 +38,8 @@ public class ActivityMain extends FragmentActivity{
 		tabsAdapter = new TabsAdapter(this, viewPager);
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_mapmode), FragmentMapView.class, null);
 		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_sort_by_size), FragmentListView.class, null);
+		tabsAdapter.addTab(actionBar.newTab().setIcon(android.R.drawable.ic_menu_gallery), FragmentImageGridView.class, null);
+		
 		if (savedInstanceState != null) {
 			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 			if(savedInstanceState.getBoolean("isSearching")) {
@@ -73,6 +77,10 @@ public class ActivityMain extends FragmentActivity{
             case R.id.search:
                 onSearchRequested();
                 return true;
+     
+            case R.id.menu_settings: 
+ 			   startActivity(new Intent(this, ActivityAppPreference.class));
+
             default:
                 return false;
         }
@@ -93,9 +101,8 @@ public class ActivityMain extends FragmentActivity{
 	
 	/**
 	 * Menu item add new note is pressed.
-	 * @param newNote
 	 */
-	public void addNewNote(MenuItem newNote){
+	public void addNewNote(MenuItem item){
 		Intent intent = new Intent(this, ActivityNote.class);
 		startActivity(intent);
 	}
