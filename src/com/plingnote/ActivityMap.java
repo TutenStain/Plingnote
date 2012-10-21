@@ -21,12 +21,18 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -50,6 +56,7 @@ public class ActivityMap extends MapActivity implements LocationListener, Observ
 	private String provider;
 	private Location location;
 	private boolean isWantingAFix = false;
+	private boolean isEnableGPSShown = false;
 	private Criteria criteria;
 	private List<Overlay> overlayList;
 	private UpdatableOverlay mapOverlayPin;
@@ -59,6 +66,10 @@ public class ActivityMap extends MapActivity implements LocationListener, Observ
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		if(savedInstanceState != null)
+			isEnableGPSShown = savedInstanceState.getBoolean("isEnableGPSShown");
+		
 		this.setContentView(R.layout.fragment_mapview);
 		this.map = (MapView) findViewById(R.id.mapview);
 		this.mc = map.getController();
@@ -109,7 +120,6 @@ public class ActivityMap extends MapActivity implements LocationListener, Observ
 		this.criteria.setBearingRequired(false);
 		this.criteria.setAccuracy(Criteria.ACCURACY_FINE);
 		
-		
 		//Show or hide the FitNotesToView button
 		this.updateFitNotesToViewButton();
 	}
@@ -117,6 +127,12 @@ public class ActivityMap extends MapActivity implements LocationListener, Observ
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putBoolean("isEnableGPSShown", isEnableGPSShown);
 	}
 
 	public void click(View view) {
@@ -221,7 +237,31 @@ public class ActivityMap extends MapActivity implements LocationListener, Observ
 		}
 	}
 
-	public void onProviderDisabled(String provider) { }
+	public void onProviderDisabled(String provider) {
+		//Only show this dialogue once
+		if(isEnableGPSShown == false) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(ActivityMap.this);
+			builder.setMessage("Your " + provider.toUpperCase() + " is disabled. Would you like to enable it?");
+			builder.setCancelable(false);
+			builder.setIcon(android.R.drawable.ic_dialog_map);
+			builder.setTitle("Unable To Find You Position");
+			builder.setPositiveButton("Enable " + provider.toUpperCase(), new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+					startActivity(gpsOptionsIntent);
+				}
+			});
+			builder.setNegativeButton("Do nothing this time", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+			
+			isEnableGPSShown = true;
+		}
+	}
 
 	public void onProviderEnabled(String provider) { }
 
@@ -319,6 +359,5 @@ public class ActivityMap extends MapActivity implements LocationListener, Observ
 				this.updateFitNotesToViewButton();
 			}
 		}
-		
 	}
 }
