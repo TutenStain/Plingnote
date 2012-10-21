@@ -64,12 +64,18 @@ public class ScrollableViewPager extends ViewPager {
 	 * Handle the touch event. If we decided that we
 	 * want to scroll we call on super to handle it
 	 * for us. Otherwise if we do not want to scroll
-	 * we just return false 
+	 * we just return false. 
+	 * Inside try catch as it sometimes throws
+	 * nasty exceptions from the super call. 
+	 * This is probably because something is wrong 
+	 * in the underlying Android framework. 
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if(this.pagingEnabled)
-			return super.onTouchEvent(event);
+		try {
+			if(this.pagingEnabled)
+				return super.onTouchEvent(event);
+		} catch (Exception e) {	}
 		
 		return false;
 	}

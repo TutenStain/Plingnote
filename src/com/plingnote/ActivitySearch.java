@@ -29,6 +29,7 @@ public class ActivitySearch extends Activity{
 
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			@SuppressWarnings("unused")
 			String query = intent.getStringExtra(SearchManager.QUERY);
 			//TODO Do search here
 		}
