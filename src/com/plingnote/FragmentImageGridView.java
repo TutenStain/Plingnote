@@ -17,10 +17,7 @@
 
 package com.plingnote;
 
-<<<<<<< HEAD
-import java.lang.reflect.Field;
-=======
->>>>>>> Deleted unused images and changed the gridview so that it uses the category images that every other class uses.
+import java.text.DateFormat.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -142,17 +139,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 
 	public class ImageAdapter extends BaseAdapter {
-<<<<<<< HEAD
-		@SuppressWarnings("unused")
-		private final Context mContext;
-
 		public ImageAdapter(Context context) {
 			super();
-			this.mContext = context;
-=======
-		public ImageAdapter(Context context) {
-			super();
->>>>>>> Deleted unused images and changed the gridview so that it uses the category images that every other class uses.
 		}
 
 		//@Override
@@ -231,21 +219,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		String category = note.getCategory().toString();
 		
 		if(category.equals(NoteCategory.Bank.toString())){
-<<<<<<< HEAD
-			this.imgIds.add(R.drawable.category_banking);	
-		} else if(category.equals(NoteCategory.Chat.toString())){
-			this.imgIds.add(R.drawable.category_chat);
-		} else if(category.equals(NoteCategory.Fun.toString())){
-			this.imgIds.add(R.drawable.category_fun);
-		} else if(category.equals(NoteCategory.Lunch.toString())){
-			this.imgIds.add(R.drawable.category_lunch);
-		} else if(category.equals(NoteCategory.Meeting.toString())){
-			this.imgIds.add(R.drawable.category_meeting);
-		} else if(category.equals(NoteCategory.Shop.toString())){
-			this.imgIds.add(R.drawable.category_shop);
-		} else{
-			this.imgIds.add(R.drawable.category_write);
-=======
 			imgIds.add(R.drawable.bank);	
 		} else if(category.equals(NoteCategory.Chat.toString())){
 			imgIds.add(R.drawable.chat);
@@ -259,7 +232,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			imgIds.add(R.drawable.shop);
 		} else{
 			imgIds.add(R.drawable.write);
->>>>>>> Deleted unused images and changed the gridview so that it uses the category images that every other class uses.
 		}
 	}
 
@@ -437,28 +409,5 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		else{
 			gView.setBackgroundColor(Color.BLACK);
 		}
-	}
-	/**
-	 * Get an array with file names of all category images in drawable folder.
-	 * 
-	 * @return the file names of all catergories in drawable folder.
-	 */
-	public List<String> getCategoryDrawables() {
-		Field[] fields = R.drawable.class.getFields();
-		List<String> categoryDrawables = new ArrayList<String>();
-
-		// Place all category images in the array.
-		for (int i = 0; i < fields.length; i++) {
-
-			// Iterate through NoteCategories and get the drawables that matches
-			// the category names.
-			for (NoteCategory category : NoteCategory.values()) {
-				if (fields[i].getName().equals(category.toString())) {
-					categoryDrawables.add(fields[i].getName());
-				}
-			}
-		}
-
-		return categoryDrawables;
 	}
 }
