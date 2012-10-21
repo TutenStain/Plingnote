@@ -20,7 +20,6 @@ package com.plingnote;
  * A fragment containing a MapActivity
  * @modifiedBy: Barnabas Sapan
  */
-
 import android.app.Activity;
 
 public class FragmentMapView extends ActivityHostFragment {
