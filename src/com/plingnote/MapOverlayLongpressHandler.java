@@ -145,7 +145,6 @@ public class MapOverlayLongpressHandler extends Overlay implements OnMapViewLong
 			mapCenterLast = map.getMapCenter();
 		}
 
-
 		//User moved the finger, no long press action
 		if (event.getAction() == MotionEvent.ACTION_MOVE) {
 			if (this.map.getMapCenter().equals(this.mapCenterLast) == false)

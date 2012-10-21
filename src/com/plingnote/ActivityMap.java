@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,8 +30,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -44,6 +41,7 @@ import com.google.android.maps.Overlay;
 
 /**
  * The map activity
+ * 
  * @author Barnabas Sapan
  */
 public class ActivityMap extends MapActivity implements LocationListener, Observer {
