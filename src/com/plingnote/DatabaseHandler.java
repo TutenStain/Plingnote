@@ -40,11 +40,11 @@ import android.util.Log;
  */
 public class DatabaseHandler extends Observable{
 	// Name of database filexe
-	private static final String DB_NAME = "notedb";
-
+	private static final String DATABASE_NAME = "notedb";
+	//Change this before upgrading the database
+	private static final int DATABASE_VERSION = 1;
 	// Table
 	private static final String TABLE_NOTE = "Note";
-
 	// Columns
 	private static final String ID = "docid"; //created automatically
 	private static final String KEY_TEXT = "Text";
@@ -56,7 +56,6 @@ public class DatabaseHandler extends Observable{
 	private static final String KEY_DATE = "Date";
 	private static final String KEY_CATEGORY = "Category";
 	private static final String KEY_ADDRESS = "Address";
-
 	// SQL statement to create Note table using fts3
 	private static final String CREATE_FTS_TABLE = "create virtual table " 
 			+ TABLE_NOTE + " using fts3("+ KEY_TITLE + " String, " 
@@ -64,14 +63,10 @@ public class DatabaseHandler extends Observable{
 			+ KEY_LATITUDE +" Double not null, " + KEY_IMAGEPATH + " String, " 
 			+ KEY_ALARM + " String, " + KEY_DATE + " String, " 
 			+ KEY_CATEGORY + " int, " + KEY_ADDRESS + " String);";
-
 	private Context context;
 	private DBHelper dbHelp;
 	private SQLiteDatabase db;
 	private static DatabaseHandler instance = null;
-
-	//Change this before upgrading the database
-	private static final int DATABASE_VERSION = 1;
 
 	/**
 	 * 
@@ -90,11 +85,9 @@ public class DatabaseHandler extends Observable{
 	}
 
 	private static class DBHelper extends SQLiteOpenHelper{
-		Context context;
 
 		DBHelper(Context con){
-			super(con, DB_NAME, null, DATABASE_VERSION);
-			this.context = con;
+			super(con, DATABASE_NAME, null, DATABASE_VERSION);
 		}
 
 		@Override
@@ -108,15 +101,12 @@ public class DatabaseHandler extends Observable{
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			DatabaseHandler dbHandler = DatabaseHandler.getInstance(this.context);
-			List<Note> backup = dbHandler.getNoteList();
 			try{
 				db.execSQL("drop table if exists " + TABLE_NOTE);
 			} catch(SQLException e){
 				Log.e("SQLException", "while upgrading database");
 			}
 			this.onCreate(db);
-			dbHandler.insertOldData(backup);
 		}
 	}
 
@@ -272,9 +262,9 @@ public class DatabaseHandler extends Observable{
 	 * Deletes all notes in the database
 	 */
 	public void deleteAllNotes(){
-		List<Note> nlist = this.getNoteList();
-		for(Note n: nlist)
-			this.deleteNote(n.getId());
+		this.open();
+		this.db.delete(TABLE_NOTE, null, null);
+		this.close();
 	}
 
 	/**
@@ -570,12 +560,6 @@ public class DatabaseHandler extends Observable{
 			}while(c.moveToNext());
 		}
 		return l;
-	}
-
-	private void insertOldData(List<Note> nlist){
-		for(Note n: nlist)
-			this.insertNote(n.getTitle(), n.getText(), n.getLocation(), 
-					n.getImagePath(), n.getAlarm(), n.getCategory(), n.getAddress());
 	}
 
 	private DatabaseHandler open() throws SQLException{
