@@ -29,5 +29,9 @@
     <string name="cleannotetext">Clean note text and title </string>
     <string name="cleannote">Clean note and snotebar</string>
     <string name="cleanlocation">Clean Location</string>
-    <string name="plingnote_settings">Plingnote Settings</string>   
+    <string name="plingnote_settings">Plingnote Settings</string> 
+    <string name="img_description_cancel_button">Cancel button</string>
+    <string name="img_description_confirm_button">Confirm button</string> 
+    <string name="date">Date:</string>
+    <string name="time">Time:</string>   
 </resources>

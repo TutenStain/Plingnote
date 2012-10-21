@@ -17,6 +17,7 @@
 package com.plingnote;
 
 import java.util.Calendar;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -27,8 +28,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -58,8 +59,8 @@ public class FragmentReminder extends Fragment implements PluginableFragment{
 	 */
 	public void onStart(){
 		super.onStart();
-		Button okey = (Button) this.view.findViewById(R.id.ok);
-		Button cancel = (Button) this.view.findViewById(R.id.cancel);
+		ImageButton okey = (ImageButton) this.view.findViewById(R.id.ok);
+		ImageButton cancel = (ImageButton) this.view.findViewById(R.id.cancel);
 
 		cancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {	  			

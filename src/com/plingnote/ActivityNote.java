@@ -273,15 +273,8 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public void onPause(){
 		super.onPause();
-		if(deleteNote == false){
-			if(!isNoteEmpty())
-				this.saveToDatabase();
-			else if(this.id != -1){
-				if(!(dbHandler.getNote(this.id).getAlarm().equals("")))
-					removeReminder();
-				dbHandler.deleteNote(this.id);
-			}
-		}
+		if(deleteNote == false)
+			this.saveToDatabase();
 	}
 	
 	/**
