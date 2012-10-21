@@ -46,8 +46,8 @@ public class LocationService extends Service implements LocationListener, Observ
 	private String provider;
 	private Criteria criteria;
 	private List<PendingIntent> pIntentList;
-	private static final long UPDATE_FREQUENCY_TIME = 1000 * 60; //milliseconds
-	private static final float UPDATE_FREQUENCY_DISTANCE = 10; //meters
+	private static final long UPDATE_FREQUENCY_TIME = 1000 * (60 * 3 + 50); //milliseconds
+	private static final float UPDATE_FREQUENCY_DISTANCE = 100; //meters
 	private static final int ALERT_RADIUS = 100; //meters
 
 	@Override
