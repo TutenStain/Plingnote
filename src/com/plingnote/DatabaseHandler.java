@@ -262,9 +262,9 @@ public class DatabaseHandler extends Observable{
 	 * Deletes all notes in the database
 	 */
 	public void deleteAllNotes(){
-		List<Note> nlist = this.getNoteList();
-		for(Note n: nlist)
-			this.deleteNote(n.getId());
+		this.open();
+		this.db.delete(TABLE_NOTE, null, null);
+		this.close();
 	}
 
 	/**
