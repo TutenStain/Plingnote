@@ -20,6 +20,12 @@ package com.plingnote;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.plingnote.R;
+import com.plingnote.R.drawable;
+import com.plingnote.R.id;
+import com.plingnote.R.layout;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Display;

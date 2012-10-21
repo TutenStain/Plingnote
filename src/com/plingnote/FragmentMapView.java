@@ -21,6 +21,7 @@ package com.plingnote;
  * @modifiedBy: Barnabas Sapan
  */
 
+
 import android.app.Activity;
 
 public class FragmentMapView extends ActivityHostFragment {

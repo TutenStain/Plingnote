@@ -17,7 +17,10 @@
 
 package com.plingnote;
 
+<<<<<<< HEAD
 import java.lang.reflect.Field;
+=======
+>>>>>>> Deleted unused images and changed the gridview so that it uses the category images that every other class uses.
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -47,6 +50,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.plingnote.R;
 /**
  * a public class that shows a list of notes in a gridview.
  * @author Magnus Huttu
@@ -137,12 +142,17 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 
 	public class ImageAdapter extends BaseAdapter {
+<<<<<<< HEAD
 		@SuppressWarnings("unused")
 		private final Context mContext;
 
 		public ImageAdapter(Context context) {
 			super();
 			this.mContext = context;
+=======
+		public ImageAdapter(Context context) {
+			super();
+>>>>>>> Deleted unused images and changed the gridview so that it uses the category images that every other class uses.
 		}
 
 		//@Override
@@ -221,6 +231,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		String category = note.getCategory().toString();
 		
 		if(category.equals(NoteCategory.Bank.toString())){
+<<<<<<< HEAD
 			this.imgIds.add(R.drawable.category_banking);	
 		} else if(category.equals(NoteCategory.Chat.toString())){
 			this.imgIds.add(R.drawable.category_chat);
@@ -234,6 +245,21 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			this.imgIds.add(R.drawable.category_shop);
 		} else{
 			this.imgIds.add(R.drawable.category_write);
+=======
+			imgIds.add(R.drawable.bank);	
+		} else if(category.equals(NoteCategory.Chat.toString())){
+			imgIds.add(R.drawable.chat);
+		} else if(category.equals(NoteCategory.Fun.toString())){
+			imgIds.add(R.drawable.fun);
+		} else if(category.equals(NoteCategory.Lunch.toString())){
+			imgIds.add(R.drawable.lunch);
+		} else if(category.equals(NoteCategory.Meeting.toString())){
+			imgIds.add(R.drawable.meeting);
+		} else if(category.equals(NoteCategory.Shop.toString())){
+			imgIds.add(R.drawable.shop);
+		} else{
+			imgIds.add(R.drawable.write);
+>>>>>>> Deleted unused images and changed the gridview so that it uses the category images that every other class uses.
 		}
 	}
 
