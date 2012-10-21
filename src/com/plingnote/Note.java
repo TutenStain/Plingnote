@@ -119,12 +119,21 @@ public class Note {
 	public NoteCategory getCategory(){
 		return this.category;
 	}
-	
+
 	/**
 	 * 
 	 * @return Address of this Note
 	 */
 	public String getAddress(){
 		return this.address;
+	}
+
+	/**
+	 * 
+	 * @return true if this note has longitude and latitude set to 0.0, false otherwise
+	 */
+	public boolean hasDefaultLocation(){
+		return this.location.getLongitude() == 0.0 
+				&& this.location.getLatitude() == 0.0;
 	}
 }
