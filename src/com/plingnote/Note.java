@@ -17,6 +17,7 @@
 
 package com.plingnote;
 
+
 /**
  * This class represents a note in the application
  * 
