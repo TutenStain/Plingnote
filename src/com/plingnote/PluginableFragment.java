@@ -16,6 +16,7 @@
 */
 package com.plingnote;
 
+
 /**
  * An interface representing the 
  * @author Julia Gustafsson

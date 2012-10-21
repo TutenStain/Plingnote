@@ -1,4 +1,3 @@
-package com.plingnote;
 /**
  * This file is part of Plingnote.
  * Copyright (C) 2012 Magnus Huttu
@@ -15,7 +14,10 @@ package com.plingnote;
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import java.io.File;
+
+package com.plingnote;
+
+import java.text.DateFormat.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -23,8 +25,7 @@ import java.util.Observer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -45,6 +47,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.plingnote.R;
 /**
  * a public class that shows a list of notes in a gridview.
  * @author Magnus Huttu
@@ -84,6 +88,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 	}
 
+	private List<Integer> imgIds = new ArrayList<Integer>();
+
 	/**
 	 * Creating the gridview layout.
 	 */
@@ -95,13 +101,13 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		abOn = false;
 
 		DatabaseHandler.getInstance(getActivity()).addObserver(this);
-
 		//Getting the database
 		db = DatabaseHandler.getInstance(getActivity());
 
 		//Creating the view based on orientation of the screen
 		final View grid;
-		if(getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
+		getResources().getConfiguration();
+		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
 			grid = inflater.inflate(R.layout.fragment_gridview, container, false); 
 		} else{
 			grid = inflater.inflate(R.layout.fragment_gridview_land, container, false); 
@@ -114,7 +120,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		gView.setOnItemClickListener(this);
 
 		// Make it possible for the user to select multiple items.
-		gView.setChoiceMode(gView.CHOICE_MODE_MULTIPLE_MODAL);
+		gView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
 		gView.setMultiChoiceModeListener(new LongPress());
 		layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -133,12 +139,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 
 	public class ImageAdapter extends BaseAdapter {
-		private final Context mContext;
-
-
 		public ImageAdapter(Context context) {
 			super();
-			mContext = context;
 		}
 
 		//@Override
@@ -179,7 +181,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			tvText.setText(notes.get(position).getText());
 
 			//Standard image set on icons
-			imgView.setBackgroundResource(R.drawable.category_write);
+			imgView.setBackgroundResource(imgIds.get(position));
 
 			if(abOn){
 				imgViewTop.setBackgroundColor(Color.TRANSPARENT);
@@ -199,10 +201,11 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 	 * Deletes all the notes in the list notes and then adds freshly from the database.
 	 */
 	public void refreshNotes(){
-		clearNotes();
+		this.clearNotes();
 
-		for(Note n : db.getNoteList()){
-			addNote(n);
+		this.imgIds.clear();
+		for(Note n : this.db.getNoteList()){
+			this.addNote(n);
 		}
 	}
 
@@ -212,13 +215,31 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 	 */
 	public void addNote(Note note){
 		notes.add(note);
+		
+		String category = note.getCategory().toString();
+		
+		if(category.equals(NoteCategory.Bank.toString())){
+			imgIds.add(R.drawable.bank);	
+		} else if(category.equals(NoteCategory.Chat.toString())){
+			imgIds.add(R.drawable.chat);
+		} else if(category.equals(NoteCategory.Fun.toString())){
+			imgIds.add(R.drawable.fun);
+		} else if(category.equals(NoteCategory.Lunch.toString())){
+			imgIds.add(R.drawable.lunch);
+		} else if(category.equals(NoteCategory.Meeting.toString())){
+			imgIds.add(R.drawable.meeting);
+		} else if(category.equals(NoteCategory.Shop.toString())){
+			imgIds.add(R.drawable.shop);
+		} else{
+			imgIds.add(R.drawable.write);
+		}
 	}
 
 	/**
 	 * Deletes all notes in the list notes.
 	 */
 	public void clearNotes(){
-		notes.clear();
+		this.notes.clear();
 	}
 
 	/**
@@ -229,7 +250,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 	}
 
 	//@Override
-	public void onItemClick(AdapterView parent, View v, int position, long id) {
+	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 		Intent editNote = new Intent(getActivity(), ActivityNote.class);
 
 		// Get the ID of the clicked note.
@@ -251,7 +272,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		// Walk through the notes and delete the checked ones.
 		for (int i = notes.size() - 1; i >= 0; i--) {
 			if (checkedItemPositions.get(i)) {
-				db.deleteNote(notes.get(i).getId());
+				this.db.deleteNote(notes.get(i).getId());
 			}
 		}
 		// Refresh the note list and the view
@@ -378,7 +399,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 	public void checkIfEmpty(){
 		if(notes.size() < 1){
-			if(getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
+			getResources().getConfiguration();
+			if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
 				gView.setBackgroundResource(R.drawable.empty_portrait);
 			} else{
 				gView.setBackgroundResource(R.drawable.empty_landscape);
@@ -388,5 +410,4 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			gView.setBackgroundColor(Color.BLACK);
 		}
 	}
-
 }

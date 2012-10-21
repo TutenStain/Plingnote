@@ -47,4 +47,5 @@ public class Utils {
 	 * The width of the gallery image
 	 */
 	public static final int SNOTEBAR_IMAGE_WIDTH = 120;
+
 }

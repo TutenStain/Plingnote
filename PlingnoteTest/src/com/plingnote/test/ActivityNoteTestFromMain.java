@@ -1,13 +1,15 @@
 package com.plingnote.test;
 
 import junit.framework.Assert;
+
+import com.plingnote.ActivityMain;
+import com.plingnote.ActivityMap;
+import com.plingnote.ActivityNote;
 import com.plingnote.R;
 import android.content.res.Configuration;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
 import com.jayway.android.robotium.solo.Solo;
-import com.plingnote.ActivityMain;
-import com.plingnote.ActivityNote;
 
 /**
  * Testing the activitynote from Activitymain
@@ -28,8 +30,6 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 	 * Test Activity note settings "Delete Note" the note and it's values should be deleted permanently
 	 */
 	public void testNoteSettingsDeleteNote(){ 
-		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activiy", ActivityMain.class);
 		//Open a new note
 		solo.clickOnView(solo.getView(R.id.add_new_note));
 		// Check that we have the right activity
@@ -44,8 +44,6 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 		//Click on settings
 		solo.clickOnImage(2);
 		solo.clickOnText("Delete this note");
-		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activiy", ActivityMain.class);
 		// Enter list view 
 		int width = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getWidth();
 		int height = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getHeight();
@@ -62,8 +60,6 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 	 * after going back to activity main and back to activtynote.
 	 */
 	public void testEditNoteTitle() {
-		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activiy", ActivityMain.class);
 		//Open a new note
 		solo.clickOnView(solo.getView(R.id.add_new_note));
 		// Check that we have the right activit
@@ -76,8 +72,6 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 		solo.enterText((EditText)solo.getView(R.id.notetitle), newNoteTitle);
 		//Go back to ActivityMain
 		solo.goBack();
-		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activiy", ActivityMain.class);
 		// Enter list view 
 		int width = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getWidth();
 		int height = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getHeight();
@@ -96,8 +90,6 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 	 * after going back to activity main and back to activtynote.
 	 */
 	public void testEditNoteText() {
-		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activiy", ActivityMain.class);
 		//Open a new note
 		solo.clickOnView(solo.getView(R.id.add_new_note));		
 		// Check that we have the right activity
@@ -110,8 +102,6 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 		solo.enterText((EditText)solo.getView(R.id.notetext), newNoteText);
 		//Go back to ActivityMain
 		solo.goBack();
-		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activiy", ActivityMain.class);
 		// Enter list view
 				int width = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getWidth();
 				int height = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getHeight();
@@ -129,8 +119,6 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 	 * Testing the go back button(the application icon) i ActivityNote
 	 */
 	public void testGoBackButton(){
-		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activiy", ActivityMain.class);
 		//Open a new note
 		solo.clickOnView(solo.getView(R.id.add_new_note));
 		// Check that we have the right activity
@@ -138,15 +126,13 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 		//The application image
 		solo.clickOnImage(1);
 		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activiy", ActivityMain.class);
+		solo.assertCurrentActivity("wrong activity", ActivityMap.class);
 	}
 
 	/**
 	 * Testing the add new note button works in ActivityMain by check if entering activitynote
 	 */
 	public void testAddNewNoteButton(){
-		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activiy", ActivityMain.class);
 		//Open a new note
 		solo.clickOnView(solo.getView(R.id.add_new_note));
 		// Check that we have the right activity

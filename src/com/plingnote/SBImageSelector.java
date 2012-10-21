@@ -17,6 +17,10 @@
 
 package com.plingnote;
 
+import com.plingnote.R;
+import com.plingnote.R.id;
+import com.plingnote.R.layout;
+
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;

@@ -1,12 +1,16 @@
 package com.plingnote.test;
 
+import junit.framework.Assert;
+
 import com.plingnote.ActivityMain;
+import com.plingnote.R.id;
 import com.jayway.android.robotium.solo.Solo;
 import android.test.ActivityInstrumentationTestCase2;
 
 public class TestGridviewFunctions extends
 ActivityInstrumentationTestCase2<ActivityMain> {
 	private Solo solo;
+	private String editText = "This text is edited";
 
 
 	public TestGridviewFunctions() {
@@ -29,8 +33,15 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.clickOnImage(5);
 		solo.clickOnImage(1);
 		solo.enterText(0, "Hello?");
-		solo.enterText(0, "\nyes, this is dog");
+		solo.sendKey(Solo.ENTER);
+		solo.enterText(1, "yes, this is dog");
 		solo.goBack();
+		solo.clickOnImage(1);
+		solo.enterText(0, "Hello?");
+		solo.sendKey(Solo.ENTER);
+		solo.enterText(1, "yes, this is dog");
+		solo.goBack();
+		Assert.assertEquals(4, solo.getCurrentImageViews(solo.getView(id.grid)).size());
 	}
 
 	//Tests if you can delete a note in gridview
@@ -38,18 +49,21 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.clickOnImage(5);
 		solo.clickLongOnScreen(150, 400);
 		solo.clickOnImage(1);
+		solo.clickOnImage(1);
+		solo.goBack();
+		Assert.assertEquals(2, solo.getCurrentImageViews(solo.getView(id.grid)).size());
 	}
 
 	//Tests if you can edit a note through gridview by first creating
 	//one and then editing it
 	public void test4EditNote(){
 		solo.clickOnImage(5);
-		solo.clickOnImage(1);
-		solo.enterText(0, "Hello?");
-		solo.enterText(0, "\nyes, this is dog");
+		solo.clickOnScreen(150, 400);
+		solo.clearEditText(1);
+		solo.enterText(1, editText);
 		solo.goBack();
 		solo.clickOnScreen(150, 400);
-		solo.enterText(0, "This text is edited");
+		Assert.assertEquals(editText, solo.getText(2).getEditableText().toString());
 		solo.goBack();
 	}
 
@@ -59,9 +73,11 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		for(int i = 1; i < 6; i++){
 			solo.clickOnImage(1);
 			solo.enterText(0, "Hello?"+i);
-			solo.enterText(0, "\nyes, this is dog");
+			solo.sendKey(Solo.ENTER);
+			solo.enterText(1, "yes, this is dog");
 			solo.goBack();
 		}
+		Assert.assertEquals(12, solo.getCurrentImageViews(solo.getView(id.grid)).size());
 		solo.clickLongOnScreen(350, 400);
 		solo.clickOnScreen(350, 500);
 		solo.clickOnScreen(150, 500);
@@ -70,11 +86,4 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.clickOnScreen(550, 500);
 		solo.clickOnImage(1);
 	}
-	
-	//Tests if you can swipe to the gridview
-	public void test6swipe(){
-		solo.drag(719, 1, 500, 500, 25);
-		solo.drag(719, 1, 500, 500, 25);
-	}
-
 }

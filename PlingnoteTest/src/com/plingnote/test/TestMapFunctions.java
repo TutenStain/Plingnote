@@ -1,5 +1,7 @@
 package com.plingnote.test;
 
+import junit.framework.Assert;
+
 import com.plingnote.ActivityMain;
 import com.jayway.android.robotium.solo.Solo;
 import android.test.ActivityInstrumentationTestCase2;
@@ -25,20 +27,30 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 	
 	//Tests if the map is scrollable
 	public void test2MapScroll(){
-		solo.drag(100, 500, 500, 500, 50);
-		solo.drag(100, 500, 500, 500, 50);
-		solo.drag(100, 500, 500, 500, 50);
-		solo.drag(100, 500, 500, 500, 50);
+		solo.drag(100, 500, 500, 500, 20);
+		solo.drag(100, 500, 500, 500, 20);
+		solo.drag(100, 500, 500, 500, 20);
+		solo.drag(100, 500, 500, 500, 20);
 	}
 	
-	//Tests if the map is zoomable
-	public void test3MapZoom(){
-		solo.clickOnScreen(500, 500);
-		solo.clickOnImageButton(1);
-		solo.clickOnImageButton(0);
+	
+	//Tests if you can create a new note in mapview
+	public void test3CreateNewNote(){
+		solo.clickLongOnScreen(300, 500);
+		solo.enterText(0, "Hello");
+		solo.sendKey(Solo.ENTER);
+		solo.enterText(1, "Yes this is dog");
+		solo.goBack();
+		solo.clickOnScreen(300, 500);
+		Assert.assertEquals("Yes this is dog", solo.getText(2).getEditableText().toString());
 	}
-
-
+	
+	//Tests if you can change tabs from mapview to another and then back.
+	public void test4ChangeViews(){
+		//solo.drag(100, solo., 500, 500, 20);
+		solo.drag(719, 500, 500, 500, 20);
+	}
+	
 	@Override
 	protected void tearDown() throws Exception {
 		solo.finishOpenedActivities();
