@@ -53,7 +53,7 @@ public class LocationService extends Service implements LocationListener, Observ
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId){
 		super.onStartCommand(intent, flags, startId);
-		this.locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		this.criteria = new Criteria();
 		this.criteria.setCostAllowed(true);
 		this.criteria.setAltitudeRequired(false);
@@ -83,7 +83,7 @@ public class LocationService extends Service implements LocationListener, Observ
 		if(data == DatabaseUpdate.NEW_NOTE)
 			this.addAlertToLast();
 	}
-	
+
 	/**
 	 * This method adds a proximity alert to the location associated to the argument note.
 	 * When the alert is triggered, an intent to start NoteNotification is fired.
@@ -92,8 +92,8 @@ public class LocationService extends Service implements LocationListener, Observ
 	 * @param n The note that needs an alert to be fired
 	 */
 	private void addAlert(Note n){
-		com.plingnote.Location loc = n.getLocation();
-		if(loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0){
+		if(!n.hasDefaultLocation()){
+			com.plingnote.Location loc = n.getLocation();
 			Intent intent = new Intent(this, NoteNotification.class);
 			intent.putExtra(IntentExtra.id.toString(), n.getId());
 			PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
@@ -102,7 +102,7 @@ public class LocationService extends Service implements LocationListener, Observ
 			this.pIntentList.add(pIntent);
 		}
 	}
-	
+
 	/**
 	 * Adds an alert to the location of the note most recently inserted to the database.
 	 */
@@ -111,7 +111,7 @@ public class LocationService extends Service implements LocationListener, Observ
 		Note n = dbHandler.getNote(dbHandler.getLastId());
 		this.addAlert(n);
 	}
-	
+
 	/**
 	 * Loops through the list of notes retrieved from the database to add alerts to their locations.
 	 */
