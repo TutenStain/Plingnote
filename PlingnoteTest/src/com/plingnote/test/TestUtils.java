@@ -3,7 +3,7 @@ package com.plingnote.test;
 import android.app.Activity;
 
 import com.jayway.android.robotium.solo.Solo;
-import com.plingnote.Utils;
+import com.plingnote.utils.Utils;
 
 public class TestUtils{
 

@@ -4,10 +4,10 @@ import junit.framework.Assert;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
-import com.plingnote.ActivityMain;
-import com.plingnote.DatabaseHandler;
 import com.plingnote.R;
-import com.plingnote.Utils;
+import com.plingnote.database.DatabaseHandler;
+import com.plingnote.main.ActivityMain;
+import com.plingnote.utils.Utils;
 
 /**
  * This test only works to a 100% if there are no notes applied to the application beforehand.

@@ -2,10 +2,11 @@ package com.plingnote.test;
 
 import junit.framework.Assert;
 
-import com.plingnote.ActivityMain;
-import com.plingnote.ActivityMap;
-import com.plingnote.ActivityNote;
 import com.plingnote.R;
+import com.plingnote.main.ActivityMain;
+import com.plingnote.main.ActivityNote;
+import com.plingnote.map.ActivityMap;
+
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
 import com.jayway.android.robotium.solo.Solo;

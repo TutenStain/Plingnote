@@ -2,9 +2,9 @@ package com.plingnote.test;
 
 import junit.framework.Assert;
 
-import com.plingnote.ActivityMain;
-import com.plingnote.DatabaseHandler;
-import com.plingnote.Utils;
+import com.plingnote.database.DatabaseHandler;
+import com.plingnote.main.ActivityMain;
+import com.plingnote.utils.Utils;
 import com.jayway.android.robotium.solo.Solo;
 import android.test.ActivityInstrumentationTestCase2;
 

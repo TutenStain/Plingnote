@@ -2,8 +2,9 @@ package com.plingnote.test;
 
 import junit.framework.Assert;
 
-import com.plingnote.ActivityNote;
 import com.plingnote.R;
+import com.plingnote.main.ActivityNote;
+
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.KeyEvent;
 import android.widget.EditText;
