@@ -266,6 +266,8 @@ public class DatabaseHandler extends Observable{
 		this.open();
 		this.db.delete(TABLE_NOTE, null, null);
 		this.close();
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.DELETED_NOTE);
 	}
 
 	/**
