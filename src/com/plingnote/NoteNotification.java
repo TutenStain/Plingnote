@@ -105,6 +105,7 @@ public class NoteNotification extends BroadcastReceiver  {
 		if(numUnreadMessages == 1)
 			builder.setContentText(message);
 		else{
+			
 			//If it's more than 1 unread note the user will se a text that says how many "unread" notes the user has
 			message = "You have " + numUnreadMessages + " reminders fired";
 			builder.setContentText(message);

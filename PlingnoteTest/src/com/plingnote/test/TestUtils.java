@@ -16,7 +16,7 @@ public class TestUtils{
 		solo.drag(Utils.getScreenPixels(activity).width() - 1, Utils
 				.getScreenPixels(activity).left + 50, Utils
 				.getScreenPixels(activity).exactCenterY(), Utils
-				.getScreenPixels(activity).exactCenterY(), 50);
+				.getScreenPixels(activity).exactCenterY(), 10);
 	}
 	
 
