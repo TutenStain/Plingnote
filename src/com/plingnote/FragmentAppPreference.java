@@ -71,7 +71,6 @@ public class FragmentAppPreference extends PreferenceFragment implements OnShare
 		}
 		
 		if(key.equals("resetAllNotes") && sharedPreferences.getBoolean(key, false)) {
-			Log.d("hej", "hej");
 			DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
 			
 			//Set the setting to false once we have cleared the search
