@@ -152,10 +152,7 @@ public class DatabaseHandler extends Observable{
 		cv.put(KEY_DATE, dateFormat.format(date));
 		cv.put(KEY_CATEGORY, ncat.ordinal());
 		cv.put(KEY_ADDRESS, adr);
-		if(alarm == "")
-			cv.put(KEY_REQUEST_CODE, -1);
-		else
-			cv.put(KEY_REQUEST_CODE, 0);
+		cv.put(KEY_REQUEST_CODE, -1);
 		this.open();
 		long tmp = this.db.insert(TABLE_NOTE, null, cv);
 		this.close();
@@ -328,8 +325,6 @@ public class DatabaseHandler extends Observable{
 		cv.put(KEY_ALARM, alarm);
 		cv.put(KEY_CATEGORY, ncat.ordinal());
 		cv.put(KEY_ADDRESS, adr);
-		if(alarm == "")
-			cv.put(KEY_REQUEST_CODE, -1);
 		this.open();
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
@@ -536,12 +531,16 @@ public class DatabaseHandler extends Observable{
 				+ TABLE_NOTE + " where " + ID + "='" + id + "'", null);
 	}
 
-	public Note getHighestRequest(){
+	/**
+	 * 
+	 * @return The highest request code in the database
+	 */
+	public int getHighestRequest(){
 		List<Note> nlist = this.getNoteList();
-		Note tmp = nlist.get(0);
+		int tmp = nlist.get(0).getRequestCode();
 		for(Note n: nlist)
-			if(n.getRequestCode() > tmp.getRequestCode())
-				tmp = n;
+			if(n.getRequestCode() > tmp)
+				tmp = n.getRequestCode();
 		return tmp;
 	}
 
