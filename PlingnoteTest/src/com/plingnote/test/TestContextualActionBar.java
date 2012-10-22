@@ -5,6 +5,8 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityMain;
+import com.plingnote.DatabaseHandler;
+import com.plingnote.R;
 import com.plingnote.Utils;
 
 /**
@@ -16,7 +18,7 @@ import com.plingnote.Utils;
  * 
  */
 public class TestContextualActionBar extends
-		ActivityInstrumentationTestCase2<ActivityMain> {
+ActivityInstrumentationTestCase2<ActivityMain> {
 	private Solo solo;
 
 	public TestContextualActionBar() {
@@ -32,6 +34,15 @@ public class TestContextualActionBar extends
 	public void test1DismissBar() {
 		// Enter list view
 		sweepToList();
+
+		// Add note to list view
+		for(int i = 0; i < 2; i++){
+			solo.clickOnView(solo.getView(R.id.add_new_note));
+			solo.enterText(0, "Hello"+i);
+			solo.sendKey(Solo.ENTER);
+			solo.enterText(1, "yes, this is dog");
+			solo.goBack();
+		}
 
 		// Long click on an item to bring up the contextual action bar
 		solo.clickLongInList(1);
@@ -70,7 +81,8 @@ public class TestContextualActionBar extends
 		Assert.assertTrue(solo.searchText("Select notes"));
 
 		// Click on remove button
-		solo.clickOnImage(1);
+		solo.clickOnScreen(Utils.getScreenPixels(getActivity()).right-1,
+				Utils.getScreenPixels(getActivity()).top+50);
 
 		Assert.assertFalse(solo.searchText("Select notes"));
 	}
@@ -88,21 +100,22 @@ public class TestContextualActionBar extends
 		solo.drag(Utils.getScreenPixels(getActivity()).left, Utils
 				.getScreenPixels(getActivity()).right - 50, Utils
 				.getScreenPixels(getActivity()).exactCenterY(), Utils
-				.getScreenPixels(getActivity()).exactCenterY(), 50);
+				.getScreenPixels(getActivity()).exactCenterY(), 10);
 
 		Assert.assertFalse(solo.searchText("Select notes"));
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotesInTestmode();
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 		solo.finishOpenedActivities();
 	}
-	
+
 	public void sweepToList() {
 		solo.drag(Utils.getScreenPixels(getActivity()).width() - 1, Utils
 				.getScreenPixels(getActivity()).left + 50, Utils
 				.getScreenPixels(getActivity()).exactCenterY(), Utils
-				.getScreenPixels(getActivity()).exactCenterY(), 50);
+				.getScreenPixels(getActivity()).exactCenterY(), 10);
 	}
 
 }

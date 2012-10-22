@@ -71,9 +71,6 @@ public class FragmentListView extends ListFragment implements Observer {
 
 		// Fill list with data from database
 		refreshNotes();
-		
-		// Update the adapter.
-		noteAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -179,8 +176,12 @@ public class FragmentListView extends ListFragment implements Observer {
 			this.addNote(n);
 		}
 
-		// Order notes after when they last were edited.
+		// Sort notes after when they last were edited.
 		Collections.sort(this.notes, new NoteComparator());
+
+		// Update the adapter.
+		this.noteAdapter.notifyDataSetChanged();
+
 	}
 
 	/**
@@ -260,8 +261,6 @@ public class FragmentListView extends ListFragment implements Observer {
 				// Data is changed, refresh list
 				this.refreshNotes();
 				
-				// Update the adapter.
-				noteAdapter.notifyDataSetChanged();
 			}
 		}
 	}
