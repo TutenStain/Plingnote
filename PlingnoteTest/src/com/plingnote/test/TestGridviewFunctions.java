@@ -5,8 +5,6 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityMain;
-import com.plingnote.ActivityNote;
-import com.plingnote.FragmentImageGridView;
 import com.plingnote.R;
 import com.plingnote.Utils;
 
