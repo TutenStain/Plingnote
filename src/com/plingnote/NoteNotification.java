@@ -48,7 +48,7 @@ public class NoteNotification extends BroadcastReceiver  {
 		notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		
 		//Cancel all previous notifications
-		notificationManager.cancelAll();
+		//notificationManager.cancelAll();
 		
 		//The number of unread messagesincreases
 		numUnreadMessages++;
@@ -112,7 +112,7 @@ public class NoteNotification extends BroadcastReceiver  {
 		}
 
 		Notification notification = builder.getNotification();
-		notificationManager.notify(intent.getExtras().getInt(IntentExtra.id.toString()), notification);
+		notificationManager.notify(0, notification);
 	}
 	
 	public static int getnumUnreadMessages() {
