@@ -38,26 +38,34 @@ public class NoteNotification extends BroadcastReceiver  {
 		Intent i = new Intent();
 		i.setClassName("com.plingnote", "com.plingnote.ActivityNote");
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		
 		//Setaction is needed to be set to something to make the intent open the right note.
-		i.setAction(Long.toString(System.currentTimeMillis()));     
-		try{
+		i.setAction(Long.toString(System.currentTimeMillis()));    
+		
+		try{			
 			i.putExtra(IntentExtra.id.toString(), intent.getExtras().getInt(IntentExtra.id.toString()));
 			i.putExtra(IntentExtra.reminderDone.toString(), true);
-			i.putExtra(IntentExtra.justId.toString(), true);
+			i.putExtra(IntentExtra.justId.toString(), true);	
 		}catch(Exception e){  	
 		}
+		
 		notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		
 		//Set the from which application the notifcation is
 		CharSequence from = "Plingnote";
+		
 		//Sets the message by by the title of the note the notification open
 		CharSequence message = "Open your note : " + DatabaseHandler.getInstance(context).getNote(intent.getExtras().getInt(IntentExtra.id.toString())).getTitle() + " !";
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, i,  PendingIntent.FLAG_ONE_SHOT);
-		Calendar canlender = Calendar.getInstance();
-	    canlender.setTimeInMillis(System.currentTimeMillis());
-	    canlender.add(Calendar.MILLISECOND, 1000);
-	    long TimeInMillised = canlender.getTimeInMillis();
-		Notification notification = new Notification(R.drawable.ic_launcher,"Check your note!",timeInMillised);
+		
+		//Getting the curren time
+		Calendar calender = Calendar.getInstance();
+	    calender.setTimeInMillis(System.currentTimeMillis());
+	    calender.add(Calendar.MILLISECOND, 1000);
+	    long timeInMillised = calender.getTimeInMillis();
+		Notification notification = new Notification(R.drawable.plingnote_icon2,"Check your note!",timeInMillised);
 		notification.setLatestEventInfo(context, from, message, contentIntent);
+		
 		//Sets sound and led settings
 		notification.defaults |= Notification.DEFAULT_SOUND; 
 		notification.flags |= Notification.FLAG_AUTO_CANCEL|Notification.FLAG_SHOW_LIGHTS; 
