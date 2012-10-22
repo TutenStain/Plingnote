@@ -28,6 +28,7 @@ public enum IntentExtra {
 	latitude("latitude"),
 	city("city"),
 	justId("justID"),
+	requestCode("requestCode");
 	;
 	private final String text;
 	private IntentExtra(final String text) {

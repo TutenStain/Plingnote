@@ -102,10 +102,21 @@ public class ActivityNote extends FragmentActivity {
 					if(this.id == -1){
 
 						//If an intent with id (that not is -1) the id will be setted here. Fetch values from the id.
-						if(getIntent().getExtras().getInt(IntentExtra.id.toString()) != -1)
+						if(getIntent().getExtras().getInt(IntentExtra.id.toString()) != -1){
 							this.id = getIntent().getExtras().getInt(IntentExtra.id.toString());
-
-
+						
+						//If not idExist in database the application will crash. With this check it doesn't crash 
+						//and open activitymain instead.
+						boolean idExist = false;
+						for(Note note :this.dbHandler.getNoteList()){
+							if(note.getId() == this.id)
+								idExist=true;
+						}
+						
+						if(!idExist)
+							this.finish();
+						}
+						
 						if(getIntent().getExtras().getBoolean(IntentExtra.reminderDone.toString()) == true)
 							this.dbHandler.updateAlarm(this.id, "");
 
@@ -277,9 +288,14 @@ public class ActivityNote extends FragmentActivity {
 	public void replaceFragmentBack(PluginableFragment fragment){
 		if(fragment.getValue() != null){
 			
-			if(fragment.getKind().equals(NoteExtra.REMINDER))
+			if(fragment.getKind().equals(NoteExtra.REMINDER)){
+				if(!(dbHandler.getNote(this.id).getAlarm().equals("")))
+					removeReminder();
 				this.dbHandler.updateAlarm(this.id, fragment.getValue());
+				this.dbHandler.updateRequestCode(this.id, fragment.getRequestCode());
+			}
 			
+				
 			if(fragment.getKind().equals(NoteExtra.IMAGE))
 				this.dbHandler.updateImagePath(this.id, fragment.getValue());
 			
@@ -304,15 +320,19 @@ public class ActivityNote extends FragmentActivity {
 	}
 
 	/**
-	 * This code must unfortunalty be in this class because if the fragmentReminder isn't
+	 * This code must be in this class because if the fragmentReminder isn't
 	 * replacing the snotebar, getActivity() in fragmentReminder will return null and you can't remove the alarm.
 	 */
 	public void removeReminder(){
+		if(!(dbHandler.getNote(this.id).getAlarm().equals(""))){
 		Intent intent = new Intent(this, NoteNotification.class);
-		intent.putExtra(IntentExtra.id.toString(),this.id); 
-		PendingIntent sender = PendingIntent.getBroadcast(this, 0,intent,PendingIntent.FLAG_ONE_SHOT);
+		intent.putExtra(IntentExtra.id.toString(),this.id);
+		int requestCode = this.dbHandler.getNote(this.id).getRequestCode();
+		intent.putExtra(IntentExtra.requestCode.toString(), requestCode);
+		PendingIntent sender = PendingIntent.getBroadcast(this, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
 		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		alarmManager.cancel(sender);
+		}
 	}
 
 	/**

@@ -59,7 +59,7 @@ public class NoteNotification extends BroadcastReceiver  {
 		
 		//Sets the message by by the title of the note the notification open
 		CharSequence message = "Open your note : " + DatabaseHandler.getInstance(context).getNote(intent.getExtras().getInt(IntentExtra.id.toString())).getTitle() + " !";
-		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, i,  PendingIntent.FLAG_ONE_SHOT);
+		PendingIntent contentIntent = PendingIntent.getActivity(context, intent.getExtras().getInt(IntentExtra.requestCode.toString()), i,  PendingIntent.FLAG_ONE_SHOT);
 		
 		//Getting the curren time
 		Calendar calender = Calendar.getInstance();

@@ -42,7 +42,8 @@ import android.widget.Toast;
 public class FragmentReminder extends Fragment implements PluginableFragment{
 	private View view;
 	private String value = "";
-	PendingIntent pendingIntent;
+	private PendingIntent pendingIntent;
+	private int requestCode;
 
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
@@ -91,8 +92,10 @@ public class FragmentReminder extends Fragment implements PluginableFragment{
 		
 		Intent intent = new Intent(getActivity(), NoteNotification.class);
 		ActivityNote activityNote = (ActivityNote)getActivity();
-		intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
-		pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
+		intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 	
+		requestCode = DatabaseHandler.getInstance(getActivity()).getHighestRequest() + 1;
+		intent.putExtra(IntentExtra.requestCode.toString(),requestCode); 
+		pendingIntent = PendingIntent.getBroadcast(getActivity(), requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
 		
 		Calendar calendar =  Calendar.getInstance();
 		calendar.set(datepicker.getYear(), datepicker.getMonth(),
@@ -111,6 +114,12 @@ public class FragmentReminder extends Fragment implements PluginableFragment{
 		return this.value;
 	}
 
+	/**
+	 * Return the value of this appliation
+	 */
+	public int getRequestCode() {
+		return this.requestCode;
+	}
 
 	/**
 	 * Return which kind of note extra this fragment is

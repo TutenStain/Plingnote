@@ -130,6 +130,14 @@ public class SBImageSelector extends Fragment implements LoaderManager.LoaderCal
 		return null;
 	}
 
+	/**
+	 * This class has not any requestcode
+	 */
+	public int getRequestCode() {
+
+		return -1;
+	}
+
 
 }
 

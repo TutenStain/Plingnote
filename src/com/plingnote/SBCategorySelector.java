@@ -143,6 +143,9 @@ public class SBCategorySelector extends Fragment implements PluginableFragment{
 			}
 	}
 
+	/**
+	 * This class has not any string value
+	 */
 	public String getValue() {
 		return "";
 	}
@@ -156,7 +159,17 @@ public class SBCategorySelector extends Fragment implements PluginableFragment{
 		activityNote.replaceFragmentBack(this);
 	}
 
+	/**
+	 * Returnthe category
+	 */
 	public NoteCategory getCategory() {
 		return noteCategory;
+	}
+
+	/**
+	 * This class has not any requestcode
+	 */
+	public int getRequestCode() {
+		return -1;
 	}
 }

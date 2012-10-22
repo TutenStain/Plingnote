@@ -25,6 +25,8 @@ public interface PluginableFragment {
 	
 	public String getValue();
 	
+	public int getRequestCode();
+	
 	public NoteCategory getCategory();
 	
 	public NoteExtra getKind();
