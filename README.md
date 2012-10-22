@@ -15,6 +15,13 @@ If it does not work, restart Eclipse and Clean again.
 
 How to run the application tests
 =========
+To run the tests you need ant installed on your system.
+
+Quickguide on getting ant up and running on Ubuntu.
+For other systems please refer to ant website.
+1. sudo apt-get install openjdk-7-jdk
+2. sudo apt-get install ant (not the ant1.7)
+
 Navigate to PlingnoteTest folder. Create a new file "local.properties" and
 paste the following to the newly created file "sdk.dir=YOUR_ROOT_ANDROID_SDK_PATH".
 Create a new folder inside PlingnoteTest called "libs" and put the Robotium test framework
