@@ -1,11 +1,15 @@
 package com.plingnote.test;
 
+import java.util.ArrayList;
+
 import junit.framework.Assert;
 
 import com.plingnote.ActivityMain;
 import com.plingnote.R.id;
 import com.jayway.android.robotium.solo.Solo;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
+
 
 public class TestGridviewFunctions extends
 ActivityInstrumentationTestCase2<ActivityMain> {
@@ -67,23 +71,9 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.goBack();
 	}
 
-	//Tests if you can select multiple notes and then delete them
-	public void test5DeleteMultipleNotes(){
-		solo.clickOnImage(5);
-		for(int i = 1; i < 6; i++){
-			solo.clickOnImage(1);
-			solo.enterText(0, "Hello?"+i);
-			solo.sendKey(Solo.ENTER);
-			solo.enterText(1, "yes, this is dog");
-			solo.goBack();
-		}
-		Assert.assertEquals(12, solo.getCurrentImageViews(solo.getView(id.grid)).size());
-		solo.clickLongOnScreen(350, 400);
-		solo.clickOnScreen(350, 500);
-		solo.clickOnScreen(150, 500);
-		solo.clickOnScreen(550, 400);
-		solo.clickOnScreen(150, 400);
-		solo.clickOnScreen(550, 500);
-		solo.clickOnImage(1);
+
+	@Override
+	protected void tearDown() throws Exception {
+		solo.finishOpenedActivities();
 	}
 }
