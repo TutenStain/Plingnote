@@ -351,7 +351,7 @@ public class DatabaseHandler extends Observable{
 		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
-
+	
 	/**
 	 * 
 	 * @param id Id of the note to update
@@ -565,8 +565,8 @@ public class DatabaseHandler extends Observable{
 	 */
 	public List<Note> search(String s){
 		this.open();
-		Cursor c = this.db.rawQuery("select " + ID + ", * from " + TABLE_NOTE 
-				+ " where " + TABLE_NOTE + " match '" + s + "*'", null);
+		Cursor c = this.db.rawQuery("select " + ID + ", * from " + TABLE_NOTE
+		+ " where " + TABLE_NOTE + " match '" + s + "*'", null);
 		List<Note> l = this.createNoteList(c);
 		this.close();
 		return l;
@@ -595,7 +595,7 @@ public class DatabaseHandler extends Observable{
 	}
 
 	private DatabaseHandler open() throws SQLException{
-		this.db = this.dbHelp.getWritableDatabase();
+			this.db = this.dbHelp.getWritableDatabase();
 		return this;
 	}
 
@@ -603,3 +603,4 @@ public class DatabaseHandler extends Observable{
 		this.db.close();
 	}
 }
+	

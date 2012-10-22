@@ -17,12 +17,11 @@
 
 package com.plingnote;
 
-
 /**
  * This class represents a note in the Plingnote application
  * 
  * @author David Grankvist
- *
+ * 
  */
 public class Note {
 	private int id;
@@ -38,12 +37,13 @@ public class Note {
 
 	/**
 	 * 
-	 * @param id Id of this Note
-	 * @param ti Title of this Note
-	 * @param txt Text of this Note
-	 * @param ncat Category of this Note
-	 * @param l Location of this Note
+	 * @param id Id of this Note          
+	 * @param ti Title of this Note         
+	 * @param txt Text of this Note       
+	 * @param ncat Category of this Note          	
+	 * @param l Location of this Note            
 	 * @param adr Address of this Note
+	 * @param rCode Request code of this Note
 	 */
 	public Note(int id, String ti, String txt, Location l, String path, 
 			String alarm, String date, NoteCategory ncat, String adr, int rCode){
@@ -63,14 +63,15 @@ public class Note {
 	 * 
 	 * @return Id of this Note
 	 */
-	public int getId(){
+	public int getId() {
 		return this.id;
 	}
+
 	/**
 	 * 
 	 * @return Title of this Note
 	 */
-	public String getTitle(){
+	public String getTitle() {
 		return this.title;
 	}
 
@@ -78,7 +79,7 @@ public class Note {
 	 * 
 	 * @return Text of this Note
 	 */
-	public String getText(){
+	public String getText() {
 		return this.text;
 	}
 
@@ -86,7 +87,7 @@ public class Note {
 	 * 
 	 * @return Location of this Note
 	 */
-	public Location getLocation(){
+	public Location getLocation() {
 		return this.location;
 	}
 
@@ -94,7 +95,7 @@ public class Note {
 	 * 
 	 * @return Image path of the image representing this Note
 	 */
-	public String getImagePath(){
+	public String getImagePath() {
 		return this.imagePath;
 	}
 
@@ -102,7 +103,7 @@ public class Note {
 	 * 
 	 * @return Date and time when the alarm of this Note will trigger
 	 */
-	public String getAlarm(){
+	public String getAlarm() {
 		return this.alarm;
 	}
 
@@ -110,15 +111,16 @@ public class Note {
 	 * 
 	 * @return Date and time of which this Note was created
 	 */
-	public String getDate(){
+	public String getDate() {
 		return this.date;
 	}
+
 
 	/**
 	 * 
 	 * @return Category of this Note as an enum
 	 */
-	public NoteCategory getCategory(){
+	public NoteCategory getCategory() {
 		return this.category;
 	}
 
@@ -126,7 +128,7 @@ public class Note {
 	 * 
 	 * @return Address of this Note
 	 */
-	public String getAddress(){
+	public String getAddress() {
 		return this.address;
 	}
 	
