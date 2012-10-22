@@ -1,6 +1,21 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-</RelativeLayout>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never" 
+        android:title="@string/menu_settings" />
+    <item
+        android:id="@+id/add_new_note"
+        android:icon="@android:drawable/ic_menu_add"
+ 		android:onClick="addNewNote"
+        android:showAsAction="always"/>
+    <item 
+        android:id="@+id/search"
+        android:title="@string/search_hint"
+        android:icon="@android:drawable/ic_menu_search"
+        android:showAsAction="ifRoom|collapseActionView"
+    	android:actionViewClass="android.widget.SearchView" />
+
+</menu>
 

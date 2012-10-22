@@ -1,12 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   android:layout_width="fill_parent"
-   android:layout_height="fill_parent"
-   android:orientation="vertical" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-   <ImageView
-       android:id="@+id/imageViewMap"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:src="@drawable/ic_launcher"/>
-</LinearLayout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <com.google.android.maps.MapView
+            android:id="@+id/mapview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:apiKey="@string/maps_api_key"
+            android:clickable="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/button_layout_mapoverlay"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp" >
+
+        <ImageButton
+            android:id="@+id/button_find_my_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#50505050"
+            android:onClick="click"
+            android:contentDescription="@string/cont_descr_compass_button"
+            android:src="@android:drawable/ic_menu_mylocation" >
+        </ImageButton>
+    
+    </LinearLayout>
+    
+    
+    <LinearLayout
+        android:id="@+id/button_layout_mapoverlay2"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp" >
+
+        <ImageButton
+            android:id="@+id/button_fit_note_markers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#50505050"
+            android:onClick="click"
+            android:contentDescription="@string/cont_descr_fit_notes"
+            android:src="@android:drawable/ic_menu_zoom" >
+        </ImageButton>
+    
+    </LinearLayout>
+
+</RelativeLayout>
