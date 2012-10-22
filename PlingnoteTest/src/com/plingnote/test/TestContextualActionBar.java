@@ -5,7 +5,9 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityMain;
+import com.plingnote.DatabaseHandler;
 import com.plingnote.Utils;
+import com.plingnote.R;
 
 /**
  * Class testing the behavior of the contextual action bar. The action bar has a
@@ -30,6 +32,12 @@ public class TestContextualActionBar extends
 	}
 
 	public void test1DismissBar() {
+		// Delete existing notes
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
+		
+		// Add note to database
+		DatabaseHandler.getInstance(getActivity()).insertNote("This is a note", "Here's the text", null, null, null, null, null);
+		
 		// Enter list view
 		sweepToList();
 
@@ -70,8 +78,8 @@ public class TestContextualActionBar extends
 		Assert.assertTrue(solo.searchText("Select notes"));
 
 		// Click on remove button
-		solo.clickOnImage(1);
-
+		getInstrumentation().invokeMenuActionSync(getActivity(), R.id.remove, 0);
+	
 		Assert.assertFalse(solo.searchText("Select notes"));
 	}
 

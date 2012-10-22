@@ -5,13 +5,13 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityMain;
+import com.plingnote.DatabaseHandler;
 import com.plingnote.Utils;
 
 /**
  * Testing the connection between the edit and list view. When a note is edited,
  * the list should be updated. Pressing the edited note again should result in
- * the new text being showed in the edit view. Requires that the database
- * contains at least one note.
+ * the new text being showed in the edit view.
  * 
  * @author Linus Karlsson
  * 
@@ -31,6 +31,13 @@ public class TestEditNote extends
 	}
 
 	public void testEditNote() {
+		// Delete existing notes
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
+
+		// Add note to database
+		DatabaseHandler.getInstance(getActivity()).insertNote("This is a note",
+				"Here's the text", null, null, null, null, null);
+
 		// Enter list view and select a note
 		sweepToList();
 		solo.clickInList(1);
@@ -45,6 +52,10 @@ public class TestEditNote extends
 		// Click on the same item again and make sure it's the same
 		solo.clickInList(1);
 		Assert.assertTrue(solo.searchText(newNote));
+		
+		// Delete existing note
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
+		
 
 	}
 
@@ -52,7 +63,7 @@ public class TestEditNote extends
 	protected void tearDown() throws Exception {
 		solo.finishOpenedActivities();
 	}
-	
+
 	public void sweepToList() {
 		solo.drag(Utils.getScreenPixels(getActivity()).width() - 1, Utils
 				.getScreenPixels(getActivity()).left + 50, Utils
