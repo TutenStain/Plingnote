@@ -56,13 +56,15 @@ public class DatabaseHandler extends Observable{
 	private static final String KEY_DATE = "Date";
 	private static final String KEY_CATEGORY = "Category";
 	private static final String KEY_ADDRESS = "Address";
+	private static final String KEY_REQUEST_CODE = "RequestCode";
 	// SQL statement to create Note table using fts3
 	private static final String CREATE_FTS_TABLE = "create virtual table " 
 			+ TABLE_NOTE + " using fts3("+ KEY_TITLE + " String, " 
 			+ KEY_TEXT + " String, " + KEY_LONGITUDE +" Double not null, "
 			+ KEY_LATITUDE +" Double not null, " + KEY_IMAGEPATH + " String, " 
 			+ KEY_ALARM + " String, " + KEY_DATE + " String, " 
-			+ KEY_CATEGORY + " int, " + KEY_ADDRESS + " String);";
+			+ KEY_CATEGORY + " int, " + KEY_ADDRESS + " String, " 
+			+ KEY_REQUEST_CODE + " int);";
 	private Context context;
 	private DBHelper dbHelp;
 	private SQLiteDatabase db;
@@ -150,6 +152,10 @@ public class DatabaseHandler extends Observable{
 		cv.put(KEY_DATE, dateFormat.format(date));
 		cv.put(KEY_CATEGORY, ncat.ordinal());
 		cv.put(KEY_ADDRESS, adr);
+		if(alarm == "")
+			cv.put(KEY_REQUEST_CODE, -1);
+		else
+			cv.put(KEY_REQUEST_CODE, 0);
 		this.open();
 		long tmp = this.db.insert(TABLE_NOTE, null, cv);
 		this.close();
@@ -179,8 +185,6 @@ public class DatabaseHandler extends Observable{
 	 */
 	public boolean deleteTitle(int id){
 		boolean b = this.updateTitle(id, "");
-		this.setChanged();
-		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
 
@@ -191,8 +195,6 @@ public class DatabaseHandler extends Observable{
 	 */
 	public boolean deleteText(int id){
 		boolean b = this.updateTitle(id, "");
-		this.setChanged();
-		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
 
@@ -204,8 +206,6 @@ public class DatabaseHandler extends Observable{
 	 */
 	public boolean deleteLocation(int id){
 		boolean b = this.updateLocation(id, new Location(0.0, 0.0));
-		this.setChanged();
-		this.notifyObservers(DatabaseUpdate.UPDATED_LOCATION);
 		return b;
 	}
 
@@ -216,8 +216,6 @@ public class DatabaseHandler extends Observable{
 	 */
 	public boolean deleteImagePath(int id){
 		boolean b = this.updateImagePath(id, "");
-		this.setChanged();
-		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
 
@@ -228,8 +226,6 @@ public class DatabaseHandler extends Observable{
 	 */
 	public boolean deleteAlarm(int id){
 		boolean b = this.updateAlarm(id, "");
-		this.setChanged();
-		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
 
@@ -242,8 +238,6 @@ public class DatabaseHandler extends Observable{
 	 */
 	public boolean deleteCategory(int id){
 		boolean b = this.updateCategory(id, NoteCategory.NO_CATEGORY);
-		this.setChanged();
-		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
 
@@ -254,10 +248,20 @@ public class DatabaseHandler extends Observable{
 	 */
 	public boolean deleteAddress(int id){
 		boolean b = this.updateAddress(id, "");
-		this.setChanged();
-		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
 	}
+
+	/**
+	 * Sets the request code to -1 rather than deleting it
+	 * 
+	 * @param id Id of the note to delete the request code from
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean deleteRequestCode(int id){
+		boolean b = this.updateRequestCode(id, -1);
+		return b;
+	}
+
 	/**
 	 * Deletes all notes in the database
 	 */
@@ -282,7 +286,7 @@ public class DatabaseHandler extends Observable{
 	private Cursor getAllNotes(){
 		return this.db.query(TABLE_NOTE, new String[]{ ID, KEY_TITLE, KEY_TEXT,
 				KEY_LONGITUDE, KEY_LATITUDE, KEY_IMAGEPATH, 
-				KEY_ALARM, KEY_DATE, KEY_CATEGORY, KEY_ADDRESS },
+				KEY_ALARM, KEY_DATE, KEY_CATEGORY, KEY_ADDRESS, KEY_REQUEST_CODE },
 				null, null,null, null, null);
 	}
 
@@ -324,6 +328,8 @@ public class DatabaseHandler extends Observable{
 		cv.put(KEY_ALARM, alarm);
 		cv.put(KEY_CATEGORY, ncat.ordinal());
 		cv.put(KEY_ADDRESS, adr);
+		if(alarm == "")
+			cv.put(KEY_REQUEST_CODE, -1);
 		this.open();
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
@@ -482,7 +488,23 @@ public class DatabaseHandler extends Observable{
 		this.setChanged();
 		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
 		return b;
+	}
 
+	/**
+	 * 
+	 * @param id Id of the note which request code will be updated
+	 * @param adr The request code to update to
+	 * @return true if database was updated, false otherwise
+	 */
+	public boolean updateRequestCode(int id, int rCode){
+		ContentValues cv = new ContentValues();
+		cv.put(KEY_REQUEST_CODE, rCode);
+		this.open();
+		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
+		this.close();
+		this.setChanged();
+		this.notifyObservers(DatabaseUpdate.UPDATED_NOTE);
+		return b;
 	}
 	/**
 	 * 
@@ -502,8 +524,9 @@ public class DatabaseHandler extends Observable{
 		String date = c.getString(7);
 		NoteCategory ncat = NoteCategory.values()[c.getInt(8)];
 		String address = c.getString(9);
+		int requestCode = c.getInt(10);
 		Note n = new Note(id, title, text, new Location(longitude, latitude), 
-				imagePath, alarm, date, ncat, address);
+				imagePath, alarm, date, ncat, address, requestCode);
 		this.close();
 		return n;
 	}
@@ -511,6 +534,15 @@ public class DatabaseHandler extends Observable{
 	private Cursor findNoteById(int id){
 		return this.db.rawQuery("select " + ID + ", * from " 
 				+ TABLE_NOTE + " where " + ID + "='" + id + "'", null);
+	}
+
+	public Note getHighestRequest(){
+		List<Note> nlist = this.getNoteList();
+		Note tmp = nlist.get(0);
+		for(Note n: nlist)
+			if(n.getRequestCode() > tmp.getRequestCode())
+				tmp = n;
+		return tmp;
 	}
 
 	/**
@@ -555,8 +587,9 @@ public class DatabaseHandler extends Observable{
 				String date = c.getString(7);
 				NoteCategory ncat = NoteCategory.values()[c.getInt(8)];
 				String address = c.getString(9);
+				int requestCode = c.getInt(10);
 				l.add(new Note(id, title, text, new Location(longitude, latitude), 
-						imagePath, alarm, date, ncat, address));
+						imagePath, alarm, date, ncat, address, requestCode));
 			}while(c.moveToNext());
 		}
 		return l;

@@ -19,7 +19,7 @@ package com.plingnote;
 
 
 /**
- * This class represents a note in the application
+ * This class represents a note in the Plingnote application
  * 
  * @author David Grankvist
  *
@@ -34,6 +34,7 @@ public class Note {
 	private String date;
 	private NoteCategory category;
 	private String address;
+	private int requestCode;
 
 	/**
 	 * 
@@ -45,7 +46,7 @@ public class Note {
 	 * @param adr Address of this Note
 	 */
 	public Note(int id, String ti, String txt, Location l, String path, 
-			String alarm, String date, NoteCategory ncat, String adr){
+			String alarm, String date, NoteCategory ncat, String adr, int rCode){
 		this.id = id;
 		this.title = ti;
 		this.text = txt;
@@ -55,6 +56,7 @@ public class Note {
 		this.date = date;
 		this.category = ncat;
 		this.address = adr;
+		this.requestCode = rCode;
 	}
 
 	/**
@@ -127,10 +129,18 @@ public class Note {
 	public String getAddress(){
 		return this.address;
 	}
+	
+	/**
+	 * 
+	 * @return Request code of this Note
+	 */
+	public int getRequestCode(){
+		return this.requestCode;
+	}
 
 	/**
 	 * 
-	 * @return true if this note has longitude and latitude set to 0.0, false otherwise
+	 * @return true if this Note has longitude and latitude set to 0.0, false otherwise
 	 */
 	public boolean hasDefaultLocation(){
 		return this.location.getLongitude() == 0.0 
