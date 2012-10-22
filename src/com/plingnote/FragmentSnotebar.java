@@ -105,28 +105,26 @@ public class FragmentSnotebar extends Fragment {
 	 */
 	public void addIcontoList(){
 		if(this.id == -1){
-			icons.add(new IconView(getActivity(), "", Utils.reminderString, new FragmentReminder()));
-			icons.add(new IconView(getActivity(), "", Utils.imageString, new SBImageSelector()));
-			icons.add(new IconView(getActivity(), "", Utils.categoryString, new SBCategorySelector()));
+			icons.add(new IconView(getActivity(), "", Utils.reminderString, new FragmentReminder(),R.drawable.plingnote_alarm));
+			icons.add(new IconView(getActivity(), "", Utils.imageString, new SBImageSelector(),R.drawable.ic_image_icon));
+			icons.add(new IconView(getActivity(), "", Utils.categoryString, new SBCategorySelector(),R.drawable.category_chat));
 		}else{
 			//Check if id is set,then it is information to fetch from database else there is no information
-			if(this.dbHandler.getNote(this.id).getAlarm() != null 
-				|| !(this.dbHandler.getNote(this.id).getAlarm().equals(""))){
-				icons.add(new IconView(getActivity(), this.dbHandler.getNote(id).getAlarm(), Utils.reminderString, new  FragmentReminder()));					
+			if(!(this.dbHandler.getNote(this.id).getAlarm().equals(""))){
+				icons.add(new IconView(getActivity(), this.dbHandler.getNote(id).getAlarm(), Utils.reminderString, new  FragmentReminder(),R.drawable.plingnote_alarm));					
 			}else{
-				icons.add(new IconView(getActivity(),"", Utils.reminderString, new FragmentReminder()));
+				icons.add(new IconView(getActivity(),"", Utils.reminderString, new FragmentReminder(),R.drawable.plingnote_alarm));
 			}
-			if(this.dbHandler.getNote(this.id).getImagePath() != null 
-			|| !(this.dbHandler.getNote(this.id).getImagePath().equals(""))){
+			if(!(this.dbHandler.getNote(this.id).getImagePath().equals(""))){
 				icons.add(new IconView(getActivity(), "", Utils.imageString, new SBImageSelector(), this.dbHandler.getNote(this.id).getImagePath()));					
 			}else{
-				icons.add(new IconView(getActivity(),"", Utils.imageString, new SBImageSelector()));
+				icons.add(new IconView(getActivity(),"", Utils.imageString, new SBImageSelector(),R.drawable.ic_image_icon));
 			}
 			if(this.dbHandler.getNote(id).getCategory() != NoteCategory.NO_CATEGORY){
 				icons.add(new IconView(getActivity(), this.dbHandler.getNote(id).getCategory().toString(), Utils.categoryString,
 						new SBCategorySelector(), Utils.getDrawable(this.dbHandler.getNote(id).getCategory())));					
 			}else{
-				icons.add(new IconView(getActivity(), "", Utils.categoryString, new SBCategorySelector()));
+				icons.add(new IconView(getActivity(), "", Utils.categoryString, new SBCategorySelector(),R.drawable.category_chat));
 			}
 		}
 	}
