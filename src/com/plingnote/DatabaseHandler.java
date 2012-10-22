@@ -270,6 +270,17 @@ public class DatabaseHandler extends Observable{
 		this.notifyObservers(DatabaseUpdate.DELETED_NOTE);
 	}
 
+
+	/**
+	 * Deletes all notes in the database
+	 * but does not notify observers
+	 */
+	public void deleteAllNotesInTestmode(){
+		this.open();
+		this.db.delete(TABLE_NOTE, null, null);
+		this.close();
+	}
+
 	/**
 	 * 
 	 * @return All data in the note table represented as a list of Note objects
