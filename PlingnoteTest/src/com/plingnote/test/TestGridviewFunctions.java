@@ -92,9 +92,6 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.enterText(1, editText);
 		solo.goBack();
 		Assert.assertTrue(solo.searchText(editText));
-		solo.pressMenuItem(0);
-		solo.clickOnText("Delete All Notes");
-		solo.clickOnButton(1);
 		solo.goBack();
 		solo.drag(left, right-1, centerY, centerY, 25);
 		solo.drag(left, right-1, centerY, centerY, 25);
