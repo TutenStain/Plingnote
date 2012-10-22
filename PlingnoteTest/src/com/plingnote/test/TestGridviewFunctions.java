@@ -2,6 +2,7 @@ package com.plingnote.test;
 
 import junit.framework.Assert;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityMain;
@@ -39,8 +40,8 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		left = Utils.getScreenPixels(getActivity()).left;
 		right = Utils.getScreenPixels(getActivity()).right;
 		centerY = Utils.getScreenPixels(getActivity()).bottom/2;
-		solo.drag(right-1, left+50 , centerY, centerY, 50);
-		solo.drag(right-1, left+50 , centerY, centerY, 50);
+		solo.drag(right-1, left+25 , centerY, centerY, 25);
+		solo.drag(right-1, left+25 , centerY, centerY, 25);
 		solo.assertCurrentActivity("right activity", ActivityMain.class);
 	}
 	
@@ -59,8 +60,8 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.sendKey(Solo.ENTER);
 		solo.enterText(1, "yes, this is dog");
 		solo.goBack();
-		solo.drag(right-1, left+50 , centerY, centerY, 50);
-		solo.drag(right-1, left+50 , centerY, centerY, 50);
+		solo.drag(right-1, left+25 , centerY, centerY, 25);
+		solo.drag(right-1, left+25 , centerY, centerY, 25);
 		Assert.assertEquals(4, solo.getCurrentImageViews(solo.getView(R.id.grid)).size());
 	}
 
@@ -69,11 +70,10 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		left = Utils.getScreenPixels(getActivity()).left;
 		right = Utils.getScreenPixels(getActivity()).right;
 		centerY = Utils.getScreenPixels(getActivity()).bottom/2;
-		solo.drag(right-1, left+50 , centerY, centerY, 50);
-		solo.drag(right-1, left+50 , centerY, centerY, 50);
-		solo.clickLongOnScreen(left+100, 350);
-		solo.clickOnImage(1);
-		solo.clickOnView(solo.getView(R.id.add_new_note));
+		solo.drag(right-1, left+25 , centerY, centerY, 25);
+		solo.drag(right-1, left+25 , centerY, centerY, 25);
+		solo.clickLongOnScreen(left+100, 325);
+		solo.clickOnScreen(right-1, Utils.getScreenPixels(getActivity()).top+50);
 		solo.goBack();
 		Assert.assertEquals(2, solo.getCurrentImageViews(solo.getView(R.id.grid)).size());
 	}
@@ -85,13 +85,21 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		left = Utils.getScreenPixels(getActivity()).left;
 		right = Utils.getScreenPixels(getActivity()).right;
 		centerY = Utils.getScreenPixels(getActivity()).bottom/2;
-		solo.drag(right-1, left+50 , centerY, centerY, 50);
-		solo.drag(right-1, left+50 , centerY, centerY, 50);
-		solo.clickOnScreen(left+100, 350);
+		solo.drag(right-1, left+25 , centerY, centerY, 25);
+		solo.drag(right-1, left+25 , centerY, centerY, 25);
+		solo.clickOnScreen(left+100, 325);
 		solo.clearEditText(1);
 		solo.enterText(1, editText);
 		solo.goBack();
 		Assert.assertTrue(solo.searchText(editText));
+		solo.pressMenuItem(0);
+		solo.clickOnText("Delete All Notes");
+		solo.clickOnButton(1);
+		solo.goBack();
+		solo.drag(left, right-1, centerY, centerY, 25);
+		solo.drag(left, right-1, centerY, centerY, 25);
+		solo.drag(right-1, left+25 , centerY, centerY, 25);
+		solo.drag(right-1, left+25 , centerY, centerY, 25);
 	}
 
 	@Override
