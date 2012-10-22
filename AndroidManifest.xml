@@ -22,7 +22,7 @@
                    android:value=".search.ActivitySearch" />
         <provider android:name=".search.SearchSuggestionsRecentProvider"
               android:exported="false" 
-              android:authorities="com.plingnote.SearchSuggestionsRecentProvider" />
+              android:authorities="com.plingnote.search.SearchSuggestionsRecentProvider" />
          
         <activity
             android:name=".main.ActivityMain"

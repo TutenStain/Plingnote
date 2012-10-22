@@ -78,6 +78,8 @@ public class FragmentListView extends ListFragment implements Observer {
 
 		// Fill list with data from database
 		refreshNotes();
+		
+		noteAdapter.notifyDataSetChanged();
 	}
 
 	@Override
