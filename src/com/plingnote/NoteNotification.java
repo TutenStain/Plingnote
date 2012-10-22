@@ -24,6 +24,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 /**
  * A class representing a noticfication that open a specifik note. With sound and led on.
@@ -34,6 +35,7 @@ public class NoteNotification extends BroadcastReceiver  {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		
 		//Start activity with the right id.
 		Intent i = new Intent();
 		i.setClassName("com.plingnote", "com.plingnote.ActivityNote");
@@ -47,6 +49,7 @@ public class NoteNotification extends BroadcastReceiver  {
 			i.putExtra(IntentExtra.reminderDone.toString(), true);
 			i.putExtra(IntentExtra.justId.toString(), true);	
 		}catch(Exception e){  	
+			Log.i("Catched Exception", "Intent is not send to the class");
 		}
 		
 		notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
