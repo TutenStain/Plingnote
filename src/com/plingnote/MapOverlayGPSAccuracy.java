@@ -39,7 +39,6 @@ public class MapOverlayGPSAccuracy extends Overlay implements UpdatableOverlay {
 		if(location != null)
 			this.radius = location.getAccuracy();
 	
-
 		this.outerCircle = new Paint();
 		this.outerCircle.setARGB(20, 0, 0, 255);
 		this.outerCircle.setStrokeWidth(2);

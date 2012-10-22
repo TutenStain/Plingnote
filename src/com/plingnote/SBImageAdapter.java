@@ -45,7 +45,7 @@ public class SBImageAdapter extends BaseAdapter {
 	}
 
 	public int getCount() {
-		return cursor.getCount();
+		return this.cursor.getCount();
 	}
 
 	public Object getItem(int position) {
@@ -60,14 +60,15 @@ public class SBImageAdapter extends BaseAdapter {
 		ImageView view = (ImageView) convertView;
 
 		if (view == null) {
-			view = new ImageView(context.getApplicationContext());
-			view.setImageBitmap(images[position]);
+			view = new ImageView(this.context.getApplicationContext());
+			view.setImageBitmap(this.images[position]);
 			
 			// Set size on gallery images
 			view.setLayoutParams(new Gallery.LayoutParams(
-					SBImageSelector.IMAGE_WIDTH, SBImageSelector.IMAGE_WIDTH));
+					Utils.SNOTEBAR_IMAGE_WIDTH, Utils.SNOTEBAR_IMAGE_WIDTH));
 		} else {
-			view.setImageBitmap(images[position]);
+			// Place bitmaps in Image View.
+			view.setImageBitmap(this.images[position]);
 		}
 
 		return view;

@@ -53,8 +53,8 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 
 	//Tests if you can change tabs from mapview to another and then back.
 	public void test4ChangeViews(){
-		solo.drag(right-1, left+50 , centerY, centerY, 50);
-		solo.drag(left, right-50, centerY, centerY, 50);
+		solo.drag(right - 1, left + 50 , centerY, centerY, 50);
+		solo.drag(left, right - 50, centerY, centerY, 50);
 	}
 
 	//Tests if you can edit an existing note

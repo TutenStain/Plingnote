@@ -17,7 +17,7 @@
 
 package com.plingnote;
 
-import java.text.DateFormat.Field;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -47,8 +47,6 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.plingnote.R;
 /**
  * a public class that shows a list of notes in a gridview.
  * @author Magnus Huttu

@@ -16,14 +16,12 @@
 
 package com.plingnote;
 
+import android.app.Activity;
+
 /**
  * A fragment containing a MapActivity
  * @modifiedBy: Barnabas Sapan
  */
-
-
-import android.app.Activity;
-
 public class FragmentMapView extends ActivityHostFragment {
 	@Override
 	protected Class<? extends Activity> getActivityClass() {

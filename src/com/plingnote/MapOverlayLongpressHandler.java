@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Handler;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -131,8 +130,8 @@ public class MapOverlayLongpressHandler extends Overlay implements OnMapViewLong
 	private void handleLongpress(final MotionEvent event) {
 		//A press gesture have started
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			timerLongpress = new Timer();
-			timerLongpress.schedule(new TimerTask() {
+			this.timerLongpress = new Timer();
+			this.timerLongpress.schedule(new TimerTask() {
 				@Override
 				public void run() {
 					handler.post(new Runnable() {
@@ -146,21 +145,20 @@ public class MapOverlayLongpressHandler extends Overlay implements OnMapViewLong
 			mapCenterLast = map.getMapCenter();
 		}
 
-
 		//User moved the finger, no long press action
 		if (event.getAction() == MotionEvent.ACTION_MOVE) {
-			if (map.getMapCenter().equals(mapCenterLast) == false)
-				timerLongpress.cancel();
+			if (this.map.getMapCenter().equals(this.mapCenterLast) == false)
+				this.timerLongpress.cancel();
 
-			mapCenterLast = map.getMapCenter();
+			this.mapCenterLast = this.map.getMapCenter();
 		}
 
 		//User removed the finger, no long press action
 		if (event.getAction() == MotionEvent.ACTION_UP)
-			timerLongpress.cancel();
+			this.timerLongpress.cancel();
 
 		//User have more then 1 finger on screen, no long press action
 		if (event.getPointerCount() > 1)
-			timerLongpress.cancel();
+			this.timerLongpress.cancel();
 	}
 }

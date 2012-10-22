@@ -11,12 +11,23 @@
             android:dialogMessage="Are you sure you wish to reset your search history? This action cannot be undone!"
             android:positiveButtonText="Clear History"
             android:negativeButtonText="Cancel"/>
-    </PreferenceCategory>   
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Notes">
+    	<com.plingnote.PreferenceDialogOption
+       		android:key="resetAllNotes"
+       		android:defaultValue="false"
+            android:dialogIcon="@android:drawable/ic_dialog_alert"
+            android:title="Delete All Notes"
+            android:summary="Remove all notes permanently"
+            android:dialogMessage="Are you sure you wish to delete all your notes permanetly? This action cannot be undone!"
+            android:positiveButtonText="Delete ALL My Notes"
+            android:negativeButtonText="Cancel"/>
+    </PreferenceCategory>      
     <PreferenceCategory android:title="About">
         <com.plingnote.PreferenceDialogInfo
         	android:title="Plingnote" 
-            android:summary="Plingnote Android Release 1"
-            android:dialogMessage="Plingnote Android Release 1\nThis is the first release of the Plingnote application."  
+            android:summary="Plingnote Android Release 2"
+            android:dialogMessage="Plingnote Android Release 2\nThis is the second release of the Plingnote application."  
             android:dialogIcon="@android:drawable/ic_dialog_info" />
         <com.plingnote.PreferenceDialogEmail
         	android:title="Send feedback" 

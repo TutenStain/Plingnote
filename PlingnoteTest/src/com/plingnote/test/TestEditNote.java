@@ -5,6 +5,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityMain;
+import com.plingnote.Utils;
 
 /**
  * Testing the connection between the edit and list view. When a note is edited,
@@ -31,7 +32,7 @@ public class TestEditNote extends
 
 	public void testEditNote() {
 		// Enter list view and select a note
-		solo.clickOnImage(4);
+		sweepToList();
 		solo.clickInList(1);
 
 		// Edit the text and leave the edit view
@@ -50,6 +51,13 @@ public class TestEditNote extends
 	@Override
 	protected void tearDown() throws Exception {
 		solo.finishOpenedActivities();
+	}
+	
+	public void sweepToList() {
+		solo.drag(Utils.getScreenPixels(getActivity()).width() - 1, Utils
+				.getScreenPixels(getActivity()).left + 50, Utils
+				.getScreenPixels(getActivity()).exactCenterY(), Utils
+				.getScreenPixels(getActivity()).exactCenterY(), 50);
 	}
 
 }

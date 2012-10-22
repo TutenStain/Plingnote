@@ -1,4 +1,4 @@
-﻿/**
+/**
  * This file is part of Plingnote.
  * Copyright (C) 2012 Linus Karlsson
  *
@@ -44,9 +44,10 @@ import android.widget.ImageView;
  * @author Linus Karlsson
  * 
  */
-public class SBCategorySelector extends Fragment implements PluginableFragment{
+public class SBCategorySelector extends Fragment implements PluginableFragment {
+
 	private NoteCategory noteCategory;
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -63,9 +64,10 @@ public class SBCategorySelector extends Fragment implements PluginableFragment{
 					int position, long id) {
 
 				String clickedCategory = getCategoryDrawables().get(position);
-				clickedCategory = clickedCategory.substring(0, 1).toUpperCase() + clickedCategory.substring(1);
+				clickedCategory = clickedCategory.substring(0, 1).toUpperCase()
+						+ clickedCategory.substring(1);
 				noteCategory = NoteCategory.valueOf(clickedCategory);
-				 replaceBackFragment();
+				replaceBackFragment();
 			}
 		});
 
@@ -75,7 +77,6 @@ public class SBCategorySelector extends Fragment implements PluginableFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.category_selector, container, false);
-
 	}
 
 	/**
@@ -93,9 +94,8 @@ public class SBCategorySelector extends Fragment implements PluginableFragment{
 			// Iterate through NoteCategories and get the drawables that matches
 			// the category names.
 			for (NoteCategory category : NoteCategory.values()) {
-				if (fields[i].getName().equals(category.toString())) {
+				if (fields[i].getName().equals(category.toString()))
 					categoryDrawables.add(fields[i].getName());
-				}
 			}
 		}
 
@@ -146,7 +146,7 @@ public class SBCategorySelector extends Fragment implements PluginableFragment{
 					.getIdentifier(getCategoryDrawables().get(position),
 							"drawable", "com.plingnote"));
 			return imageView;
-			}
+		}
 	}
 
 	public String getValue() {
@@ -158,11 +158,11 @@ public class SBCategorySelector extends Fragment implements PluginableFragment{
 	}
 
 	public void replaceBackFragment() {
-		ActivityNote activityNote = (ActivityNote)getActivity();
+		ActivityNote activityNote = (ActivityNote) getActivity();
 		activityNote.replaceFragmentBack(this);
 	}
 
 	public NoteCategory getCategory() {
-		return noteCategory;
+		return this.noteCategory;
 	}
 }

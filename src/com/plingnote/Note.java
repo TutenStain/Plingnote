@@ -19,7 +19,7 @@ package com.plingnote;
 
 
 /**
- * This class represents a note in the application
+ * This class represents a note in the Plingnote application
  * 
  * @author David Grankvist
  * 
@@ -34,24 +34,20 @@ public class Note {
 	private String date;
 	private NoteCategory category;
 	private String address;
+	private int requestCode;
 
 	/**
 	 * 
-	 * @param id
-	 *            Id of this Note
-	 * @param ti
-	 *            Title of this Note
-	 * @param txt
-	 *            Text of this Note
-	 * @param ncat
-	 *            Category of this Note
-	 * @param l
-	 *            Location of this Note
-	 * @param adr
-	 *            Address of this Note
+	 * @param id Id of this Note          
+	 * @param ti Title of this Note         
+	 * @param txt Text of this Note       
+	 * @param ncat Category of this Note          	
+	 * @param l Location of this Note            
+	 * @param adr Address of this Note
+	 * @param rCode Request code of this Note
 	 */
-	public Note(int id, String ti, String txt, Location l, String path,
-			String alarm, String date, NoteCategory ncat, String adr) {
+	public Note(int id, String ti, String txt, Location l, String path, 
+			String alarm, String date, NoteCategory ncat, String adr, int rCode){
 		this.id = id;
 		this.title = ti;
 		this.text = txt;
@@ -61,6 +57,7 @@ public class Note {
 		this.date = date;
 		this.category = ncat;
 		this.address = adr;
+		this.requestCode = rCode;
 	}
 
 	/**
@@ -122,7 +119,7 @@ public class Note {
 
 	/**
 	 * 
-	 * @return Category of this Note as an enum cate
+	 * @return Category of this Note as an enum
 	 */
 	public NoteCategory getCategory() {
 		return this.category;
@@ -134,5 +131,23 @@ public class Note {
 	 */
 	public String getAddress() {
 		return this.address;
+	}
+	
+	/**
+	 * This is used to add several alarms
+	 * 
+	 * @return Request code of this Note
+	 */
+	public int getRequestCode(){
+		return this.requestCode;
+	}
+
+	/**
+	 * 
+	 * @return true if this Note has longitude and latitude set to 0.0, false otherwise
+	 */
+	public boolean hasDefaultLocation(){
+		return this.location.getLongitude() == 0.0 
+				&& this.location.getLatitude() == 0.0;
 	}
 }

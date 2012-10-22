@@ -32,6 +32,13 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
+/**
+ * Displays all notes with location data in the map.
+ * Once a note is clicked the user will get to another
+ * screen to edit/view the note.
+ * 
+ * @author Barnabas Sapan
+ */
 public class MapOverlayPinNotes extends ItemizedOverlay<OverlayItem> implements Observer {
 	private Context context;
 	private List <Note> notes = new ArrayList<Note>(); 

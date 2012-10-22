@@ -28,6 +28,15 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+/**
+ * Custom class that displays a dialogue where the
+ * user can enter text. Once the user is done
+ * the message gets opened up in the default email client
+ * with debug info such as device make and version attached
+ * under the user typed text. To be used in Preferences.
+ * 
+ * @author Barnabas Sapan
+ */
 public class PreferenceDialogEmail extends DialogPreference {
 	private Context context;
 	private String deviceInfoString = "------------------\n"
@@ -40,7 +49,7 @@ public class PreferenceDialogEmail extends DialogPreference {
 	public PreferenceDialogEmail(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.context = context;
-		appVersionName += this.context.getString(R.string.app_version_name);
+		this.appVersionName += this.context.getString(R.string.app_version_name);
 		setPersistent(false);
 		setDialogLayoutResource(R.layout.preference_dialog_email);
 	}

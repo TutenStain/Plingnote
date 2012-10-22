@@ -1,7 +1,7 @@
 /**
  * This file is part of Plingnote.
  * Copyright (C) 2012 Linus Karlsson
- * 
+ *
  * Plingnote is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or any later version.
@@ -45,6 +45,7 @@ import android.widget.ListView;
  * 
  */
 public class FragmentListView extends ListFragment implements Observer {
+	
 	private DatabaseHandler db;
 	private NoteAdapter noteAdapter;
 	private List<Note> notes = new ArrayList<Note>();
@@ -58,18 +59,21 @@ public class FragmentListView extends ListFragment implements Observer {
 		DatabaseHandler.getInstance(getActivity()).addObserver(this);
 
 		// Get instance of database
-		db = DatabaseHandler.getInstance(getActivity());
+		this.db = DatabaseHandler.getInstance(getActivity());
 
 		// Make it possible for the user to select multiple items.
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setMultiChoiceModeListener(new LongPress());
 
-		noteAdapter = new NoteAdapter(getActivity(),
-				android.R.layout.simple_list_item_activated_2, notes);
-		setListAdapter(noteAdapter);
+		this.noteAdapter = new NoteAdapter(getActivity(),
+				android.R.layout.simple_list_item_activated_2, this.notes);
+		setListAdapter(this.noteAdapter);
 
 		// Fill list with data from database
 		refreshNotes();
+		
+		// Update the adapter.
+		noteAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -87,9 +91,9 @@ public class FragmentListView extends ListFragment implements Observer {
 		Intent editNote = new Intent(getActivity(), ActivityNote.class);
 
 		// Get the row ID of the clicked note.
-		int noteId = notes.get(position).getId();
+		int noteId = this.notes.get(position).getId();
 		editNote.putExtra(IntentExtra.id.toString(), noteId);
-		editNote.putExtra(IntentExtra.justId.toString(),true);
+		editNote.putExtra(IntentExtra.justId.toString(), true);
 		// Start edit view.
 		startActivity(editNote);
 	}
@@ -102,7 +106,7 @@ public class FragmentListView extends ListFragment implements Observer {
 	 * 
 	 */
 	private class LongPress implements ListView.MultiChoiceModeListener {
-
+		
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			// Listen to user input and perform the action of choice.
 			switch (item.getItemId()) {
@@ -143,7 +147,6 @@ public class FragmentListView extends ListFragment implements Observer {
 		 */
 		public void onItemCheckedStateChanged(ActionMode mode, int position,
 				long id, boolean checked) {
-
 			switch (getListView().getCheckedItemCount()) {
 			case (0):
 				// If no note is selected, don't set any subtitle.
@@ -168,20 +171,16 @@ public class FragmentListView extends ListFragment implements Observer {
 	 * Refresh the notes that will later be added to the view.
 	 */
 	public void refreshNotes() {
-
 		// Clear list from previous notes.
 		clearNotes();
 
 		// Fill the list with info from database.
-		for (Note n : db.getNoteList()) {
+		for (Note n : this.db.getNoteList()) {
 			this.addNote(n);
 		}
 
 		// Order notes after when they last were edited.
-		Collections.sort(notes, new NoteComparator());
-
-		// Update the adapter.
-		noteAdapter.notifyDataSetChanged();
+		Collections.sort(this.notes, new NoteComparator());
 	}
 
 	/**
@@ -190,14 +189,13 @@ public class FragmentListView extends ListFragment implements Observer {
 	 * @return number of notes displayed on the screen.
 	 */
 	public int numberOfNotes() {
-		return noteAdapter.getCount();
+		return this.noteAdapter.getCount();
 	}
 
 	/**
 	 * Remove checked notes from the list.
 	 */
 	public void removeListItem() {
-
 		// Get the positions of all the checked items.
 		SparseBooleanArray checkedItemPositions = getListView()
 				.getCheckedItemPositions();
@@ -205,7 +203,7 @@ public class FragmentListView extends ListFragment implements Observer {
 		// Walk through the notes and delete the checked ones.
 		for (int i = getListView().getCount() - 1; i >= 0; i--) {
 			if (checkedItemPositions.get(i)) {
-				db.deleteNote(notes.get(i).getId());
+				this.db.deleteNote(this.notes.get(i).getId());
 			}
 		}
 
@@ -224,8 +222,8 @@ public class FragmentListView extends ListFragment implements Observer {
 		if (isVisible()) {
 			if (!isActive) {
 				// If user leaves the list view, close the top menu.
-				if (actionBar != null) {
-					actionBar.finish();
+				if (this.actionBar != null) {
+					this.actionBar.finish();
 				}
 			}
 		}
@@ -238,7 +236,7 @@ public class FragmentListView extends ListFragment implements Observer {
 	 *            the note to add
 	 */
 	public void addNote(Note n) {
-		notes.add(n);
+		this.notes.add(n);
 	}
 
 	/**
@@ -246,7 +244,7 @@ public class FragmentListView extends ListFragment implements Observer {
 	 * overridden
 	 */
 	public void clearNotes() {
-		notes.clear();
+		this.notes.clear();
 	}
 
 	/**
@@ -261,8 +259,10 @@ public class FragmentListView extends ListFragment implements Observer {
 
 				// Data is changed, refresh list
 				this.refreshNotes();
+				
+				// Update the adapter.
+				noteAdapter.notifyDataSetChanged();
 			}
 		}
-
 	}
 }
