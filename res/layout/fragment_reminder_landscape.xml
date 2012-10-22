@@ -1,38 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal" >
 
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="227dp"
-        android:layout_height="82dp"
-        android:layout_weight="0.22" />
+    <LinearLayout
+        android:id="@+id/timepicker_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
 
-    <DatePicker
-        android:id="@+id/datePicker"
-        android:layout_width="159dp"
-        android:layout_height="77dp"
-        android:layout_weight="0.60"
-        android:calendarViewShown="false" />
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time"
+            android:textSize="18dp" />
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="fill_parent"
+            android:layout_height="85dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/timepicker_layout"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date"
+            android:textSize="18dp" />
+
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
+            android:layout_gravity="center_vertical"
+            android:calendarViewShown="false" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:gravity="bottom|center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingRight="3dp" >
 
-        <Button
-            android:id="@+id/ok"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@android:string/ok" />
-
-        <Button
+        <ImageButton
             android:id="@+id/cancel"
-            android:layout_width="97dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_cancel" />
+            android:background="@drawable/no"
+            android:contentDescription="@string/img_description_cancel_button" />
+
+        <ImageButton
+            android:id="@+id/ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/yes"
+            android:contentDescription="@string/img_description_confirm_button" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

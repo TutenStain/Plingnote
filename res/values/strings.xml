@@ -17,7 +17,6 @@
     <string name="maps_api_key">0DjJH-LkGjLUC7TicZmZF0JV3MTRl2zJN7uv2hw</string>
     <string name="cont_descr_compass_button">Find my location button</string>
     <string name="cont_descr_fit_notes">Fit all notes on the screen</string>
-    <string name="img_description">Image Description</string>
     <string name="img_original_description">Image Original Description</string>
     <string name="image">image</string>
     <string name="title">Title</string>
@@ -27,5 +26,12 @@
     <string name="resetsnotebar">Reset snotebar</string>
     <string name="cleannotetext">Clean note text and title </string>
     <string name="cleannote">Clean note and snotebar</string>
-    <string name="plingnote_settings">Plingnote Settings</string>   
+    <string name="cleanlocation">Clean Location</string>
+    <string name="plingnote_settings">Plingnote Settings</string> 
+    <string name="img_description_cancel_button">Cancel button</string>
+    <string name="img_description_confirm_button">Confirm button</string> 
+    <string name="date">Date:</string>
+    <string name="time">Time:</string>   
+	 <string name="img_description">Image</string>
+
 </resources>

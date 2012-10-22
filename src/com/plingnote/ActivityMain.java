@@ -42,11 +42,13 @@ public class ActivityMain extends FragmentActivity{
 	private ScrollableViewPager viewPager;
 	private TabsAdapter tabsAdapter;
 	private SearchView searchView;
-
+		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	
+
+		Intent service = new Intent(this, LocationService.class);
+		startService(service);
 		this.viewPager = new ScrollableViewPager(this);
 		this.viewPager.setId(R.id.viewPager);
 		setContentView(viewPager);
@@ -67,6 +69,7 @@ public class ActivityMain extends FragmentActivity{
 				this.onSearchRequested();
 			}
 		}
+		this.startService(new Intent(this, LocationService.class));
 	}
 
 	@Override
@@ -198,3 +201,4 @@ public class ActivityMain extends FragmentActivity{
 		
 	}
 }
+

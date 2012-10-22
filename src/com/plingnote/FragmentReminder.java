@@ -29,8 +29,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -42,15 +42,16 @@ import android.widget.Toast;
 public class FragmentReminder extends Fragment implements PluginableFragment{
 	private View view;
 	private String value = "";
-	PendingIntent pendingIntent;
+	private PendingIntent pendingIntent;
+	private int requestCode;
 
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
-		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+		
+		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
 			this.view = inflater.inflate(R.layout.fragment_reminder_landscape, container, false);		
-		}else{
+		else
 			this.view = inflater.inflate(R.layout.fragment_reminder, container, false);		
-		}
 
 		return this.view;		
 	}
@@ -60,16 +61,19 @@ public class FragmentReminder extends Fragment implements PluginableFragment{
 	 */
 	public void onStart(){
 		super.onStart();
-		Button okey = (Button) this.view.findViewById(R.id.ok);
-		Button cancel = (Button) this.view.findViewById(R.id.cancel);
+		
+		ImageButton okey = (ImageButton) this.view.findViewById(R.id.ok);
+		ImageButton cancel = (ImageButton) this.view.findViewById(R.id.cancel);
 
 		cancel.setOnClickListener(new View.OnClickListener() {
+			
 			public void onClick(View v) {	  			
 				replaceBackFragment();
 			}
 		});	
 		
 		okey.setOnClickListener(new View.OnClickListener() {
+			
 			//Save the time and the the alarm in the method savetime
 			public void onClick(View v) {
 				saveTime(v);
@@ -84,15 +88,20 @@ public class FragmentReminder extends Fragment implements PluginableFragment{
 	 */
 	public void saveTime(View view){
 		DatePicker datepicker = (DatePicker)this.view.findViewById(R.id.datePicker);
-		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);	    	
+		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);	
+		
 		Intent intent = new Intent(getActivity(), NoteNotification.class);
 		ActivityNote activityNote = (ActivityNote)getActivity();
-		intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
-		pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
+		intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 	
+		requestCode = DatabaseHandler.getInstance(getActivity()).getHighestRequest() + 1;
+		intent.putExtra(IntentExtra.requestCode.toString(),requestCode); 
+		pendingIntent = PendingIntent.getBroadcast(getActivity(), requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
+		
 		Calendar calendar =  Calendar.getInstance();
 		calendar.set(datepicker.getYear(), datepicker.getMonth(),
 				datepicker.getDayOfMonth(), timepicker.getCurrentHour(), timepicker.getCurrentMinute(), 0);
 		this.value = calendar.getTime()+"";
+		
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);    
 		Toast.makeText(getActivity(), "Reminder set : " + value, Toast.LENGTH_LONG).show();	
@@ -105,6 +114,12 @@ public class FragmentReminder extends Fragment implements PluginableFragment{
 		return this.value;
 	}
 
+	/**
+	 * Return the value of this appliation
+	 */
+	public int getRequestCode() {
+		return this.requestCode;
+	}
 
 	/**
 	 * Return which kind of note extra this fragment is

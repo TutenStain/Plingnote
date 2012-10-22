@@ -21,11 +21,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.plingnote.R;
-import com.plingnote.R.drawable;
-import com.plingnote.R.id;
-import com.plingnote.R.layout;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Display;
@@ -149,6 +144,9 @@ public class SBCategorySelector extends Fragment implements PluginableFragment {
 		}
 	}
 
+	/**
+	 * This class has not any string value
+	 */
 	public String getValue() {
 		return "";
 	}
@@ -162,7 +160,17 @@ public class SBCategorySelector extends Fragment implements PluginableFragment {
 		activityNote.replaceFragmentBack(this);
 	}
 
+	/**
+	 * Returnthe category
+	 */
 	public NoteCategory getCategory() {
 		return this.noteCategory;
+	}
+
+	/**
+	 * This class has not any requestcode
+	 */
+	public int getRequestCode() {
+		return -1;
 	}
 }

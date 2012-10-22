@@ -70,21 +70,24 @@ public class IconView extends View{
 		Bitmap bit;
 		if(this.drawbleId != -1){
 			bit = BitmapFactory.decodeResource(getResources(), drawbleId);
-			bit = Bitmap.createScaledBitmap(bit, 120, 120, false);
+			bit = Bitmap.createScaledBitmap(bit, 140, 140, false);
 		}else if(this.path.equals("")){
 			bit = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 		}
 		else{
-			bit = ImageHelper.decodeSampledBitmapFromUri(path, 120, 120); 
-		}			
+			bit = ImageHelper.decodeSampledBitmapFromUri(path, 140, 140); 
+		}	
+	
+		if(this.path.equals("")) {
 		if(this.text.equals(""))
-			canvas.drawText(this.defaultText, 0, this.defaultText.length(), 10, 160, paint);
+			canvas.drawText(this.defaultText, 0, this.defaultText.length(), 10, 180, paint);
 		else{
 			if(text.length() > 1)
 			text = text.substring(0, 1).toUpperCase() + text.substring(1);
 			if(text.length() > 10)
 				text = text.substring(0, 10);
-			canvas.drawText(text, 0, text.length(), 10, 160, paint);
+			canvas.drawText(text, 0, text.length(), 10, 180, paint);
+		}
 		}
 		canvas.drawBitmap(bit, 0, 10, null);	          
 	}

@@ -73,7 +73,6 @@ public class ActivitySearch extends FragmentActivity {
 	 */
 	private void handleIntent(Intent intent) {
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			@SuppressWarnings("unused")
 			String query = intent.getStringExtra(SearchManager.QUERY);
 			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, SearchSuggestionsRecentProvider.AUTHORITY, SearchSuggestionsRecentProvider.MODE);
 			suggestions.saveRecentQuery(query, null);

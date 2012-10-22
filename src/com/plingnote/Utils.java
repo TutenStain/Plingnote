@@ -21,6 +21,11 @@ public class Utils {
 	
 	public final static String categoryString = "Category";
 
+	/**
+	 *Return a drawable id.
+	 * @param noteCategory
+	 * @return int
+	 */
 	public static int getDrawable(NoteCategory noteCategory){
 		
 		switch (noteCategory) {
