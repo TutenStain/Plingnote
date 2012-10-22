@@ -31,12 +31,6 @@ public class TestEditNote extends
 	}
 
 	public void testEditNote() {
-		// Delete existing notes
-		DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
-
-		// Add note to database
-		DatabaseHandler.getInstance(getActivity()).insertNote("This is a note",
-				"Here's the text", null, null, null, null, null);
 
 		// Enter list view and select a note
 		sweepToList();
@@ -52,10 +46,6 @@ public class TestEditNote extends
 		// Click on the same item again and make sure it's the same
 		solo.clickInList(1);
 		Assert.assertTrue(solo.searchText(newNote));
-		
-		// Delete existing note
-		DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
-		
 
 	}
 

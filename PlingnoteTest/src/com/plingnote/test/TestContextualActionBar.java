@@ -32,12 +32,6 @@ public class TestContextualActionBar extends
 	}
 
 	public void test1DismissBar() {
-		// Delete existing notes
-		DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
-		
-		// Add note to database
-		DatabaseHandler.getInstance(getActivity()).insertNote("This is a note", "Here's the text", null, null, null, null, null);
-		
 		// Enter list view
 		sweepToList();
 
