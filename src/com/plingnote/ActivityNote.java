@@ -275,7 +275,7 @@ public class ActivityNote extends FragmentActivity {
 		super.onPause();
 
 		if(deleteNote == false){
-				this.saveToDatabase();
+			this.saveToDatabase();
 		}
 
 	}
@@ -430,14 +430,14 @@ public class ActivityNote extends FragmentActivity {
 	 */
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
-	
-			super.onSaveInstanceState(savedInstanceState);
-			savedInstanceState.putInt(IntentExtra.id.toString(), this.id);
-			//If anotherFragment isn't null is should be saved
-			if(anotherFragment != null){
-				getSupportFragmentManager().putFragment(savedInstanceState, "anotherFragment", anotherFragment);
-			}
-		
+
+		super.onSaveInstanceState(savedInstanceState);
+		savedInstanceState.putInt(IntentExtra.id.toString(), this.id);
+		//If anotherFragment isn't null is should be saved
+		if(anotherFragment != null){
+			getSupportFragmentManager().putFragment(savedInstanceState, "anotherFragment", anotherFragment);
+		}
+
 	}
 
 	/**
@@ -449,12 +449,35 @@ public class ActivityNote extends FragmentActivity {
 
 			if(anotherFragment != null)
 				this.changeToSnotebarFragment();
-			else
+			else{
+				if(!this.isNoteEmpty())
+					this.saveToDatabase();
+				else{
+					deleteNotePermanetly();
+				}
 				this.finish();
-
+			}
 			return true;
 		}
+		if(keyCode == KeyEvent.KEYCODE_HOME){
+			if(!this.isNoteEmpty())
+				this.saveToDatabase();
+			else{
+				deleteNotePermanetly();
+				}
+			this.finish();
+		}
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	public void deleteNotePermanetly(){
+		if(this.id!=-1){
+			if(!(this.dbHandler.getNote(this.id).getAlarm().equals("")))
+				this.removeReminder();
+			dbHandler.deleteNote(this.id);
+			
+		}
+		deleteNote = true;
 	}
 
 	/**
@@ -472,23 +495,24 @@ public class ActivityNote extends FragmentActivity {
 		case android.R.id.home:
 			InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 			inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
+			
+			if(!this.isNoteEmpty())
+				this.saveToDatabase();
+			else{
+				deleteNotePermanetly();
+				}
+			
 			this.finish();
 			return true;
 
 		case R.id.delete_note:
-			if(this.id!=-1){
-				if(!(this.dbHandler.getNote(this.id).getAlarm().equals("")))
-					this.removeReminder();
-				dbHandler.deleteNote(this.id);
-			}
-
-			deleteNote = true;
+			deleteNotePermanetly();
 			this.finish();
 			return true;
 
 		case R.id.reset_snotebar:
 			if(this.id != -1)
-				this.deleteAllValues();
+				this.deleteAllExtraValues();
 			return true;
 
 		case R.id.clean_notetext:
@@ -497,7 +521,7 @@ public class ActivityNote extends FragmentActivity {
 
 		case R.id.clean_note:
 			this.deleteNoteTextandTitle();
-			this.deleteAllValues();
+			this.deleteAllExtraValues();
 			return true;
 
 
@@ -515,7 +539,7 @@ public class ActivityNote extends FragmentActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 
 	/**
 	 * Create the settings menu
@@ -542,7 +566,7 @@ public class ActivityNote extends FragmentActivity {
 	/**
 	 * Delete all note extra values location,imagepath,reminder.
 	 */
-	public void deleteAllValues(){	
+	public void deleteAllExtraValues(){	
 		if(!(this.dbHandler.getNote(this.id).getAlarm().equals(""))){
 			this.removeReminder();
 		}
