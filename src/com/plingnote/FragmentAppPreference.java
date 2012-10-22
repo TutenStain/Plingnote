@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.provider.SearchRecentSuggestions;
-import android.util.Log;
 
 /**
  * The application preference fragment that shows the settings view.
