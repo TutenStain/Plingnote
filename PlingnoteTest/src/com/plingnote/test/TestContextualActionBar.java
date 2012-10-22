@@ -5,6 +5,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityMain;
+import com.plingnote.DatabaseHandler;
 import com.plingnote.R;
 import com.plingnote.Utils;
 
@@ -33,6 +34,13 @@ public class TestContextualActionBar extends
 	public void test1DismissBar() {
 		// Enter list view
 		sweepToList();
+		
+		// Add note to list view
+		solo.clickOnView(solo.getView(R.id.add_new_note));
+		solo.enterText(0, "Hello"+0);
+		solo.sendKey(Solo.ENTER);
+		solo.enterText(1, "yes, this is dog");
+		solo.goBack();
 
 		// Long click on an item to bring up the contextual action bar
 		solo.clickLongInList(1);
@@ -90,16 +98,14 @@ public class TestContextualActionBar extends
 		solo.drag(Utils.getScreenPixels(getActivity()).left, Utils
 				.getScreenPixels(getActivity()).right - 50, Utils
 				.getScreenPixels(getActivity()).exactCenterY(), Utils
-				.getScreenPixels(getActivity()).exactCenterY(), 50);
+				.getScreenPixels(getActivity()).exactCenterY(), 25);
 
 		Assert.assertFalse(solo.searchText("Select notes"));
-		solo.pressMenuItem(0);
-		solo.clickOnText("Delete All Notes");
-		solo.clickOnButton(1);
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
 		solo.finishOpenedActivities();
 	}
 	
@@ -107,7 +113,7 @@ public class TestContextualActionBar extends
 		solo.drag(Utils.getScreenPixels(getActivity()).width() - 1, Utils
 				.getScreenPixels(getActivity()).left + 50, Utils
 				.getScreenPixels(getActivity()).exactCenterY(), Utils
-				.getScreenPixels(getActivity()).exactCenterY(), 50);
+				.getScreenPixels(getActivity()).exactCenterY(), 25);
 	}
 
 }

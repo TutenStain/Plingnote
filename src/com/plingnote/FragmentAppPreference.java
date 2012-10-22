@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.provider.SearchRecentSuggestions;
+import android.util.Log;
 
 /**
  * The application preference fragment that shows the settings view.
@@ -70,6 +71,7 @@ public class FragmentAppPreference extends PreferenceFragment implements OnShare
 		}
 		
 		if(key.equals("resetAllNotes") && sharedPreferences.getBoolean(key, false)) {
+			Log.d("hej", "hej");
 			DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
 			
 			//Set the setting to false once we have cleared the search
