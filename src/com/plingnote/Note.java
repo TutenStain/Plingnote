@@ -116,7 +116,7 @@ public class Note {
 
 	/**
 	 * 
-	 * @return Category of this Note as an enum cate
+	 * @return Category of this Note as an enum
 	 */
 	public NoteCategory getCategory(){
 		return this.category;
@@ -131,6 +131,7 @@ public class Note {
 	}
 	
 	/**
+	 * This is used to add several alarms
 	 * 
 	 * @return Request code of this Note
 	 */
