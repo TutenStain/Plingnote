@@ -60,13 +60,13 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 
 	//Tests if you can edit an existing note
 	public void test5EditNote(){
-		solo.clickOnScreen(300, 500);
+		solo.clickLongOnScreen(300, 300, 550);
 		solo.clearEditText(1);
 		solo.enterText(1, "This text is edited");
 		solo.goBack();
-		solo.clickOnScreen(300, 500);
+		solo.clickOnScreen(300, 300);
 		TestUtils.sweepToList(getActivity(), solo);
-		Assert.assertEquals("This text is edited", solo.getText(2).getEditableText().toString());
+		Assert.assertTrue(solo.searchText("This text is edited"));
 	}
 	
 	public void test6EndIt(){

@@ -3,6 +3,7 @@ package com.plingnote.test;
 import junit.framework.Assert;
 
 import com.plingnote.R;
+import com.plingnote.database.DatabaseHandler;
 import com.plingnote.main.ActivityNote;
 
 import android.test.ActivityInstrumentationTestCase2;
@@ -105,6 +106,10 @@ public class ActivityNoteTest extends ActivityInstrumentationTestCase2<ActivityN
 		
 		//Make sure 'notetext' is foucused
 		assertTrue("notetext should be focused",solo.getView(R.id.notetext).isFocusable());
+	}
+	
+	public void test5EndIt(){
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotesInTestmode();
 	}
 
 	@Override

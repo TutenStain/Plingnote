@@ -103,6 +103,9 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 				.getScreenPixels(getActivity()).exactCenterY(), 10);
 
 		Assert.assertFalse(solo.searchText("Select notes"));
+	}
+	
+	public void test5EndIt(){
 		DatabaseHandler.getInstance(getActivity()).deleteAllNotesInTestmode();
 	}
 

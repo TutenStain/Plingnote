@@ -86,6 +86,9 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.drag(left, right-1, centerY, centerY, 10);
 		solo.drag(left, right-1, centerY, centerY, 10);
 		TestUtils.swipeToGrid(getActivity(), solo);
+	}
+	
+	public void test5EndIt(){
 		DatabaseHandler.getInstance(getActivity()).deleteAllNotesInTestmode();
 	}
 

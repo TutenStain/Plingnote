@@ -3,6 +3,7 @@ package com.plingnote.test;
 import junit.framework.Assert;
 
 import com.plingnote.R;
+import com.plingnote.database.DatabaseHandler;
 import com.plingnote.main.ActivityMain;
 import com.plingnote.main.ActivityNote;
 import com.plingnote.map.ActivityMap;
@@ -151,6 +152,10 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 		
 		// Check that we have the right activity
 		solo.assertCurrentActivity("wrong activiy", ActivityMap.class);	
+	}
+	
+	public void test6EndIt(){
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotesInTestmode();
 	}
 
 	@Override

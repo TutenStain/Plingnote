@@ -7,7 +7,6 @@ import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.R;
 import com.plingnote.database.DatabaseHandler;
 import com.plingnote.main.ActivityMain;
-import com.plingnote.utils.Utils;
 
 /**
  * Testing the connection between the edit and list view. When a note is edited,
@@ -31,10 +30,10 @@ public class TestEditNote extends
 		solo = new Solo(getInstrumentation(), getActivity());
 	}
 
-	public void testEditNote() {
+	public void test1EditNote() {
 
 		// Enter list view and select a note
-		sweepToList();
+		TestUtils.sweepToList(getActivity(), solo);
 		
 		// Add note to list view
 		for(int i = 0; i < 2; i++){
@@ -57,7 +56,9 @@ public class TestEditNote extends
 		// Click on the same item again and make sure it's the same
 		solo.clickInList(1);
 		Assert.assertTrue(solo.searchText(newNote));
-		
+	}
+	
+	public void test2EndIt(){
 		DatabaseHandler.getInstance(getActivity()).deleteAllNotesInTestmode();
 	}
 
@@ -65,12 +66,4 @@ public class TestEditNote extends
 	protected void tearDown() throws Exception {
 		solo.finishOpenedActivities();
 	}
-
-	public void sweepToList() {
-		solo.drag(Utils.getScreenPixels(getActivity()).width() - 1, Utils
-				.getScreenPixels(getActivity()).left + 10, Utils
-				.getScreenPixels(getActivity()).exactCenterY(), Utils
-				.getScreenPixels(getActivity()).exactCenterY(), 10);
-	}
-
 }
