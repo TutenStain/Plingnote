@@ -69,6 +69,7 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.clickOnScreen(150, 400);
 		Assert.assertEquals(editText, solo.getText(2).getEditableText().toString());
 		solo.goBack();
+		test3DeleteNote();
 	}
 
 
