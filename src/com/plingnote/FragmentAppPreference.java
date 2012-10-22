@@ -28,6 +28,7 @@ import android.provider.SearchRecentSuggestions;
  * This class listens to changes in the settings view so this
  * class is also responsible for responding to the user requested
  * new settings. 
+ * @author Barnabas Sapan
  */
 public class FragmentAppPreference extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 	@Override
@@ -55,12 +56,21 @@ public class FragmentAppPreference extends PreferenceFragment implements OnShare
 	 * Gets called if the settings change
 	 */
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		@SuppressWarnings("unused")
+		//For future use
 		Preference prefs = findPreference(key);
 		
-		if (key.equals("resetSearchHistory") && sharedPreferences.getBoolean(key, false)) {
+		if(key.equals("resetSearchHistory") && sharedPreferences.getBoolean(key, false)) {
 			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(getActivity(), 
 					SearchSuggestionsRecentProvider.AUTHORITY, SearchSuggestionsRecentProvider.MODE);
 			suggestions.clearHistory();
+			
+			//Set the setting to false once we have cleared the search
+			sharedPreferences.edit().putBoolean(key, false).commit();
+		}
+		
+		if(key.equals("resetAllNotes") && sharedPreferences.getBoolean(key, false)) {
+			DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
 			
 			//Set the setting to false once we have cleared the search
 			sharedPreferences.edit().putBoolean(key, false).commit();

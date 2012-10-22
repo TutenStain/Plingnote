@@ -1,7 +1,7 @@
 /**
  * This file is part of Plingnote.
  * Copyright (C) 2012 Linus Karlsson
- * 
+ *
  * Plingnote is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or any later version.
@@ -176,8 +176,7 @@ public class FragmentListView extends ListFragment implements Observer {
 			this.addNote(n);
 		}
 
-		// Order notes after when they last were edited.
-
+		// Sort notes after when they last were edited.
 		Collections.sort(this.notes, new NoteComparator());
 
 		// Update the adapter.

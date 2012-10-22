@@ -32,9 +32,9 @@ import com.google.android.maps.Projection;
 
 /**
  * Displays an animated pin for the current location
+ * 
  * @author Barnabas Sapan
  */
-
 public class MapOverlayPinCurrentPos extends Overlay implements UpdatableOverlay {
 	private Drawable marker;
 	private MapView map;

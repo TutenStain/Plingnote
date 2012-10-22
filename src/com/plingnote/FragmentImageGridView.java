@@ -179,7 +179,6 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 			//Standard image set on icons
 			imgView.setBackgroundResource(imgIds.get(position));
-
 			if(abOn){
 				imgViewTop.setBackgroundColor(Color.TRANSPARENT);
 				if(gView.getCheckedItemPositions().get(position)){
@@ -188,7 +187,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 			} else{
 				imgViewTop.setBackgroundColor(Color.TRANSPARENT);
 			}
-
+			
 			return v;
 		}
 

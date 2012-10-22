@@ -1,3 +1,20 @@
+/**
+ * This file is part of Plingnote.
+ * Copyright (C) 2012 Barnabas Sapan
+ * 
+ * Plingnote is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.plingnote;
 
 
@@ -48,12 +65,18 @@ public class ScrollableViewPager extends ViewPager {
 	 * Handle the touch event. If we decided that we
 	 * want to scroll we call on super to handle it
 	 * for us. Otherwise if we do not want to scroll
-	 * we just return false 
+	 * we just return false. 
+	 * Inside try catch as it sometimes throws
+	 * nasty exceptions from the super call. 
+	 * This is probably because something is wrong 
+	 * in the underlying Android framework. 
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if(this.pagingEnabled)
-			return super.onTouchEvent(event);
+		try {
+			if(this.pagingEnabled)
+				return super.onTouchEvent(event);
+		} catch (Exception e) {	}
 		
 		return false;
 	}

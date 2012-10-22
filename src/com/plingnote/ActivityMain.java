@@ -1,6 +1,10 @@
 /**
  * This file is part of Plingnote.
+<<<<<<< HEAD
  * Copyright (C) 2012 Barnabas sapan
+=======
+ * Copyright (C) 2012 Barnabas Sapan
+>>>>>>> base_gui
  * 
  * Plingnote is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software

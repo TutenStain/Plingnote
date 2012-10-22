@@ -13,11 +13,28 @@ and selecting the debug.keystore file supplied from us from the "Custom debug ke
 option. You will need to clean the project before it will work (Project -> Clean..). 
 If it does not work, restart Eclipse and Clean again.
 
-How to run test
+How to run the application tests
 =========
-Navigate to PlingnoteTest folder and run "ant debug install test"
+To run the tests you need ant installed on your system.
 
-How to run the application
+Quickguide on getting ant up and running on Ubuntu.
+For other systems please refer to ant website.
+1. sudo apt-get install openjdk-7-jdk
+2. sudo apt-get install ant (not the ant1.7)
+
+Navigate to PlingnoteTest folder. Create a new file "local.properties" and
+paste the following to the newly created file "sdk.dir=YOUR_ROOT_ANDROID_SDK_PATH".
+Create a new folder inside PlingnoteTest called "libs" and put the Robotium test framework
+jar inside it. Download the jar from "http://code.google.com/p/robotium/".
+Now just run "ant debug install test" to run the tests. Note that the tests only
+work on a real Android device and not in a emulator, so plug in your device before 
+running the command.
+To run EMMA and generate code coverage information run "ant emma debug install test"
+A html document inside the PlingnoteTest/bin folder called coverage will be created 
+with the statistics. This will only work on rooted Android devices with a insecure kernel
+(ADBD Insecure).
+
+How to build and install the application
 =========
 Navigate to the root folder (Plingnote) and run "ant debug install"
 
