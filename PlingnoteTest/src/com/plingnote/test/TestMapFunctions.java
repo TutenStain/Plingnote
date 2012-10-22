@@ -10,9 +10,9 @@ import android.test.ActivityInstrumentationTestCase2;
 public class TestMapFunctions extends
 ActivityInstrumentationTestCase2<ActivityMain> {
 	private Solo solo;
-	private int left = Utils.getScreenPixels(getActivity()).left;
-	private int right = Utils.getScreenPixels(getActivity()).right;
-	private int centerY = Utils.getScreenPixels(getActivity()).centerY();
+	private int left;
+	private int right;
+	private int centerY;
 
 	public TestMapFunctions() {
 		super("com.plingnote", ActivityMain.class);
@@ -31,16 +31,19 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 
 	//Tests if the map is scrollable
 	public void test2MapScroll(){
-		solo.drag(left+50, right-50, 500, 500, 20);
-		solo.drag(left+50, right-50, 500, 500, 20);
-		solo.drag(left+50, right-50, 500, 500, 20);
-		solo.drag(left+50, right-50, 500, 500, 20);
+		int left = Utils.getScreenPixels(getActivity()).left;
+		int right = Utils.getScreenPixels(getActivity()).right;
+		int centerY = Utils.getScreenPixels(getActivity()).centerY();
+		solo.drag(left+50, right-50, centerY, centerY, 20);
+		solo.drag(left+50, right-50, centerY, centerY, 20);
+		solo.drag(left+50, right-50, centerY, centerY, 20);
+		solo.drag(left+50, right-50, centerY, centerY, 20);
 	}
 
 
 	//Tests if you can create a new note in mapview
 	public void test3CreateNewNote(){
-		solo.clickLongOnScreen(300, 500);
+		solo.clickLongOnScreen(300, centerY);
 		solo.enterText(0, "Hello");
 		solo.sendKey(Solo.ENTER);
 		solo.enterText(1, "Yes this is dog");
@@ -57,11 +60,11 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 
 	//Tests if you can edit an existing note
 	public void test5EditNote(){
-		solo.clickOnScreen(300, 500);
+		solo.clickOnScreen(300, centerY);
 		solo.clearEditText(1);
 		solo.enterText(1, "This text is edited");
 		solo.goBack();
-		solo.clickOnScreen(300, 500);
+		solo.clickOnScreen(300, centerY);
 		Assert.assertEquals("This text is edited", solo.getText(2).getEditableText().toString());
 	}
 
