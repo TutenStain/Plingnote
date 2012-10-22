@@ -40,12 +40,9 @@ import android.widget.GridView;
  * 
  */
 
-public class SBImageSelector extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-	@SuppressWarnings("unused")
+public class SBImageSelector extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, PluginableFragment {
 	private String selectedImage;
 	private SimpleCursorAdapter adapter;
-
-
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,7 +76,7 @@ public class SBImageSelector extends Fragment implements LoaderManager.LoaderCal
 				final int column = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 				selectedImage = cursor.getString(column);
 				
-				//replaceBackFragment();
+				replaceBackFragment();
 			}
 
 		});
@@ -123,7 +120,7 @@ public class SBImageSelector extends Fragment implements LoaderManager.LoaderCal
 	 */
 	public void replaceBackFragment() {
 		ActivityNote activityNote = (ActivityNote)getActivity();
-		//activityNote.replaceFragmentBack(this);
+		activityNote.replaceFragmentBack(this);
 	}
 
 	/**
