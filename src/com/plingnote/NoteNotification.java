@@ -16,6 +16,8 @@
 */
 package com.plingnote;
 
+import java.util.Calendar;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -26,10 +28,10 @@ import android.content.Intent;
 /**
  * A class representing a noticfication that open a specifik note. With sound and led on.
  * @author Julia Gustafsson
- *
  */
 public class NoteNotification extends BroadcastReceiver  {
-	NotificationManager notificationManager;
+	private NotificationManager notificationManager;
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		//Start activity with the right id.
@@ -49,8 +51,12 @@ public class NoteNotification extends BroadcastReceiver  {
 		CharSequence from = "Plingnote";
 		//Sets the message by by the title of the note the notification open
 		CharSequence message = "Open your note : " + DatabaseHandler.getInstance(context).getNote(intent.getExtras().getInt(IntentExtra.id.toString())).getTitle() + " !";
-		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, i, 0);
-		Notification notification = new Notification(R.drawable.ic_launcher,"Check your note!", PendingIntent.FLAG_ONE_SHOT);
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, i,  PendingIntent.FLAG_ONE_SHOT);
+		Calendar canlender = Calendar.getInstance();
+	    canlender.setTimeInMillis(System.currentTimeMillis());
+	    canlender.add(Calendar.MILLISECOND, 1000);
+	    long TimeInMillised = canlender.getTimeInMillis();
+		Notification notification = new Notification(R.drawable.ic_launcher,"Check your note!",timeInMillised);
 		notification.setLatestEventInfo(context, from, message, contentIntent);
 		//Sets sound and led settings
 		notification.defaults |= Notification.DEFAULT_SOUND; 
