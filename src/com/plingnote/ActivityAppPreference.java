@@ -25,6 +25,8 @@ import android.view.MenuItem;
  * The activity that handles the settings menu.
  * This just basically replaces the current view 
  * with the preference fragment.
+ * 
+ * @author Barnabas Sapan
  */
 public class ActivityAppPreference extends PreferenceActivity {	
 
