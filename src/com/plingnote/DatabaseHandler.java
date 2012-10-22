@@ -492,7 +492,7 @@ public class DatabaseHandler extends Observable{
 	public Note getNote(int id){
 		this.open();
 		Cursor c = this.findNoteById(id);
-		c.move(1);
+		c.moveToFirst();
 		String title = c.getString(1);
 		String text = c.getString(2);
 		Double longitude = c.getDouble(3);
@@ -521,8 +521,8 @@ public class DatabaseHandler extends Observable{
 		this.open();
 		Cursor c = this.db.rawQuery("select " + ID + " from " 
 				+ TABLE_NOTE + " order by " + ID + " desc limit 1", null);
-		c.move(1);
-		int id = Integer.parseInt(c.getString(0));
+		c.moveToFirst();
+		int id = c.getInt(0);
 		this.close();
 		return id;
 	}
@@ -545,7 +545,7 @@ public class DatabaseHandler extends Observable{
 		List<Note> l = new ArrayList<Note>();
 		if(c.moveToFirst()){
 			do{
-				int id = Integer.parseInt(c.getString(0));
+				int id = c.getInt(0);
 				String title = c.getString(1);
 				String text = c.getString(2);
 				Double longitude = c.getDouble(3);
