@@ -29,7 +29,8 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.clickOnImage(5);
 		solo.clickOnImage(1);
 		solo.enterText(0, "Hello?");
-		solo.enterText(0, "\nyes, this is dog");
+		solo.sendKey(solo.ENTER);
+		solo.enterText(1, "yes, this is dog");
 		solo.goBack();
 	}
 
@@ -46,10 +47,11 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.clickOnImage(5);
 		solo.clickOnImage(1);
 		solo.enterText(0, "Hello?");
-		solo.enterText(0, "\nyes, this is dog");
+		solo.sendKey(solo.ENTER);
+		solo.enterText(1, "yes, this is dog");
 		solo.goBack();
 		solo.clickOnScreen(150, 400);
-		solo.enterText(0, "This text is edited");
+		solo.enterText(1, "This text is edited");
 		solo.goBack();
 	}
 
@@ -59,7 +61,8 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		for(int i = 1; i < 6; i++){
 			solo.clickOnImage(1);
 			solo.enterText(0, "Hello?"+i);
-			solo.enterText(0, "\nyes, this is dog");
+			solo.sendKey(solo.ENTER);
+			solo.enterText(1, "yes, this is dog");
 			solo.goBack();
 		}
 		solo.clickLongOnScreen(350, 400);
