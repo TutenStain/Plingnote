@@ -76,7 +76,9 @@ public class IconView extends View{
 		}
 		else{
 			bit = ImageHelper.decodeSampledBitmapFromUri(path, 140, 140); 
-		}			
+		}	
+	
+		if(this.path.equals("")) {
 		if(this.text.equals(""))
 			canvas.drawText(this.defaultText, 0, this.defaultText.length(), 10, 180, paint);
 		else{
@@ -85,6 +87,7 @@ public class IconView extends View{
 			if(text.length() > 10)
 				text = text.substring(0, 10);
 			canvas.drawText(text, 0, text.length(), 10, 180, paint);
+		}
 		}
 		canvas.drawBitmap(bit, 0, 10, null);	          
 	}
