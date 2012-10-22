@@ -1,6 +1,8 @@
 package com.plingnote.test;
 
 import junit.framework.Assert;
+
+import com.plingnote.DatabaseHandler;
 import com.plingnote.R;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.KeyEvent;
@@ -11,14 +13,14 @@ import com.plingnote.ActivityNote;
 /**
  * Test gui in class ActivityNote
  * @author Julia Gustafsson
- *
  */
 public class ActivityNoteTest extends ActivityInstrumentationTestCase2<ActivityNote>{
 	private Solo solo;
 
 	public ActivityNoteTest() {
-		super(ActivityNote.class);
+		super(ActivityNote.class);	
 	}
+	
 	public void setUp() throws Exception {
 		solo = new Solo(getInstrumentation(), getActivity());
 	}
@@ -26,7 +28,7 @@ public class ActivityNoteTest extends ActivityInstrumentationTestCase2<ActivityN
 	/**
 	 * Test that note setting "Clean note" remove the text in 'notetext' and 'notetitle'.
 	 */
-	public void testNoteSettingsCleanNote(){ 
+	public void test1NoteSettingsCleanNoteText(){ 
 		// Check that we have the right activity
 		solo.assertCurrentActivity("wrong activiy", ActivityNote.class);
 		//Clear the edittext fields 'notetext' and 'notetitle' from text
@@ -39,16 +41,17 @@ public class ActivityNoteTest extends ActivityInstrumentationTestCase2<ActivityN
 		solo.enterText((EditText)solo.getView(R.id.notetext), newNoteText);
 		//Click on settings
 		solo.clickOnImage(2);
-		solo.clickOnText("Clean note text");
+		solo.clickOnText(solo.getString(R.string.cleannotetext));
 		//Make sure that 'newNoteText' and 'newNoteTitle' can't be find.
 		Assert.assertFalse(solo.searchText(newNoteTitle));
 		Assert.assertFalse(solo.searchText(newNoteText));
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
 	}
 
 	/**
 	 * Test that ActivityNote's method "getTitleofNoteText"  return same as the text in the edittext field 'notetitle'.
 	 */
-	public void testGetNoteTitle(){
+	public void test2GetNoteTitle(){
 		// Check that we have the right activity
 		solo.assertCurrentActivity("wrong activiy", ActivityNote.class);
 		//Clear edittextfield 'notetitle' from text
@@ -61,12 +64,13 @@ public class ActivityNoteTest extends ActivityInstrumentationTestCase2<ActivityN
 		if(newNoteTitle.equals(activityNote.getTitleofNoteText())){
 			assert(true);
 		}
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
 	}
 	
 	/**
 	 * Test that ActivityNote's method "getTextofNoteText" return same as the text in the edittext field 'notetext'.
 	 */
-	public void testGetNoteText(){
+	public void test3GetNoteText(){
 		// Check that we have the right activity
 		solo.assertCurrentActivity("wrong activiy", ActivityNote.class);
 		//Clear edittextfield 'notetext' from text
@@ -79,17 +83,19 @@ public class ActivityNoteTest extends ActivityInstrumentationTestCase2<ActivityN
 		if(newNoteText.equals(activityNote.getTextofNoteText())){
 			assert(true);
 		}
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
 	}
 
 	/**
 	 * Test that Edittext field 'notetext' is focused after pressing enter after entering activitynote
 	 */
-	public void testFocusAfterPressEnter() {	
+	public void test4FocusAfterPressEnter() {	
 		// Check that we have the right activity
 		solo.assertCurrentActivity("wrong activiy", ActivityNote.class);
 		sendKeys(KeyEvent.KEYCODE_ENTER);
 		//Make sure 'notetext' is foucused
 		assertTrue("notetext should be focused",solo.getView(R.id.notetext).isFocusable());
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotes();
 	}
 
 	@Override

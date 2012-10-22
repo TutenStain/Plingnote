@@ -9,6 +9,7 @@ import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityMain;
 import com.plingnote.ActivityMap;
 import com.plingnote.ActivityNote;
+import com.plingnote.DatabaseHandler;
 
 /**
  * Testing the activitynote from Activitymain
@@ -28,7 +29,7 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 	/**
 	 * Test Activity note settings "Delete Note" the note and it's values should be deleted permanently
 	 */
-	public void testNoteSettingsDeleteNote(){ 
+	public void test1NoteSettingsDeleteNote(){ 
 		//Open a new note
 		solo.clickOnView(solo.getView(R.id.add_new_note));
 		// Check that we have the right activity
@@ -42,23 +43,19 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 		solo.enterText((EditText)solo.getView(R.id.notetext), newNote);
 		//Click on settings
 		solo.clickOnImage(2);
-		solo.clickOnText("Delete this note");
+		solo.clickOnText(solo.getString(R.string.deletenote));
 		// Enter list view 
-		int width = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getWidth();
-		int height = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getHeight();
-		if(solo.getCurrentActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-			solo.clickOnImage(2);
-		if(solo.getCurrentActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-			solo.clickOnScreen(width-1, height/8);
+		TestUtils.sweepToList(getActivity(),solo);
 		//Make sure we can't find the note by searching after the text
 		Assert.assertFalse(solo.searchText(newNote));
+		
 	}
 
 	/**
 	 * Test edit note title by entering ActivityNote by listview and check that it is saved 
 	 * after going back to activity main and back to activtynote.
 	 */
-	public void testEditNoteTitle() {
+	public void test2EditNoteTitle() {
 		//Open a new note
 		solo.clickOnView(solo.getView(R.id.add_new_note));
 		// Check that we have the right activit
@@ -66,29 +63,23 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 		// Clear the editttext fields
 		solo.clearEditText((EditText)solo.getView(R.id.notetitle));
 		solo.clearEditText((EditText)solo.getView(R.id.notetext));
-		String newNoteTitle = "This note is now containing new title.";	
+		String newNoteTitle = "This note is containing new title.";	
 		//Add text to the 'notetitle' field.
 		solo.enterText((EditText)solo.getView(R.id.notetitle), newNoteTitle);
 		//Go back to ActivityMain
 		solo.goBack();
 		// Enter list view 
-		int width = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getWidth();
-		int height = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getHeight();
-		if(solo.getCurrentActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-			solo.clickOnImage(2);
-		if(solo.getCurrentActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-			solo.clickOnScreen(width-1, height/8);
+		TestUtils.sweepToList(getActivity(),solo);
 		// Make sure we find the note by searching after the text
 		Assert.assertTrue(solo.searchText(newNoteTitle));
-		//Go back to ActivityMain
-		solo.goBack();
+		
 	}
 
 	/**
 	 * Test Edit note text  by entering ActivityNote by listview and check that it is saved 
 	 * after going back to activity main and back to activtynote.
 	 */
-	public void testEditNoteText() {
+	public void test3EditNoteText() {
 		//Open a new note
 		solo.clickOnView(solo.getView(R.id.add_new_note));		
 		// Check that we have the right activity
@@ -96,28 +87,24 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 		// Clear the editttext fields
 		solo.clearEditText((EditText)solo.getView(R.id.notetitle));
 		solo.clearEditText((EditText)solo.getView(R.id.notetext));
-		String newNoteText = "This note is now containing new text.";	
+		String newNoteText = "This note is containing new text.";	
 		//Add text to the 'notetext' field.
 		solo.enterText((EditText)solo.getView(R.id.notetext), newNoteText);
+
 		//Go back to ActivityMain
-		solo.goBack();
+		solo.clickOnImage(0);
 		// Enter list view
-				int width = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getWidth();
-				int height = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getHeight();
-				if(solo.getCurrentActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-					solo.clickOnImage(2);
-				if(solo.getCurrentActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-					solo.clickOnScreen(width-1, height/8);
+		//TestUtils.sweepToList(getActivity(),solo);
 		// Make sure we find the note by searching after the text
 		Assert.assertTrue(solo.searchText(newNoteText));
 		//Go back to ActivityMain
-		solo.goBack();
+			//	solo.goBack();
 	}
 
 	/**
 	 * Testing the go back button(the application icon) i ActivityNote
 	 */
-	public void testGoBackButton(){
+	public void test4GoBackButton(){
 		//Open a new note
 		solo.clickOnView(solo.getView(R.id.add_new_note));
 		// Check that we have the right activity
@@ -125,19 +112,21 @@ public class ActivityNoteTestFromMain extends ActivityInstrumentationTestCase2<A
 		//The application image
 		solo.clickOnImage(1);
 		// Check that we have the right activity
-		solo.assertCurrentActivity("wrong activity", ActivityMap.class);
+		solo.assertCurrentActivity("wrong activity", ActivityMap.class);		
 	}
 
 	/**
 	 * Testing the add new note button works in ActivityMain by check if entering activitynote
 	 */
-	public void testAddNewNoteButton(){
+	public void test5AddNewNoteButton(){
 		//Open a new note
 		solo.clickOnView(solo.getView(R.id.add_new_note));
 		// Check that we have the right activity
 		solo.assertCurrentActivity("wrong activiy", ActivityNote.class);
 		//Go back to ActivityMain
 		solo.goBack();
+		// Check that we have the right activity
+		solo.assertCurrentActivity("wrong activiy", ActivityMap.class);	
 	}
 
 	@Override
