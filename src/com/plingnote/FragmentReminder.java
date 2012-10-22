@@ -92,10 +92,10 @@ public class FragmentReminder extends Fragment implements PluginableFragment{
 		
 		Intent intent = new Intent(getActivity(), NoteNotification.class);
 		ActivityNote activityNote = (ActivityNote)getActivity();
-		intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 	
-		requestCode = DatabaseHandler.getInstance(getActivity()).getHighestRequest() + 1;
-		intent.putExtra(IntentExtra.requestCode.toString(),requestCode); 
-		pendingIntent = PendingIntent.getBroadcast(getActivity(), requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
+		intent.putExtra(IntentExtra.id.toString(), activityNote.getId()); 	
+		this.requestCode = DatabaseHandler.getInstance(getActivity()).getHighestRequest() + 1;
+		intent.putExtra(IntentExtra.requestCode.toString(), this.requestCode); 
+		pendingIntent = PendingIntent.getBroadcast(getActivity(), this.requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
 		
 		Calendar calendar =  Calendar.getInstance();
 		calendar.set(datepicker.getYear(), datepicker.getMonth(),

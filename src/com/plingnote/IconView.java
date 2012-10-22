@@ -39,38 +39,39 @@ public class IconView extends View{
 	private Paint paint;
 	private Bitmap bit;
 
-
 	public IconView(Context context,String text,String defaultText, Fragment fragment) {
 		super(context);
 		this.text = text;
 		this.defaultText = defaultText;
 		this.fragment = fragment;
-		setPaintSettings();
-		bit = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+		this.setPaintSettings();
+		this.bit = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 	}
+	
 	public IconView(Context context,String text,String defaultText, Fragment fragment, String path) {
 		super(context);
 		this.text = text;
 		this.defaultText = defaultText;
 		this.fragment = fragment;
 		this.path = path;
-		setPaintSettings();
-		bit = ImageHelper.decodeSampledBitmapFromUri(path, 140, 140); 
+		this.setPaintSettings();
+		this.bit = ImageHelper.decodeSampledBitmapFromUri(this.path, 140, 140); 
 	}
+	
 	public IconView(Context context,String text,String defaultText, Fragment fragment, int drawbleId) {
 		super(context);
 		this.text = text;
 		this.defaultText = defaultText;
 		this.fragment = fragment;
-		setPaintSettings();
-		bit = BitmapFactory.decodeResource(getResources(), drawbleId);
-		bit = Bitmap.createScaledBitmap(bit, 140, 140, false);
+		this.setPaintSettings();
+		this.bit = BitmapFactory.decodeResource(getResources(), drawbleId);
+		this.bit = Bitmap.createScaledBitmap(this.bit, 140, 140, false);
 	}
 
 	public void setPaintSettings(){
-		paint = new Paint();
-		paint.setColor(Color.WHITE); 
-		paint.setTextSize(30); 
+		this.paint = new Paint();
+		this.paint.setColor(Color.WHITE); 
+		this.paint.setTextSize(30); 
 	}
 
 	/**
@@ -83,11 +84,13 @@ public class IconView extends View{
 			if(this.text.equals(""))
 				canvas.drawText(this.defaultText, 0, this.defaultText.length(), 10, 180, paint);
 			else{
+				
 				if(text.length() > 1)
-					text = text.substring(0, 1).toUpperCase() + text.substring(1);
+					this.text = text.substring(0, 1).toUpperCase() + this.text.substring(1);
+				
 				if(text.length() > 10)
-					text = text.substring(0, 10);
-				canvas.drawText(text, 0, text.length(), 10, 180, paint);
+					this.text = text.substring(0, 10);
+				canvas.drawText(text, 0, text.length(), 10, 180, this.paint);
 			}
 		}
 		canvas.drawBitmap(bit, 0, 10, null);	          

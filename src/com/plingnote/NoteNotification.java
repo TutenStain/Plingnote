@@ -16,8 +16,6 @@
  */
 package com.plingnote;
 
-import java.util.ArrayList;
-import java.util.List;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -28,7 +26,6 @@ import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * A class representing a noticfication that open a specifik note. With sound and led on.
@@ -45,7 +42,7 @@ public class NoteNotification extends BroadcastReceiver  {
 	
 	public void buildNotification(Context context, Intent intent){
 		
-		notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		
 		//Cancel all previous notifications
 		//notificationManager.cancelAll();
@@ -55,7 +52,7 @@ public class NoteNotification extends BroadcastReceiver  {
 		
 		//Start activity with the right id.
 		Intent i = new Intent();
-		i.setClassName("com.plingnote", "com.plingnote.ActivityNote");
+		//i.setClassName("com.plingnote", "com.plingnote.ActivityNote");
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 		//Setaction is needed to be set to something to make the intent open the right note.

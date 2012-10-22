@@ -30,6 +30,7 @@ public enum IntentExtra {
 	justId("justID"),
 	requestCode("requestCode");
 	;
+	
 	private final String text;
 	private IntentExtra(final String text) {
 		this.text = text;

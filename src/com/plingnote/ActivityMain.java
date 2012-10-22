@@ -100,6 +100,9 @@ public class ActivityMain extends FragmentActivity{
      
             case R.id.menu_settings: 
  			   startActivity(new Intent(this, ActivityAppPreference.class));
+ 			   
+            case R.id.add_new_note:
+        	startActivity(new Intent(this, ActivityNote.class));
 
             default:
                 return false;
@@ -118,14 +121,7 @@ public class ActivityMain extends FragmentActivity{
 		outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
 		outState.putBoolean("isSearching", isSearching);
 	}
-	
-	/**
-	 * Menu item add new note is pressed.
-	 */
-	public void addNewNote(MenuItem item){
-		Intent intent = new Intent(this, ActivityNote.class);
-		startActivity(intent);
-	}
+
 
 	public static class TabsAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ScrollableViewPager.OnPageChangeListener {
 		private final Context context;

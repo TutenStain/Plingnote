@@ -61,7 +61,7 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_note);
+		this.setContentView(R.layout.activity_note);
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -244,12 +244,12 @@ public class ActivityNote extends FragmentActivity {
 	@Override
 	public void onStart(){
 		super.onStart();
-		setNoteTitleLayoutParam();
-		setNoteTextLayoutParam();
-		setNoteText();	
-		setNoteTitle();
-		setNoteAddress();
-		setKeyListenertoTitle();
+		this.setNoteTitleLayoutParam();
+		this.setNoteTextLayoutParam();
+		this.setNoteText();	
+		this.setNoteTitle();
+		this.setNoteAddress();
+		this.setKeyListenertoTitle();
 	}
 
 	/**
