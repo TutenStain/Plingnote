@@ -16,6 +16,8 @@
  */
 package com.plingnote;
 
+import java.util.ArrayList;
+import java.util.List;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -26,6 +28,7 @@ import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * A class representing a noticfication that open a specifik note. With sound and led on.
@@ -41,6 +44,13 @@ public class NoteNotification extends BroadcastReceiver  {
 	}
 	
 	public void buildNotification(Context context, Intent intent){
+		
+		notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		//Cancel all previous notifications
+		notificationManager.cancelAll();
+		
+		//The number of unread messagesincreases
 		numUnreadMessages++;
 		
 		//Start activity with the right id.
@@ -55,7 +65,7 @@ public class NoteNotification extends BroadcastReceiver  {
 			i.putExtra(IntentExtra.id.toString(), intent.getExtras().getInt(IntentExtra.id.toString()));
 			i.putExtra(IntentExtra.reminderDone.toString(), true);
 			i.putExtra(IntentExtra.justId.toString(), true);	
-		}catch(Exception e){  	
+		}catch(Exception e){
 			Log.i("Catched Exception", "Intent is not send to the class");
 		}
 
@@ -78,30 +88,32 @@ public class NoteNotification extends BroadcastReceiver  {
 		Resources res = context.getResources();
 		Notification.Builder builder = new Notification.Builder(context);
 
+		//Sets all the settings of the notifications builder
 		builder.setContentIntent(contentIntent)
-		.setSmallIcon(R.drawable.plingnote_icon2)
-		.setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.plingnote_icon2))
-		.setTicker(ticker)
-		.setWhen(System.currentTimeMillis())
-		.setAutoCancel(true)
-		.setContentTitle(from)
-		.setNumber(numUnreadMessages)
-		.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND | 
+			.setSmallIcon(R.drawable.plingnote_icon2)
+			.setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.plingnote_icon2))
+			.setTicker(ticker)
+			.setWhen(System.currentTimeMillis())
+			.setAutoCancel(true)
+			.setContentTitle(from)
+			.setNumber(numUnreadMessages)
+			.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND | 
 					Notification.FLAG_SHOW_LIGHTS |Notification.FLAG_AUTO_CANCEL)				
-		.setLights(0xFFff00ff, 1000, 1000);
+			.setLights(0xFFff00ff, 1000, 1000);
 
-		if(numUnreadMessages == 1){
+		//If it's only 1 "unread" the user will se another text showing that notes title
+		if(numUnreadMessages == 1)
 			builder.setContentText(message);
-		}else{
+		else{
+			//If it's more than 1 unread note the user will se a text that says how many "unread" notes the user has
 			message = "You have " + numUnreadMessages + " reminders fired";
 			builder.setContentText(message);
 		}
 
 		Notification notification = builder.getNotification();
-		notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.notify(intent.getExtras().getInt(IntentExtra.id.toString()), notification);
 	}
-
+	
 	public static int getnumUnreadMessages() {
 		return numUnreadMessages;
 	}
