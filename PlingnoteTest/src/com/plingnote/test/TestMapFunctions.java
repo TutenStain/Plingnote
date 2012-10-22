@@ -3,6 +3,7 @@ package com.plingnote.test;
 import junit.framework.Assert;
 
 import com.plingnote.ActivityMain;
+import com.plingnote.DatabaseHandler;
 import com.plingnote.Utils;
 import com.jayway.android.robotium.solo.Solo;
 import android.test.ActivityInstrumentationTestCase2;
@@ -10,9 +11,6 @@ import android.test.ActivityInstrumentationTestCase2;
 public class TestMapFunctions extends
 ActivityInstrumentationTestCase2<ActivityMain> {
 	private Solo solo;
-	private int left;
-	private int right;
-	private int centerY;
 
 	public TestMapFunctions() {
 		super("com.plingnote", ActivityMain.class);
@@ -43,7 +41,7 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 
 	//Tests if you can create a new note in mapview
 	public void test3CreateNewNote(){
-		solo.clickLongOnScreen(300, centerY);
+		solo.clickLongOnScreen(300, 500);
 		solo.enterText(0, "Hello");
 		solo.sendKey(Solo.ENTER);
 		solo.enterText(1, "Yes this is dog");
@@ -53,21 +51,26 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 
 	//Tests if you can change tabs from mapview to another and then back.
 	public void test4ChangeViews(){
-		solo.drag(right - 1, left + 50 , centerY, centerY, 50);
-		solo.drag(left, right - 50, centerY, centerY, 50);
+		int left = Utils.getScreenPixels(getActivity()).left;
+		int right = Utils.getScreenPixels(getActivity()).right;
+		int centerY = Utils.getScreenPixels(getActivity()).centerY();
+		TestUtils.sweepToList(getActivity(), solo);
+		solo.drag(left, right - 50, centerY, centerY, 10);
 	}
 
 	//Tests if you can edit an existing note
 	public void test5EditNote(){
-		solo.clickOnScreen(300, centerY);
+		solo.clickOnScreen(300, 500);
 		solo.clearEditText(1);
 		solo.enterText(1, "This text is edited");
 		solo.goBack();
-		solo.clickOnScreen(300, centerY);
+		solo.clickOnScreen(300, 500);
+		TestUtils.sweepToList(getActivity(), solo);
 		Assert.assertEquals("This text is edited", solo.getText(2).getEditableText().toString());
-		solo.pressMenuItem(0);
-		solo.clickOnText("Delete All Notes");
-		solo.clickOnButton(1);
+	}
+	
+	public void test6EndIt(){
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotesInTestmode();
 	}
 
 	@Override
