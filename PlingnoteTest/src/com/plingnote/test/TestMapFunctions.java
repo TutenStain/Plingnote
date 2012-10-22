@@ -47,7 +47,6 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.enterText(0, "Hello");
 		solo.sendKey(Solo.ENTER);
 		solo.enterText(1, "Yes this is dog");
-		solo.goBack();
 		solo.clickOnScreen(300, 500);
 		Assert.assertEquals("Yes this is dog", solo.getText(2).getEditableText().toString());
 	}
