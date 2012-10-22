@@ -5,9 +5,8 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityMain;
-import com.plingnote.DatabaseHandler;
-import com.plingnote.Utils;
 import com.plingnote.R;
+import com.plingnote.Utils;
 
 /**
  * Class testing the behavior of the contextual action bar. The action bar has a
@@ -72,7 +71,8 @@ public class TestContextualActionBar extends
 		Assert.assertTrue(solo.searchText("Select notes"));
 
 		// Click on remove button
-		getInstrumentation().invokeMenuActionSync(getActivity(), R.id.remove, 0);
+		solo.clickOnScreen(Utils.getScreenPixels(getActivity()).right-1,
+				Utils.getScreenPixels(getActivity()).top+50);
 	
 		Assert.assertFalse(solo.searchText("Select notes"));
 	}
@@ -93,6 +93,9 @@ public class TestContextualActionBar extends
 				.getScreenPixels(getActivity()).exactCenterY(), 50);
 
 		Assert.assertFalse(solo.searchText("Select notes"));
+		solo.pressMenuItem(0);
+		solo.clickOnText("Delete All Notes");
+		solo.clickOnButton(1);
 	}
 
 	@Override
