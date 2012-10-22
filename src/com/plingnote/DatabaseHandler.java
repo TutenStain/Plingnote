@@ -138,7 +138,6 @@ public class DatabaseHandler extends Observable{
 			ncat = NoteCategory.NO_CATEGORY;
 		if(adr == null)
 			adr = "";
-		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_TITLE, title);
 		cv.put(KEY_TEXT, text);
@@ -151,6 +150,7 @@ public class DatabaseHandler extends Observable{
 		cv.put(KEY_DATE, dateFormat.format(date));
 		cv.put(KEY_CATEGORY, ncat.ordinal());
 		cv.put(KEY_ADDRESS, adr);
+		this.open();
 		long tmp = this.db.insert(TABLE_NOTE, null, cv);
 		this.close();
 		this.setChanged();
@@ -315,7 +315,6 @@ public class DatabaseHandler extends Observable{
 			ncat = NoteCategory.NO_CATEGORY;
 		if(adr == null)
 			adr = "";
-		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_TITLE, title);
 		cv.put(KEY_TEXT, text);
@@ -325,6 +324,7 @@ public class DatabaseHandler extends Observable{
 		cv.put(KEY_ALARM, alarm);
 		cv.put(KEY_CATEGORY, ncat.ordinal());
 		cv.put(KEY_ADDRESS, adr);
+		this.open();
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		this.setChanged();
@@ -341,9 +341,9 @@ public class DatabaseHandler extends Observable{
 	public boolean updateTitle(int id, String title){
 		if(title == null)
 			title = "";
-		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_TITLE, title);
+		this.open();
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		this.setChanged();
@@ -360,9 +360,9 @@ public class DatabaseHandler extends Observable{
 	public boolean updateText(int id, String text){
 		if(text == null)
 			text = "";
-		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_TEXT, text);
+		this.open();
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		this.setChanged();
@@ -379,10 +379,10 @@ public class DatabaseHandler extends Observable{
 	public boolean updateLocation(int id, Location l){
 		if(l == null)
 			l = new Location(0.0, 0.0);
-		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_LONGITUDE, l.getLongitude());
 		cv.put(KEY_LATITUDE, l.getLatitude());
+		this.open();
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		this.setChanged();
@@ -399,9 +399,9 @@ public class DatabaseHandler extends Observable{
 	public boolean updateImagePath(int id, String path){
 		if(path == null)
 			path = "";
-		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_IMAGEPATH, path);
+		this.open();
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		this.setChanged();
@@ -418,9 +418,9 @@ public class DatabaseHandler extends Observable{
 	public boolean updateAlarm(int id, String alarm){
 		if(alarm == null)
 			alarm = "";
-		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_ALARM, alarm);
+		this.open();
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		this.setChanged();
@@ -434,11 +434,11 @@ public class DatabaseHandler extends Observable{
 	 * @return true if database was updated, false otherwise
 	 */
 	public boolean refreshDate(int id){
-		this.open();
 		ContentValues cv = new ContentValues();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		Date date = new Date();
 		cv.put(KEY_DATE, dateFormat.format(date));
+		this.open();
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		this.setChanged();
@@ -455,9 +455,9 @@ public class DatabaseHandler extends Observable{
 	public boolean updateCategory(int id, NoteCategory ncat){
 		if(ncat == null)
 			ncat = NoteCategory.NO_CATEGORY;
-		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_CATEGORY, ncat.ordinal());
+		this.open();
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		this.setChanged();
@@ -474,9 +474,9 @@ public class DatabaseHandler extends Observable{
 	public boolean updateAddress(int id, String adr){
 		if(adr == null)
 			adr = "";
-		this.open();
 		ContentValues cv = new ContentValues();
 		cv.put(KEY_ADDRESS, adr);
+		this.open();
 		boolean b = this.db.update(TABLE_NOTE, cv, ID + "=" + id, null) > 0;
 		this.close();
 		this.setChanged();
