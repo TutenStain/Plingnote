@@ -45,11 +45,11 @@ public class FragmentReminder extends Fragment implements PluginableFragment{
 
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
-		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+		
+		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
 			this.view = inflater.inflate(R.layout.fragment_reminder_landscape, container, false);		
-		}else{
+		else
 			this.view = inflater.inflate(R.layout.fragment_reminder, container, false);		
-		}
 
 		return this.view;		
 	}
@@ -59,16 +59,19 @@ public class FragmentReminder extends Fragment implements PluginableFragment{
 	 */
 	public void onStart(){
 		super.onStart();
+		
 		ImageButton okey = (ImageButton) this.view.findViewById(R.id.ok);
 		ImageButton cancel = (ImageButton) this.view.findViewById(R.id.cancel);
 
 		cancel.setOnClickListener(new View.OnClickListener() {
+			
 			public void onClick(View v) {	  			
 				replaceBackFragment();
 			}
 		});	
 		
 		okey.setOnClickListener(new View.OnClickListener() {
+			
 			//Save the time and the the alarm in the method savetime
 			public void onClick(View v) {
 				saveTime(v);
@@ -83,15 +86,18 @@ public class FragmentReminder extends Fragment implements PluginableFragment{
 	 */
 	public void saveTime(View view){
 		DatePicker datepicker = (DatePicker)this.view.findViewById(R.id.datePicker);
-		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);	    	
+		TimePicker  timepicker = (TimePicker)this.view.findViewById(R.id.timePicker);	
+		
 		Intent intent = new Intent(getActivity(), NoteNotification.class);
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		intent.putExtra(IntentExtra.id.toString(),activityNote.getId()); 
 		pendingIntent = PendingIntent.getBroadcast(getActivity(), 0,intent, PendingIntent.FLAG_ONE_SHOT);
+		
 		Calendar calendar =  Calendar.getInstance();
 		calendar.set(datepicker.getYear(), datepicker.getMonth(),
 				datepicker.getDayOfMonth(), timepicker.getCurrentHour(), timepicker.getCurrentMinute(), 0);
 		this.value = calendar.getTime()+"";
+		
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);    
 		Toast.makeText(getActivity(), "Reminder set : " + value, Toast.LENGTH_LONG).show();	

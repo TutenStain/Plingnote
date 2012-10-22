@@ -104,27 +104,40 @@ public class FragmentSnotebar extends Fragment {
 	 * Add new icons to list, it's information depends on if the note id exist and if the note has stored value
 	 */
 	public void addIcontoList(){
+		
 		if(this.id == -1){
-			icons.add(new IconView(getActivity(), "", Utils.reminderString, new FragmentReminder(),R.drawable.plingnote_alarm));
-			icons.add(new IconView(getActivity(), "", Utils.imageString, new SBImageSelector(),R.drawable.plingnote_images));
-			icons.add(new IconView(getActivity(), "", Utils.categoryString, new SBCategorySelector(),R.drawable.plingnote_categories));
+			icons.add(new IconView(getActivity(), "",
+					Utils.reminderString, new FragmentReminder(),R.drawable.plingnote_alarm));
+			icons.add(new IconView(getActivity(), "",
+					Utils.imageString, new SBImageSelector(),R.drawable.plingnote_images));
+			icons.add(new IconView(getActivity(), "",
+					Utils.categoryString, new SBCategorySelector(),R.drawable.plingnote_categories));		
 		}else{
+			
 			//Check if id is set,then it is information to fetch from database else there is no information
 			if(!(this.dbHandler.getNote(this.id).getAlarm().equals(""))){
-				icons.add(new IconView(getActivity(), this.dbHandler.getNote(id).getAlarm(), Utils.reminderString, new  FragmentReminder(),R.drawable.plingnote_alarm));					
+				icons.add(new IconView(getActivity(), this.dbHandler.getNote(id).getAlarm(),
+						Utils.reminderString, new FragmentReminder(),R.drawable.plingnote_alarm));					
 			}else{
-				icons.add(new IconView(getActivity(),"", Utils.reminderString, new FragmentReminder(),R.drawable.plingnote_alarm));
+				icons.add(new IconView(getActivity(),"",
+						Utils.reminderString, new FragmentReminder(),R.drawable.plingnote_alarm));
 			}
+			
 			if(!(this.dbHandler.getNote(this.id).getImagePath().equals(""))){
-				icons.add(new IconView(getActivity(), "", Utils.imageString, new SBImageSelector(), this.dbHandler.getNote(this.id).getImagePath()));					
+				icons.add(new IconView(getActivity(), "",
+						Utils.imageString, new SBImageSelector(), this.dbHandler.getNote(this.id).getImagePath()));					
 			}else{
-				icons.add(new IconView(getActivity(),"", Utils.imageString, new SBImageSelector(),R.drawable.plingnote_images));
+				icons.add(new IconView(getActivity(),"",
+						Utils.imageString, new SBImageSelector(),R.drawable.plingnote_images));
 			}
+			
 			if(this.dbHandler.getNote(id).getCategory() != NoteCategory.NO_CATEGORY){
 				icons.add(new IconView(getActivity(), this.dbHandler.getNote(id).getCategory().toString(), Utils.categoryString,
-						new SBCategorySelector(), Utils.getDrawable(this.dbHandler.getNote(id).getCategory())));					
+						new SBCategorySelector(),
+						Utils.getDrawable(this.dbHandler.getNote(id).getCategory())));					
 			}else{
-				icons.add(new IconView(getActivity(), "", Utils.categoryString, new SBCategorySelector(),R.drawable.plingnote_categories));
+				icons.add(new IconView(getActivity(), "",
+						Utils.categoryString, new SBCategorySelector(),R.drawable.plingnote_categories));
 			}
 		}
 	}
@@ -134,6 +147,7 @@ public class FragmentSnotebar extends Fragment {
 	 * @param linearLayout
 	 */
 	public void addIcontoLayout(LinearLayout linearLayout){
+		
 		for(IconView item: icons){
 			item.setOnClickListener(new PreviewListener());
 			item.setOnLongClickListener(new PreviewLongListner());
@@ -142,6 +156,7 @@ public class FragmentSnotebar extends Fragment {
 			relative.addView(item);
 			linearLayout.addView(relative);
 		}
+		
 		linearLayout.invalidate();
 	}
 
@@ -152,6 +167,7 @@ public class FragmentSnotebar extends Fragment {
 		LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.snotebar);
 		removeChildren(linearLayout);
 		icons.clear();
+		
 		//Check if id is -1, then no id is set and there is no information to fetch from database
 		addIcontoList();
 		linearLayout = (LinearLayout)view.findViewById(R.id.snotebar);
@@ -176,12 +192,11 @@ public class FragmentSnotebar extends Fragment {
 	 * @author Julia Gustafsson
 	 */
 	private class PreviewListener implements OnClickListener{
+		
 		public PreviewListener(){	
 		}
-
-		/**
-		 * Cast view IconView and call the fragment snotebar method 'openNewFragment'
-		 */
+		
+		 // Cast view IconView and call the fragment snotebar method 'openNewFragment' 
 		public void onClick(View v) {		
 			IconView icon = (IconView)v;
 			FragmentSnotebar.this.replaceFragment(icon.getFragment());
@@ -195,9 +210,11 @@ public class FragmentSnotebar extends Fragment {
 	 */
 	private class PreviewLongListner implements OnLongClickListener {
 		IconView icon;
+		
 		public boolean onLongClick(View v) {
 			icon = (IconView)v;
 			PluginableFragment pluginFrag = (PluginableFragment)icon.getFragment();
+			
 			if(FragmentSnotebar.this.checkIfValueIsSetted(pluginFrag.getKind())){
 				DialogFragment newFragment = new AskIfReset();
 				newFragment.show(getFragmentManager(), "Reset");
@@ -212,30 +229,38 @@ public class FragmentSnotebar extends Fragment {
 		 *
 		 */
 		private class AskIfReset extends DialogFragment {
+			
 			@Override
 			public Dialog onCreateDialog(Bundle savedInstanceState) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 				builder.setTitle("Reset");
 				builder.setIcon(android.R.drawable.ic_dialog_alert);
 				builder.setMessage("Do you want to reset the " + icon.getDefaultText() + " ?");
+				
 				builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					
 					//Call methods that will delete the data
 					public void onClick(DialogInterface dialog, int id) {
 						PluginableFragment pluginFrag = (PluginableFragment)icon.getFragment();
-						//This code must unfortunalty be in this class or in fragmentsnotebarclass because if the fragmentReminder isn't
+						
+						//This code must unfortunalty be in this class or
+						//in fragmentsnotebarclass because if the fragmentReminder isn't
 						//in snotebar it's value it's getactivty return null and you can't remove the alarm.
 						if(pluginFrag instanceof FragmentReminder){
 							ActivityNote activityNote = (ActivityNote)getActivity();
 							activityNote.removeReminder();
 						}
+						
 						FragmentSnotebar.this.deleteFragmentValue(pluginFrag.getKind());
 					}
 				});
 				builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					
 					public void onClick(DialogInterface dialog, int id) {
 						// User cancelled the dialog
 					}
 				});
+				
 				return builder.create();
 			}
 		}
