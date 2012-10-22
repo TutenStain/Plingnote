@@ -65,6 +65,9 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.goBack();
 		solo.clickOnScreen(300, centerY);
 		Assert.assertEquals("This text is edited", solo.getText(2).getEditableText().toString());
+		solo.pressMenuItem(0);
+		solo.clickOnText("Delete All Notes");
+		solo.clickOnButton(1);
 	}
 
 	@Override
