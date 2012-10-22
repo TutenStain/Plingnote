@@ -1,14 +1,15 @@
 package com.plingnote.test;
 
 import junit.framework.Assert;
+
+import com.plingnote.ActivityMain;
+import com.plingnote.ActivityMap;
+import com.plingnote.ActivityNote;
 import com.plingnote.R;
 import android.content.res.Configuration;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
 import com.jayway.android.robotium.solo.Solo;
-import com.plingnote.ActivityMain;
-import com.plingnote.ActivityMap;
-import com.plingnote.ActivityNote;
 
 /**
  * Testing the activitynote from Activitymain

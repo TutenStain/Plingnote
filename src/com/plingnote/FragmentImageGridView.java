@@ -17,7 +17,7 @@
 
 package com.plingnote;
 
-import java.lang.reflect.Field;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -25,6 +25,7 @@ import java.util.Observer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -102,7 +104,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 		//Creating the view based on orientation of the screen
 		final View grid;
-		if(getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
+		getResources().getConfiguration();
+		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
 			grid = inflater.inflate(R.layout.fragment_gridview, container, false); 
 		} else{
 			grid = inflater.inflate(R.layout.fragment_gridview_land, container, false); 
@@ -115,7 +118,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		gView.setOnItemClickListener(this);
 
 		// Make it possible for the user to select multiple items.
-		gView.setChoiceMode(gView.CHOICE_MODE_MULTIPLE_MODAL);
+		gView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
 		gView.setMultiChoiceModeListener(new LongPress());
 		layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -134,12 +137,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 
 	public class ImageAdapter extends BaseAdapter {
-		private final Context mContext;
-
-
 		public ImageAdapter(Context context) {
 			super();
-			mContext = context;
 		}
 
 		//@Override
@@ -200,11 +199,11 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 	 * Deletes all the notes in the list notes and then adds freshly from the database.
 	 */
 	public void refreshNotes(){
-		clearNotes();
+		this.clearNotes();
 
-		imgIds.clear();
-		for(Note n : db.getNoteList()){
-			addNote(n);
+		this.imgIds.clear();
+		for(Note n : this.db.getNoteList()){
+			this.addNote(n);
 		}
 	}
 
@@ -218,19 +217,19 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		String category = note.getCategory().toString();
 		
 		if(category.equals(NoteCategory.Bank.toString())){
-			imgIds.add(R.drawable.category_banking);	
+			imgIds.add(R.drawable.bank);	
 		} else if(category.equals(NoteCategory.Chat.toString())){
-			imgIds.add(R.drawable.category_chat);
+			imgIds.add(R.drawable.chat);
 		} else if(category.equals(NoteCategory.Fun.toString())){
-			imgIds.add(R.drawable.category_fun);
+			imgIds.add(R.drawable.fun);
 		} else if(category.equals(NoteCategory.Lunch.toString())){
-			imgIds.add(R.drawable.category_lunch);
+			imgIds.add(R.drawable.lunch);
 		} else if(category.equals(NoteCategory.Meeting.toString())){
-			imgIds.add(R.drawable.category_meeting);
+			imgIds.add(R.drawable.meeting);
 		} else if(category.equals(NoteCategory.Shop.toString())){
-			imgIds.add(R.drawable.category_shop);
+			imgIds.add(R.drawable.shop);
 		} else{
-			imgIds.add(R.drawable.category_write);
+			imgIds.add(R.drawable.write);
 		}
 	}
 
@@ -238,7 +237,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 	 * Deletes all notes in the list notes.
 	 */
 	public void clearNotes(){
-		notes.clear();
+		this.notes.clear();
 	}
 
 	/**
@@ -249,7 +248,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 	}
 
 	//@Override
-	public void onItemClick(AdapterView parent, View v, int position, long id) {
+	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 		Intent editNote = new Intent(getActivity(), ActivityNote.class);
 
 		// Get the ID of the clicked note.
@@ -271,7 +270,7 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		// Walk through the notes and delete the checked ones.
 		for (int i = notes.size() - 1; i >= 0; i--) {
 			if (checkedItemPositions.get(i)) {
-				db.deleteNote(notes.get(i).getId());
+				this.db.deleteNote(notes.get(i).getId());
 			}
 		}
 		// Refresh the note list and the view
@@ -398,7 +397,8 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 
 	public void checkIfEmpty(){
 		if(notes.size() < 1){
-			if(getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
+			getResources().getConfiguration();
+			if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
 				gView.setBackgroundResource(R.drawable.empty_portrait);
 			} else{
 				gView.setBackgroundResource(R.drawable.empty_landscape);
@@ -407,28 +407,5 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		else{
 			gView.setBackgroundColor(Color.BLACK);
 		}
-	}
-	/**
-	 * Get an array with file names of all category images in drawable folder.
-	 * 
-	 * @return the file names of all catergories in drawable folder.
-	 */
-	public List<String> getCategoryDrawables() {
-		Field[] fields = R.drawable.class.getFields();
-		List<String> categoryDrawables = new ArrayList<String>();
-
-		// Place all category images in the array.
-		for (int i = 0; i < fields.length; i++) {
-
-			// Iterate through NoteCategories and get the drawables that matches
-			// the category names.
-			for (NoteCategory category : NoteCategory.values()) {
-				if (fields[i].getName().equals(category.toString())) {
-					categoryDrawables.add(fields[i].getName());
-				}
-			}
-		}
-
-		return categoryDrawables;
 	}
 }

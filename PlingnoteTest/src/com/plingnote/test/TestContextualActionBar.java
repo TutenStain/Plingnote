@@ -5,10 +5,12 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityMain;
+import com.plingnote.Utils;
 
 /**
  * Class testing the behavior of the contextual action bar. The action bar has a
- * text saying "Select notes", so the test is searching for such strings on the display.
+ * text saying "Select notes", so the test is searching for such strings on the
+ * display.
  * 
  * @author Linus Karlsson
  * 
@@ -29,10 +31,12 @@ public class TestContextualActionBar extends
 
 	public void test1DismissBar() {
 		// Enter list view
-		solo.clickOnImage(4);
+		sweepToList();
 
 		// Long click on an item to bring up the contextual action bar
 		solo.clickLongInList(1);
+
+		Assert.assertTrue(solo.searchText("Select notes"));
 
 		// Close the contextual bar manually
 		solo.clickOnImage(0);
@@ -43,10 +47,12 @@ public class TestContextualActionBar extends
 
 	public void test2NoSelectedNotes() {
 		// Enter list view
-		solo.clickOnImage(4);
+		sweepToList();
 
 		// Long click on an item to bring up the contextual action bar
 		solo.clickLongInList(1);
+
+		Assert.assertTrue(solo.searchText("Select notes"));
 
 		// Re-click on same item
 		solo.clickInList(1);
@@ -56,10 +62,12 @@ public class TestContextualActionBar extends
 
 	public void test3DeleteNotes() {
 		// Enter list view
-		solo.clickOnImage(4);
+		sweepToList();
 
 		// Long click on an item to bring up the contextual action bar
 		solo.clickLongInList(1);
+
+		Assert.assertTrue(solo.searchText("Select notes"));
 
 		// Click on remove button
 		solo.clickOnImage(1);
@@ -69,13 +77,18 @@ public class TestContextualActionBar extends
 
 	public void test4ChangeTab() {
 		// Enter list view
-		solo.clickOnImage(4);
+		sweepToList();
 
 		// Long click on an item to bring up the contextual action bar
 		solo.clickLongInList(1);
 
+		Assert.assertTrue(solo.searchText("Select notes"));
+
 		// Enter map view
-		solo.clickOnImage(2);
+		solo.drag(Utils.getScreenPixels(getActivity()).left, Utils
+				.getScreenPixels(getActivity()).right - 50, Utils
+				.getScreenPixels(getActivity()).exactCenterY(), Utils
+				.getScreenPixels(getActivity()).exactCenterY(), 50);
 
 		Assert.assertFalse(solo.searchText("Select notes"));
 	}
@@ -83,6 +96,13 @@ public class TestContextualActionBar extends
 	@Override
 	protected void tearDown() throws Exception {
 		solo.finishOpenedActivities();
+	}
+	
+	public void sweepToList() {
+		solo.drag(Utils.getScreenPixels(getActivity()).width() - 1, Utils
+				.getScreenPixels(getActivity()).left + 50, Utils
+				.getScreenPixels(getActivity()).exactCenterY(), Utils
+				.getScreenPixels(getActivity()).exactCenterY(), 50);
 	}
 
 }

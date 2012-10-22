@@ -1,12 +1,13 @@
 package com.plingnote.test;
 
 import junit.framework.Assert;
+
+import com.plingnote.ActivityNote;
 import com.plingnote.R;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import com.jayway.android.robotium.solo.Solo;
-import com.plingnote.ActivityNote;
 
 /**
  * Test gui in class ActivityNote

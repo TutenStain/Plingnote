@@ -16,6 +16,9 @@
 */
 package com.plingnote;
 
+import com.plingnote.R;
+import com.plingnote.R.drawable;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

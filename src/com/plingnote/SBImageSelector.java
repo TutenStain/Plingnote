@@ -17,6 +17,10 @@
 
 package com.plingnote;
 
+import com.plingnote.R;
+import com.plingnote.R.id;
+import com.plingnote.R.layout;
+
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -37,16 +41,10 @@ import android.widget.Gallery;
  * @author Linus Karlsson
  * 
  */
-public class SBImageSelector extends Fragment implements PluginableFragment{
+public class SBImageSelector extends Fragment implements PluginableFragment {
+
 	private String selectedImage;
-
 	private Cursor cursor;
-
-	/**
-	 * The width of the gallery image
-	 */
-	public static final int IMAGE_WIDTH = 120;
-
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,14 +62,12 @@ public class SBImageSelector extends Fragment implements PluginableFragment{
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-
-
 		// Set cursor pointing to SD Card
-		cursor = getSDCursor();
-
+		this.cursor = getSDCursor();
 
 		// Initialize the column index
-		int columnIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
+		int columnIndex = this.cursor
+				.getColumnIndex(MediaStore.Images.Media._ID);
 
 		// Create array of bitmaps with the siza of cursor
 		Bitmap[] images = new Bitmap[cursor.getCount()];
@@ -79,25 +75,25 @@ public class SBImageSelector extends Fragment implements PluginableFragment{
 		// Add images to array.
 		for (int i = 0; i < this.cursor.getCount(); i++) {
 
-			cursor.moveToPosition(i);
+			this.cursor.moveToPosition(i);
 			images[i] = MediaStore.Images.Thumbnails.getThumbnail(getActivity()
-					.getContentResolver(), cursor.getInt(columnIndex),
+					.getContentResolver(), this.cursor.getInt(columnIndex),
 					MediaStore.Images.Thumbnails.MICRO_KIND, null);
-
 		}
 
 		// Create gallery using ImageAdapter.
 		Gallery gallery = (Gallery) getView().findViewById(
 				R.id.snotebar_image_browser);
-		gallery.setAdapter(new SBImageAdapter(getActivity(), cursor, images));
+		gallery.setAdapter(new SBImageAdapter(getActivity(), this.cursor,
+				images));
 
 		// Place first gallery image at far left
 		DisplayMetrics metrics = new DisplayMetrics();
 		getActivity().getWindowManager().getDefaultDisplay()
-		.getMetrics(metrics);
+				.getMetrics(metrics);
 
 		MarginLayoutParams mlp = (MarginLayoutParams) gallery.getLayoutParams();
-		mlp.setMargins(-(metrics.widthPixels / 2 + IMAGE_WIDTH), mlp.topMargin,
+		mlp.setMargins(-(metrics.widthPixels / 2 + Utils.SNOTEBAR_IMAGE_WIDTH), mlp.topMargin,
 				mlp.rightMargin, mlp.bottomMargin);
 
 		// Get user click
@@ -106,11 +102,9 @@ public class SBImageSelector extends Fragment implements PluginableFragment{
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 				// The path to the selected image
-				selectedImage = 
-						getSelectedImagePath(position);
+				selectedImage = getSelectedImagePath(position);
 				replaceBackFragment();
 			}
-
 		});
 	}
 
@@ -150,7 +144,7 @@ public class SBImageSelector extends Fragment implements PluginableFragment{
 	 * Return the imagepath
 	 */
 	public String getValue() {
-		return selectedImage;
+		return this.selectedImage;
 	}
 
 	/**
@@ -164,7 +158,7 @@ public class SBImageSelector extends Fragment implements PluginableFragment{
 	 * Replace this fragment
 	 */
 	public void replaceBackFragment() {
-		ActivityNote activityNote = (ActivityNote)getActivity();
+		ActivityNote activityNote = (ActivityNote) getActivity();
 		activityNote.replaceFragmentBack(this);
 	}
 
@@ -174,6 +168,5 @@ public class SBImageSelector extends Fragment implements PluginableFragment{
 	public NoteCategory getCategory() {
 		return null;
 	}
-
 
 }
