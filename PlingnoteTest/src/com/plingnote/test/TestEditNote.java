@@ -22,7 +22,7 @@ public class TestEditNote extends
 	private Solo solo;
 
 	public TestEditNote() {
-		super("com.plingnote", ActivityMain.class);
+		super(ActivityMain.class);
 	}
 
 	@Override

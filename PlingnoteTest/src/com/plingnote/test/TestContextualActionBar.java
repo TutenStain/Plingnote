@@ -22,7 +22,7 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 	private Solo solo;
 
 	public TestContextualActionBar() {
-		super("com.plingnote", ActivityMain.class);
+		super(ActivityMain.class);
 	}
 
 	@Override

@@ -25,7 +25,7 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 
 
 	public TestGridviewFunctions() {
-		super("com.plingnote", ActivityMain.class);
+		super(ActivityMain.class);
 	}
 
 	@Override

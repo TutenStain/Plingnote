@@ -13,7 +13,7 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 	private Solo solo;
 
 	public TestMapFunctions() {
-		super("com.plingnote", ActivityMain.class);
+		super(ActivityMain.class);
 	}
 
 	@Override
