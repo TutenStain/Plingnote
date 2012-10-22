@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.ActivityMain;
+import com.plingnote.DatabaseHandler;
 import com.plingnote.R;
 import com.plingnote.Utils;
 
@@ -37,19 +38,13 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 
 	//Tests if the correct tab is available for use
 	public void test1GoToGridTab(){
-		left = Utils.getScreenPixels(getActivity()).left;
-		right = Utils.getScreenPixels(getActivity()).right;
-		centerY = Utils.getScreenPixels(getActivity()).bottom/2;
-		solo.drag(right-1, left+25 , centerY, centerY, 25);
-		solo.drag(right-1, left+25 , centerY, centerY, 25);
+		swipeToGrid();
 		solo.assertCurrentActivity("right activity", ActivityMain.class);
 	}
 	
 	//Tests if you can add a new note, and if it's viewable in gridview
 	public void test2AddNewNote(){
-		left = Utils.getScreenPixels(getActivity()).left;
-		right = Utils.getScreenPixels(getActivity()).right;
-		centerY = Utils.getScreenPixels(getActivity()).bottom/2;
+		swipeToGrid();
 		solo.clickOnView(solo.getView(R.id.add_new_note));
 		solo.enterText(0, "Hello"+0);
 		solo.sendKey(Solo.ENTER);
@@ -60,8 +55,6 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		solo.sendKey(Solo.ENTER);
 		solo.enterText(1, "yes, this is dog");
 		solo.goBack();
-		solo.drag(right-1, left+25 , centerY, centerY, 25);
-		solo.drag(right-1, left+25 , centerY, centerY, 25);
 		Assert.assertEquals(4, solo.getCurrentImageViews(solo.getView(R.id.grid)).size());
 	}
 
@@ -69,9 +62,7 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 	public void test3DeleteNote(){
 		left = Utils.getScreenPixels(getActivity()).left;
 		right = Utils.getScreenPixels(getActivity()).right;
-		centerY = Utils.getScreenPixels(getActivity()).bottom/2;
-		solo.drag(right-1, left+25 , centerY, centerY, 25);
-		solo.drag(right-1, left+25 , centerY, centerY, 25);
+		swipeToGrid();
 		solo.clickLongOnScreen(left+100, 325);
 		solo.clickOnScreen(right-1, Utils.getScreenPixels(getActivity()).top+50);
 		solo.goBack();
@@ -81,26 +72,33 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 	//Tests if you can edit a note through gridview by first creating
 	//one and then editing it
 	public void test4EditNote(){
-		editText = "This text is edited!";
 		left = Utils.getScreenPixels(getActivity()).left;
 		right = Utils.getScreenPixels(getActivity()).right;
 		centerY = Utils.getScreenPixels(getActivity()).bottom/2;
-		solo.drag(right-1, left+25 , centerY, centerY, 25);
-		solo.drag(right-1, left+25 , centerY, centerY, 25);
+		editText = "This text is edited!";
+		swipeToGrid();
 		solo.clickOnScreen(left+100, 325);
 		solo.clearEditText(1);
 		solo.enterText(1, editText);
 		solo.goBack();
 		Assert.assertTrue(solo.searchText(editText));
 		solo.goBack();
-		solo.drag(left, right-1, centerY, centerY, 25);
-		solo.drag(left, right-1, centerY, centerY, 25);
-		solo.drag(right-1, left+25 , centerY, centerY, 25);
-		solo.drag(right-1, left+25 , centerY, centerY, 25);
+		solo.drag(left, right-1, centerY, centerY, 10);
+		solo.drag(left, right-1, centerY, centerY, 10);
+		swipeToGrid();
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotesInTestmode();
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 		solo.finishOpenedActivities();
+	}
+	
+	public void swipeToGrid(){
+		left = Utils.getScreenPixels(getActivity()).left;
+		right = Utils.getScreenPixels(getActivity()).right;
+		centerY = Utils.getScreenPixels(getActivity()).bottom/2;
+		solo.drag(right-1, left+25 , centerY, centerY, 10);
+		solo.drag(right-1, left+25 , centerY, centerY, 10);
 	}
 }

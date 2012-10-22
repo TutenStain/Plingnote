@@ -3,6 +3,7 @@ package com.plingnote.test;
 import junit.framework.Assert;
 
 import com.plingnote.ActivityMain;
+import com.plingnote.DatabaseHandler;
 import com.plingnote.Utils;
 import com.jayway.android.robotium.solo.Solo;
 import android.test.ActivityInstrumentationTestCase2;
@@ -43,7 +44,7 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 
 	//Tests if you can create a new note in mapview
 	public void test3CreateNewNote(){
-		solo.clickLongOnScreen(300, centerY);
+		solo.clickLongOnScreen(300, 500);
 		solo.enterText(0, "Hello");
 		solo.sendKey(Solo.ENTER);
 		solo.enterText(1, "Yes this is dog");
@@ -59,15 +60,13 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 
 	//Tests if you can edit an existing note
 	public void test5EditNote(){
-		solo.clickOnScreen(300, centerY);
+		solo.clickOnScreen(300, 500);
 		solo.clearEditText(1);
 		solo.enterText(1, "This text is edited");
 		solo.goBack();
-		solo.clickOnScreen(300, centerY);
+		solo.clickOnScreen(300, 500);
 		Assert.assertEquals("This text is edited", solo.getText(2).getEditableText().toString());
-		solo.pressMenuItem(0);
-		solo.clickOnText("Delete All Notes");
-		solo.clickOnButton(1);
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotesInTestmode();
 	}
 
 	@Override
