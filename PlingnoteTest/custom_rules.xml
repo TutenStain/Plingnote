@@ -61,5 +61,16 @@
 	    </if>
 	</target>
 
+	<!--Findbugs target -->
+	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask"/>
+	
+	<target name="findbugs">
+		<mkdir dir="reports" />
+		<findbugs home="${findbugs.home}" output="html" outputFile="bin/findbugs.html" excludeFilter="findbugs-exclude.xml">
+			<class location="../${out.dir}" />
+		</findbugs>
+	</target>
+
+
 </project>
 
