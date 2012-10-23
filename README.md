@@ -34,6 +34,14 @@ A html document inside the PlingnoteTest/bin folder called coverage will be crea
 with the statistics. This will only work on rooted Android devices with a insecure kernel
 (ADBD Insecure).
 
+How to run findbugs
+=========
+Install ant and findbugs. On Ubuntu do not forget to copy the findbugs-ant.jar to the 
+ant libs folder where ant is installed. Navigate to the PlingnoteTest folder and edit the 
+"local.properties" and add the following "findbugs.home="YOUR_ROOT_FINDBUGS_PATH"
+To run findbugs run the command "ant findbugs". The output html will be in the
+"PlingnoteTest/bin" folder afterwards.
+
 How to build and install the application
 =========
 Navigate to the root folder (Plingnote) and run "ant debug install"
