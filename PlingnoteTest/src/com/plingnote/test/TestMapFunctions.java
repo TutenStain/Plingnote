@@ -1,13 +1,17 @@
 package com.plingnote.test;
 
 import junit.framework.Assert;
+import android.test.ActivityInstrumentationTestCase2;
 
+import com.jayway.android.robotium.solo.Solo;
 import com.plingnote.database.DatabaseHandler;
 import com.plingnote.main.ActivityMain;
 import com.plingnote.utils.Utils;
-import com.jayway.android.robotium.solo.Solo;
-import android.test.ActivityInstrumentationTestCase2;
 
+/**
+ * 
+* @author magnushuttu
+*/
 public class TestMapFunctions extends
 ActivityInstrumentationTestCase2<ActivityMain> {
 	private Solo solo;
@@ -24,7 +28,7 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 
 	//Tests if the map will start
 	public void test1MapViewAtStartUp(){
-		solo.waitForView(null, ActivityMain.TabsAdapter.POSITION_UNCHANGED, 0);
+		solo.waitForActivity("ActivityMain", 5000);
 	}
 
 	//Tests if the map is scrollable
@@ -32,10 +36,10 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		int left = Utils.getScreenPixels(getActivity()).left;
 		int right = Utils.getScreenPixels(getActivity()).right;
 		int centerY = Utils.getScreenPixels(getActivity()).centerY();
-		solo.drag(left+50, right-50, centerY, centerY, 20);
-		solo.drag(left+50, right-50, centerY, centerY, 20);
-		solo.drag(left+50, right-50, centerY, centerY, 20);
-		solo.drag(left+50, right-50, centerY, centerY, 20);
+		solo.drag(left+50, right-50, centerY, centerY, 30);
+		solo.drag(left+50, right-50, centerY, centerY, 30);
+		solo.drag(left+50, right-50, centerY, centerY, 30);
+		solo.drag(left+50, right-50, centerY, centerY, 30);
 	}
 
 

@@ -44,16 +44,14 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 	//Tests if you can add a new note, and if it's viewable in gridview
 	public void test2AddNewNote(){
 		TestUtils.swipeToGrid(getActivity(), solo);
-		solo.clickOnView(solo.getView(R.id.add_new_note));
-		solo.enterText(0, "Hello"+0);
-		solo.sendKey(Solo.ENTER);
-		solo.enterText(1, "yes, this is dog");
-		solo.goBack();
-		solo.clickOnView(solo.getView(R.id.add_new_note));
-		solo.enterText(0, "Hello"+1);
-		solo.sendKey(Solo.ENTER);
-		solo.enterText(1, "yes, this is dog");
-		solo.goBack();
+		// Add note to list view
+		for(int i = 0; i < 2; i++){
+			solo.clickOnView(solo.getView(R.id.add_new_note));
+			solo.enterText(0, "Hello"+i);
+			solo.sendKey(Solo.ENTER);
+			solo.enterText(1, "yes, this is dog");
+			solo.goBack();
+		}
 		Assert.assertEquals(4, solo.getCurrentImageViews(solo.getView(R.id.grid)).size());
 	}
 
@@ -64,8 +62,7 @@ ActivityInstrumentationTestCase2<ActivityMain> {
 		TestUtils.swipeToGrid(getActivity(), solo);
 		solo.clickLongOnScreen(left+100, 325);
 		solo.clickOnScreen(right-1, Utils.getScreenPixels(getActivity()).top+50);
-		solo.goBack();
-		Assert.assertEquals(2, solo.getCurrentImageViews(solo.getView(R.id.grid)).size());
+		Assert.assertTrue(solo.searchText("Hello1"));
 	}
 
 	//Tests if you can edit a note through gridview by first creating
