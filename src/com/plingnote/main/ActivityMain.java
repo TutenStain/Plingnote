@@ -54,8 +54,8 @@ public class ActivityMain extends FragmentActivity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Intent service = new Intent(this, LocationService.class);
-		startService(service);
+		//Intent service = new Intent(this, LocationService.class);
+		//startService(service);
 		this.viewPager = new ScrollableViewPager(this);
 		this.viewPager.setId(R.id.viewPager);
 		setContentView(viewPager);

@@ -82,12 +82,12 @@ public class LocationService extends Service implements LocationListener, Observ
 	 */
 	public void update(Observable observable, Object data) {
 		//We do not know which one was deleted
-		if(data == DatabaseUpdate.UPDATED_LOCATION || data == DatabaseUpdate.DELETED_NOTE){
-			this.removeAlerts();
-			this.addAllAlerts();
-		}
-		if(data == DatabaseUpdate.NEW_NOTE)
-			this.addAlertToLast();
+		//if(data == DatabaseUpdate.UPDATED_LOCATION || data == DatabaseUpdate.DELETED_NOTE){
+		//	this.removeAlerts();
+		//	this.addAllAlerts();
+		//}
+		//if(data == DatabaseUpdate.NEW_NOTE)
+		//	this.addAlertToLast();
 	}
 	
 	/**
