@@ -76,7 +76,9 @@ public class ActivityMain extends FragmentActivity{
 				this.onSearchRequested();
 			}
 		}
-		this.startService(new Intent(this, LocationService.class));
+		
+		//TODO Removed for now until better implementation
+		//this.startService(new Intent(this, LocationService.class));
 	}
 
 	@Override
