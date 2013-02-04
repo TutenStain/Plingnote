@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/time"
-            android:textSize="18dp" />
+            android:textSize="20sp" />
 
         <TimePicker
             android:id="@+id/timePicker"
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/date"
-            android:textSize="18dp" />
+            android:textSize="20sp" />
 
         <DatePicker
             android:id="@+id/datePicker"
