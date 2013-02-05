@@ -112,11 +112,9 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		//Creating the view based on orientation of the screen
 		final View grid;
 		getResources().getConfiguration();
-		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-			grid = inflater.inflate(R.layout.fragment_gridview, container, false); 
-		} else{
-			grid = inflater.inflate(R.layout.fragment_gridview_land, container, false); 
-		}
+
+		grid = inflater.inflate(R.layout.fragment_gridview, container, false); 
+	
 
 		//Setting image adapter for the view.
 		this.imgAdapter = new ImageAdapter(getActivity());
@@ -222,20 +220,28 @@ public class FragmentImageGridView extends Fragment implements OnItemClickListen
 		
 		String category = note.getCategory().toString();
 		
-		if(category.equals(NoteCategory.Bank.toString())){
-			imgIds.add(R.drawable.bank);	
-		} else if(category.equals(NoteCategory.Chat.toString())){
-			imgIds.add(R.drawable.chat);
-		} else if(category.equals(NoteCategory.Fun.toString())){
-			imgIds.add(R.drawable.fun);
-		} else if(category.equals(NoteCategory.Lunch.toString())){
-			imgIds.add(R.drawable.lunch);
-		} else if(category.equals(NoteCategory.Meeting.toString())){
+		if(category.equals(NoteCategory.Meeting.toString())){
 			imgIds.add(R.drawable.meeting);
-		} else if(category.equals(NoteCategory.Shop.toString())){
-			imgIds.add(R.drawable.shop);
+		} else if(category.equals(NoteCategory.Mechanic.toString())){
+			imgIds.add(R.drawable.mechanic);
+		} else if(category.equals(NoteCategory.Key.toString())){
+			imgIds.add(R.drawable.key);
+		} else if(category.equals(NoteCategory.Steeringwheel.toString())){
+			imgIds.add(R.drawable.steeringwheel);
+		} else if(category.equals(NoteCategory.Sun.toString())){
+			imgIds.add(R.drawable.sun);
+		} else if(category.equals(NoteCategory.Comment.toString())){
+			imgIds.add(R.drawable.comment);
+		} else if(category.equals(NoteCategory.Internet.toString())){
+			imgIds.add(R.drawable.internet);
+		} else if(category.equals(NoteCategory.Note.toString())){
+			imgIds.add(R.drawable.note);
+		} else if(category.equals(NoteCategory.Hash.toString())){
+			imgIds.add(R.drawable.hash);
+		} else if(category.equals(NoteCategory.Pin.toString())){
+			imgIds.add(R.drawable.pin);
 		} else{
-			imgIds.add(R.drawable.write);
+			imgIds.add(R.drawable.read_more);
 		}
 	}
 
