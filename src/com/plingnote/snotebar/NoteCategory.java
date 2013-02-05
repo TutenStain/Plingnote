@@ -26,13 +26,16 @@ package com.plingnote.snotebar;
  */
 public enum NoteCategory {
 	NO_CATEGORY(""),
-	Bank("bank"),
-	Lunch("lunch"),
-	Fun("fun"),
-	Chat("chat"),
 	Meeting("meeting"),
-	Shop("shop"),
-	Write("write")
+	Mechanic("mechanic"),
+	Key("key"),
+	Steeringwheel("steeringwheel"),
+	Sun("sun"),
+	Comment("comment"),
+	Internet("internet"),
+	Note("note"),
+	Hash("hash"),
+	Pin("pin")
 	;
 	private final String imageName;
 	

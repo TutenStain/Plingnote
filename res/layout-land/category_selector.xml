@@ -10,8 +10,8 @@
         android:layout_height="fill_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:columnWidth="65dp"
-        android:horizontalSpacing="10dp"
+        android:columnWidth="90dp"
+        android:horizontalSpacing="5dp"
         android:verticalSpacing="10dp"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth" />

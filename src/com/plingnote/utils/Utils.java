@@ -32,20 +32,26 @@ public class Utils {
 	public static int getDrawable(NoteCategory noteCategory){
 		
 		switch (noteCategory) {
-		case Bank:
-			return R.drawable.bank;
-		case Chat:
-			return R.drawable.chat;	
-		case Fun:
-			return R.drawable.fun;
-		case Lunch:
-			return R.drawable.lunch;
 		case Meeting:
 			return R.drawable.meeting;
-		case Shop:
-			return R.drawable.shop;
-		case Write:
-			return R.drawable.write;
+		case Internet:
+			return R.drawable.internet;
+		case Hash:
+			return R.drawable.hash;
+		case Note:
+			return R.drawable.note;
+		case Comment:
+			return R.drawable.comment;
+		case Sun:
+			return R.drawable.sun;
+		case Steeringwheel:
+			return R.drawable.steeringwheel;
+		case Key:
+			return R.drawable.key;
+		case Mechanic:
+			return R.drawable.mechanic;
+		case Pin:
+			return R.drawable.pin;
 		default:
 			return -1;
 		}
