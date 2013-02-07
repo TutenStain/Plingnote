@@ -23,6 +23,7 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,19 +42,22 @@ import com.plingnote.utils.NoteExtra;
  * Class displaying category icons in a fragment. Placed in SNotebar.
  * 
  * @author Linus Karlsson
+ * @ModifiedBy Barnabas Sapan
  * 
  */
 public class SBCategorySelector extends Fragment implements PluginableFragment {
 
 	private NoteCategory noteCategory;
+	GridView categoryGrid;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
 		// Create GridView
-		GridView categoryGrid = (GridView) getActivity().findViewById(
+		categoryGrid = (GridView) getActivity().findViewById(
 				R.id.gridview);
+
 
 		// Set adapter
 		categoryGrid.setAdapter(new CategoryAdapter());
@@ -69,6 +73,8 @@ public class SBCategorySelector extends Fragment implements PluginableFragment {
 				replaceBackFragment();
 			}
 		});
+
+
 
 	}
 
@@ -109,41 +115,44 @@ public class SBCategorySelector extends Fragment implements PluginableFragment {
 	 */
 	private class CategoryAdapter extends BaseAdapter {
 
+		@Override
 		public int getCount() {
 			return getCategoryDrawables().size();
 		}
 
+		@Override
 		public Object getItem(int position) {
 			return null;
 		}
 
+		@Override
 		public long getItemId(int position) {
 			return 0;
 		}
 
+		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ImageView imageView;
 
 			if (convertView == null) {
-
 				// Get screen size
 				Display display = getActivity().getWindowManager()
 						.getDefaultDisplay();
 
 				// Set size to width of display.
-				int size = display.getWidth() / 7;
+				int size = display.getWidth() / (categoryGrid.getNumColumns() + 3); //7
 				imageView = new ImageView(getActivity());
-				imageView.setLayoutParams(new GridView.LayoutParams((int) size,
-						(int) size));
-				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+				imageView.setLayoutParams(new GridView.LayoutParams((int) size, (int) size));
+				imageView.setScaleType(ImageView.ScaleType.FIT_XY); //CENTER_CsROP
+				
+				// Set image view to bitmap at current position.
+				imageView.setImageResource(getActivity().getResources()
+						.getIdentifier(getCategoryDrawables().get(position),
+								"drawable", "com.plingnote"));
 			} else {
 				imageView = (ImageView) convertView;
 			}
 
-			// Set image view to bitmap at current position.
-			imageView.setImageResource(getActivity().getResources()
-					.getIdentifier(getCategoryDrawables().get(position),
-							"drawable", "com.plingnote"));
 			return imageView;
 		}
 	}
@@ -151,22 +160,26 @@ public class SBCategorySelector extends Fragment implements PluginableFragment {
 	/**
 	 * This class has not any string value
 	 */
+	@Override
 	public String getValue() {
 		return "";
 	}
 
+	@Override
 	public NoteExtra getKind() {
 		return NoteExtra.CATEGORY;
 	}
 
+	@Override
 	public void replaceBackFragment() {
 		ActivityNote activityNote = (ActivityNote) getActivity();
 		activityNote.replaceFragmentBack(this);
 	}
 
 	/**
-	 * Returnthe category
+	 * Return the category
 	 */
+	@Override
 	public NoteCategory getCategory() {
 		return this.noteCategory;
 	}
@@ -174,6 +187,7 @@ public class SBCategorySelector extends Fragment implements PluginableFragment {
 	/**
 	 * This class has not any requestcode
 	 */
+	@Override
 	public int getRequestCode() {
 		return -1;
 	}
