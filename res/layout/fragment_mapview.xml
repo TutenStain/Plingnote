@@ -9,12 +9,6 @@
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <com.google.android.maps.MapView
-            android:id="@+id/mapview"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:apiKey="@string/maps_api_key"
-            android:clickable="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -30,14 +24,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#50505050"
-            android:onClick="click"
             android:contentDescription="@string/cont_descr_compass_button"
+            android:onClick="click"
             android:src="@android:drawable/ic_menu_mylocation" >
         </ImageButton>
-    
     </LinearLayout>
-    
-    
+
     <LinearLayout
         android:id="@+id/button_layout_mapoverlay2"
         android:layout_width="wrap_content"
@@ -51,11 +43,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#50505050"
-            android:onClick="click"
             android:contentDescription="@string/cont_descr_fit_notes"
+            android:onClick="click"
             android:src="@android:drawable/ic_menu_zoom" >
         </ImageButton>
-    
     </LinearLayout>
 
 </RelativeLayout>
