@@ -31,11 +31,13 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -58,11 +60,14 @@ public class FragmentMapView extends SupportMapFragment implements Observer, OnM
      public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		this.map = getMap();
-		if(this.map == null)
+		if(this.map == null){
+			Toast.makeText(getActivity(), "Map not avaiable", Toast.LENGTH_SHORT).show();
 			Log.e("Plingnote", "Map is null, probably not ready yet");
+		}
 		this.map.setMyLocationEnabled(true);
 		this.map.setOnMapLongClickListener(this);
 		this.map.setOnInfoWindowClickListener(this);
+		this.map.setInfoWindowAdapter(new MarkerBaloon(getActivity(), markerToNoteID));
 		
 		//Add ourself as observers to get notified when things
 		//change in the DB to be able to react accordingly
@@ -109,6 +114,7 @@ public class FragmentMapView extends SupportMapFragment implements Observer, OnM
 				op.title(note.getTitle());
 				op.snippet(note.getText());
 				op.position(new LatLng(note.getLocation().getLatitude(), note.getLocation().getLongitude()));
+				op.icon(BitmapDescriptorFactory.defaultMarker(20)); //the hue of the marker
 				Marker marker = map.addMarker(op);
 				markerToNoteID.put(marker.getId(), note.getId());
 			}
