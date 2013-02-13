@@ -28,17 +28,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.LatLngBounds.Builder;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.plingnote.database.DatabaseHandler;
@@ -56,38 +63,83 @@ public class FragmentMapView extends SupportMapFragment implements Observer, OnM
 	private List <Note> notes = new ArrayList<Note>(); 
 	private HashMap<String, Integer> markerToNoteID = new HashMap<String, Integer>();
 
-	 @Override
-     public void onActivityCreated(Bundle savedInstanceState) {
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		this.map = getMap();
-		if(this.map == null){
-			Toast.makeText(getActivity(), "Map not avaiable", Toast.LENGTH_SHORT).show();
-			Log.e("Plingnote", "Map is null, probably not ready yet");
+		setUpMapIfNeeded();
+
+		//Add ourself as observers to get notified when things
+		//change in the DB to be able to react accordingly
+		DatabaseHandler.getInstance(getActivity()).addObserver(this);
+
+		//Do a initial refresh of the markers. Show them on the map.
+		this.refresh();
+	}
+
+	private void setUpMapIfNeeded() {
+		// Do a null check to confirm that we have not already instantiated the map.
+		if (map == null) {
+			// Try to obtain the map from the SupportMapFragment.
+			map = getMap();
+			// Check if we were successful in obtaining the map.
+			if (map != null)
+				setUpMap();
+			else {
+				Toast.makeText(getActivity(), "Map not avaiable", Toast.LENGTH_SHORT).show();
+				Log.e("Plingnote", "Map is null, probably not ready yet?");
+			}
 		}
+	}
+
+	private void setUpMap(){
+		LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE); 
+		Location zoom = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+		if(zoom != null) //Just to make sure that in the rare case lastKnownLocation is not null
+			this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(zoom.getLatitude(), zoom.getLongitude()), 12));
 		this.map.setMyLocationEnabled(true);
 		this.map.setOnMapLongClickListener(this);
 		this.map.setOnInfoWindowClickListener(this);
 		this.map.setInfoWindowAdapter(new MarkerBaloon(getActivity(), markerToNoteID));
-		
-		//Add ourself as observers to get notified when things
-		//change in the DB to be able to react accordingly
-		DatabaseHandler.getInstance(getActivity()).addObserver(this);
-		
-		//Do a initial refresh of the markers. Show them on the map.
-		this.refresh();
-	 }
-	 
+
+		/*
+		 * Code for centering the view around the markers
+		 * 
+		// Pan to see all markers in view.
+		// Cannot zoom to bounds until the map has a size.
+		final View mapView = getView();
+		if (mapView.getViewTreeObserver().isAlive()) {
+			mapView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+				@Override
+				public void onGlobalLayout() {
+					Builder bounds = new LatLngBounds.Builder();
+
+					notes = DatabaseHandler.getInstance(getActivity()).getNoteList();
+
+					//Add all notes with a valid location to the map
+					for(Note note : notes){
+						if(note.getLocation().getLatitude() != 0 && note.getLocation().getLongitude() != 0) {
+							bounds.include(new LatLng(note.getLocation().getLatitude(), note.getLocation().getLongitude()));
+						}
+					}
+					mapView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+
+					map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 50));
+				}
+			});
+		}*/
+	}
+
 	@Override
 	public void onLowMemory(){
 		//Show a dialog probably
 	}
-	
+
 	@Override
 	public void onMapLongClick(LatLng pos) {
 		//Do the reverse geocoding in the background
 		new ReverseGeocodingTask(getActivity()).execute(pos);		
 	}
-	
+
 	@Override
 	public void onInfoWindowClick(Marker marker) {
 		Intent editNote = new Intent(getActivity(), ActivityNote.class);
@@ -105,7 +157,7 @@ public class FragmentMapView extends SupportMapFragment implements Observer, OnM
 		map.clear();
 		this.notes.clear();		
 		this.notes = DatabaseHandler.getInstance(getActivity()).getNoteList();
-		
+
 		//Add all notes with a valid location to the map
 		for(Note note : notes){
 			if(note.getLocation().getLatitude() != 0 && note.getLocation().getLongitude() != 0) {
@@ -120,7 +172,7 @@ public class FragmentMapView extends SupportMapFragment implements Observer, OnM
 			}
 		}
 	}
-	
+
 	@Override
 	public void update(Observable observable, Object data) {
 		if(observable instanceof DatabaseHandler) {
@@ -132,8 +184,7 @@ public class FragmentMapView extends SupportMapFragment implements Observer, OnM
 			}
 		}
 	}
-	
-	
+
 	//From http://wptrafficanalyzer.in/blog/android-reverse-geocoding-at-touched-location-in-google-map-android-api-v2/
 	private class ReverseGeocodingTask extends AsyncTask<LatLng, Void, String>{
 		Context mContext;
