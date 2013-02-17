@@ -38,17 +38,21 @@ import android.util.Log;
  * It also includes full text search.
  * 
  * @author David Grankvist
+ * @Modifiedby Barnabas Sapan
  *
  */
 public class DatabaseHandler extends Observable{
-	// Name of database filexe
-	private static final String DATABASE_NAME = "notedb";
-	//Change this before upgrading the database
-	private static final int DATABASE_VERSION = 1;
+	// Name of database
+	private static final String DATABASE_NAME = "plingnotedb";
+	
+	//Database version, change this before upgrading the database
+	private static final int DATABASE_VERSION = 2;
+	
 	// Table
 	private static final String TABLE_NOTE = "Note";
+	
 	// Columns
-	private static final String ID = "docid"; //created automatically
+	private static final String ID = "docid"; //Automagical id
 	private static final String KEY_TEXT = "Text";
 	private static final String KEY_TITLE = "Title";
 	private static final String KEY_LONGITUDE = "Longitude";
@@ -59,14 +63,16 @@ public class DatabaseHandler extends Observable{
 	private static final String KEY_CATEGORY = "Category";
 	private static final String KEY_ADDRESS = "Address";
 	private static final String KEY_REQUEST_CODE = "RequestCode";
-	// SQL statement to create Note table using fts3
+	
+	// SQL statement to create Note table using fts4
 	private static final String CREATE_FTS_TABLE = "create virtual table " 
-			+ TABLE_NOTE + " using fts3("+ KEY_TITLE + " String, " 
+			+ TABLE_NOTE + " using fts4("+ KEY_TITLE + " String, " 
 			+ KEY_TEXT + " String, " + KEY_LONGITUDE +" Double not null, "
 			+ KEY_LATITUDE +" Double not null, " + KEY_IMAGEPATH + " String, " 
 			+ KEY_ALARM + " String, " + KEY_DATE + " String, " 
 			+ KEY_CATEGORY + " int, " + KEY_ADDRESS + " String, " 
 			+ KEY_REQUEST_CODE + " int);";
+	
 	private Context context;
 	private DBHelper dbHelp;
 	private SQLiteDatabase db;
@@ -77,18 +83,18 @@ public class DatabaseHandler extends Observable{
 	 * @param con The context
 	 * @return The singleton instance
 	 */
-	public static DatabaseHandler getInstance(Context con){
+	public static DatabaseHandler getInstance(Context context){
 		if(instance == null)
-			instance = new DatabaseHandler(con);
+			instance = new DatabaseHandler(context);
 		return instance;
 	}
 
-	private DatabaseHandler(Context con){
-		this.context = con;
+	private DatabaseHandler(Context context){
+		this.context = context;
 		this.dbHelp = new DBHelper(this.context);
 	}
 
-	private static class DBHelper extends SQLiteOpenHelper{
+	private class DBHelper extends SQLiteOpenHelper{
 
 		DBHelper(Context con){
 			super(con, DATABASE_NAME, null, DATABASE_VERSION);
@@ -96,21 +102,18 @@ public class DatabaseHandler extends Observable{
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			try {
-				db.execSQL(CREATE_FTS_TABLE);
-			} catch (SQLException e) {
-				Log.e("SQLException", "while creating database");
-			}
+			db.execSQL(CREATE_FTS_TABLE);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			try{
-				db.execSQL("drop table if exists " + TABLE_NOTE);
-			} catch(SQLException e){
-				Log.e("SQLException", "while upgrading database");
-			}
-			this.onCreate(db);
+			Log.w(DatabaseHandler.class.getName(), "Upgrading database from version " + oldVersion + " to "
+			            + newVersion + ", which will destroy all old data");
+			
+			db.execSQL("drop table if exists " + TABLE_NOTE);
+
+			//Recreate the db
+			onCreate(db);
 		}
 	}
 
@@ -587,6 +590,11 @@ public class DatabaseHandler extends Observable{
 		return l;
 	}
 
+	/**
+	 * 
+	 * @param c the cursor to create the note list from
+	 * @return the resulting list from the cursor
+	 */
 	private List<Note> createNoteList(Cursor c){
 		List<Note> l = new ArrayList<Note>();
 		if(c.moveToFirst()){
@@ -615,7 +623,8 @@ public class DatabaseHandler extends Observable{
 	}
 
 	private void close(){
-		this.db.close();
+		if(db != null)
+			this.db.close();
 	}
 }
 	
