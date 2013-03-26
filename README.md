@@ -2,6 +2,12 @@ Plingnote
 =========
 Note that minimum API level is 14 (Ice Cream Sandwich, ver 4.0).
 
+To get the latest version of Plingnote it is always best to compile from source.
+
+Screenshots
+========
+![ScreenShot](https://github.com/TutenStain/Plingnote/raw/master/screenshots/small/map1.png) ![ScreenShot](https://github.com/TutenStain/Plingnote/raw/master/screenshots/small/listview1.png)![ScreenShot](https://github.com/TutenStain/Plingnote/raw/master/screenshots/small/gridveiw1.png)
+
 Google Maps Android API Key
 =========
 To get the map view to display the map you need a valid Android Maps API Key.
