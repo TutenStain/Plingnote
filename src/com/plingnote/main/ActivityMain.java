@@ -25,6 +25,9 @@ import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.app.SearchManager.OnDismissListener;
 import android.content.Context;
@@ -33,9 +36,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import com.plingnote.R;
 import com.plingnote.gridview.FragmentImageGridView;
@@ -49,6 +57,7 @@ public class ActivityMain extends FragmentActivity{
 	private ScrollableViewPager viewPager;
 	private TabsAdapter tabsAdapter;
 	private SearchView searchView;
+	static final int REQUEST_CODE_RECOVER_PLAY_SERVICES = 1001;
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +89,60 @@ public class ActivityMain extends FragmentActivity{
 		//TODO Removed for now until better implementation
 		//this.startService(new Intent(this, LocationService.class));
 	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		if(checkPlayServices()){
+		    //Do additional stuff here
+		}
+	}
+	
+	/**
+	 * Checks if the GooglePlayServices is installed 
+	 * @return true if playServices is installed or false if note
+	 */
+	private boolean checkPlayServices() {
+		int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+		if (status != ConnectionResult.SUCCESS) {
+			if (GooglePlayServicesUtil.isUserRecoverableError(status)) {
+				showErrorDialog(status);
+			} else {
+				Toast.makeText(this, "This device is not supported.", 
+						Toast.LENGTH_LONG).show();
+				finish();
+			}
+			return false;
+		}
+		return true;
+	} 
 
+	/*
+	 * Shows a error dialog with the given code
+	 * @param code the code
+	 */
+	void showErrorDialog(int code) {
+		GooglePlayServicesUtil.getErrorDialog(code, this, REQUEST_CODE_RECOVER_PLAY_SERVICES).show();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		//If the play services is not installed and the user dismissed the dialog
+		//that prompted the user to install it, then we finish and toast a message.
+		switch(requestCode){
+		case REQUEST_CODE_RECOVER_PLAY_SERVICES:
+			if(resultCode == RESULT_CANCELED){
+				Toast.makeText(this, "Google Play Services must be installed.",
+						Toast.LENGTH_SHORT).show();
+				finish();
+			}
+			return;
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
