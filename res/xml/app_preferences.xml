@@ -39,10 +39,9 @@
             android:summary="Know your rights"
             android:dialogMessage="We take no responsibility for your important notes in case of data loss or corruption."  
             android:dialogIcon="@android:drawable/ic_dialog_info" />
-    	<com.plingnote.preferences.PreferenceDialogInfo
+    	<com.plingnote.preferences.PreferenceDialogOpenSourceLicenses
         	android:title="Open Source Licenses" 
             android:summary="Modules used by Plingnote"
-            android:dialogMessage="	Big thanks to:\n*Ourselfs"
             android:dialogIcon="@android:drawable/ic_dialog_info" />
     </PreferenceCategory>                               
 </PreferenceScreen>
