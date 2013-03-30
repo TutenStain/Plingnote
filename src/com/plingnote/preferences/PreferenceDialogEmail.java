@@ -17,15 +17,13 @@
 
 package com.plingnote.preferences;
 
-import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.plingnote.R;
@@ -46,6 +44,7 @@ public class PreferenceDialogEmail extends DialogPreference {
 									+ Build.DISPLAY + "\n"
 			 						+ "SDK: " + Build.VERSION.SDK_INT + "\n";
 	private String appVersionName = "Plingnote ";
+	private EditText editText;
 
 	
 	public PreferenceDialogEmail(Context context, AttributeSet attrs) {
@@ -57,35 +56,23 @@ public class PreferenceDialogEmail extends DialogPreference {
 	}
 	
 	@Override
-	protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-		builder.setPositiveButton(null, null);
-		builder.setNegativeButton(null, null);
-		super.onPrepareDialogBuilder(builder);  
+	public void onClick (DialogInterface dialog, int which){
+		if(which == DialogInterface.BUTTON_POSITIVE){
+			String userText = editText.getText().toString() + "\n\n";
+			Intent intent = new Intent(Intent.ACTION_SEND);
+			intent.setType("message/rfc822");
+			intent.putExtra(Intent.EXTRA_EMAIL,new String[] { "plingnote@plingnote.com" });
+			intent.putExtra(Intent.EXTRA_SUBJECT, appVersionName);
+			intent.putExtra(Intent.EXTRA_TEXT, userText + deviceInfoString);
+			context.startActivity(Intent.createChooser(intent, "Send with..."));
+		} else if (which == DialogInterface.BUTTON_NEGATIVE){
+			dialog.dismiss();
+		}
 	}
-
+	
 	@Override
 	public void onBindDialogView(View view){
-		final EditText editText = (EditText)view.findViewById(R.id.editText_email);
-		Button sendButton = (Button)view.findViewById(R.id.email_send_button);
-		sendButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				String userText = editText.getText().toString() + "\n\n";
-				Intent intent = new Intent(Intent.ACTION_SEND);
-				intent.setType("message/rfc822");
-				intent.putExtra(Intent.EXTRA_EMAIL,new String[] { "plingnote@plingnote.com" });
-				intent.putExtra(Intent.EXTRA_SUBJECT, appVersionName);
-				intent.putExtra(Intent.EXTRA_TEXT, userText + deviceInfoString);
-				context.startActivity(Intent.createChooser(intent, "Send with..."));
-			}
-		});
-		
-		Button cancelButton = (Button)view.findViewById(R.id.email_cancel_button);
-		cancelButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				getDialog().dismiss();
-			}
-		});
-
+		editText = (EditText)view.findViewById(R.id.editText_email);
 		super.onBindDialogView(view);
 	}
 

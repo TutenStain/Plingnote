@@ -25,23 +25,31 @@
     </PreferenceCategory>      
     <PreferenceCategory android:title="About">
         <com.plingnote.preferences.PreferenceDialogInfo
-        	android:title="Plingnote" 
+            android:title="Plingnote"
             android:summary="Plingnote Android Release 2"
-            android:dialogMessage="Plingnote Android Release 2\nThis is the second release of the Plingnote application."  
+            android:dialogMessage="Plingnote Android Release 2\nThis is the second release of the Plingnote application."
+            android:positiveButtonText="OK"
+            android:negativeButtonText="@null"  
             android:dialogIcon="@android:drawable/ic_dialog_info" />
         <com.plingnote.preferences.PreferenceDialogEmail
         	android:title="Send feedback" 
         	android:summary="Send comments, request, or error reports to Plingnote"
-        	android:dialogMessage="Placeholder"     	
+        	android:dialogMessage="Placeholder"
+        	android:positiveButtonText="Send feedback"
+            android:negativeButtonText="Cancel"     	
             android:dialogIcon="@android:drawable/ic_dialog_info" />
         <com.plingnote.preferences.PreferenceDialogInfo
         	android:title="Terms of Use" 
             android:summary="Know your rights"
-            android:dialogMessage="We take no responsibility for your important notes in case of data loss or corruption."  
+            android:dialogMessage="We take no responsibility for your important notes in case of data loss or corruption."
+            android:positiveButtonText="OK"
+            android:negativeButtonText="@null"   
             android:dialogIcon="@android:drawable/ic_dialog_info" />
     	<com.plingnote.preferences.PreferenceDialogOpenSourceLicenses
         	android:title="Open Source Licenses" 
             android:summary="Modules used by Plingnote"
+            android:positiveButtonText="OK"
+            android:negativeButtonText="@null"  
             android:dialogIcon="@android:drawable/ic_dialog_info" />
     </PreferenceCategory>                               
 </PreferenceScreen>
