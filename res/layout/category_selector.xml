@@ -8,6 +8,14 @@
         android:id="@+id/gridview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:numColumns="7" />
+        android:alwaysDrawnWithCache="true"
+        android:clipChildren="true"
+        android:gravity="center"
+        android:numColumns="auto_fit"
+        android:columnWidth="65dp"
+        android:stretchMode="columnWidth"
+        android:horizontalSpacing="10dp"
+        android:verticalSpacing="10dp" 
+        android:padding="5dp" />
 
 </LinearLayout>

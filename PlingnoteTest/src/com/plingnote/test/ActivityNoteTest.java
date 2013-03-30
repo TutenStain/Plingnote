@@ -1,24 +1,27 @@
 package com.plingnote.test;
 
 import junit.framework.Assert;
+
 import com.plingnote.R;
+import com.plingnote.database.DatabaseHandler;
+import com.plingnote.main.ActivityNote;
+
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import com.jayway.android.robotium.solo.Solo;
-import com.plingnote.ActivityNote;
 
 /**
  * Test gui in class ActivityNote
  * @author Julia Gustafsson
- *
  */
 public class ActivityNoteTest extends ActivityInstrumentationTestCase2<ActivityNote>{
 	private Solo solo;
 
 	public ActivityNoteTest() {
-		super(ActivityNote.class);
+		super(ActivityNote.class);	
 	}
+	
 	public void setUp() throws Exception {
 		solo = new Solo(getInstrumentation(), getActivity());
 	}
@@ -26,20 +29,25 @@ public class ActivityNoteTest extends ActivityInstrumentationTestCase2<ActivityN
 	/**
 	 * Test that note setting "Clean note" remove the text in 'notetext' and 'notetitle'.
 	 */
-	public void testNoteSettingsCleanNote(){ 
+	public void test1NoteSettingsCleanNoteText(){ 
+		
 		// Check that we have the right activity
 		solo.assertCurrentActivity("wrong activiy", ActivityNote.class);
+		
 		//Clear the edittext fields 'notetext' and 'notetitle' from text
 		solo.clearEditText((EditText)solo.getView(R.id.notetext));
 		solo.clearEditText((EditText)solo.getView(R.id.notetitle));
 		String newNoteTitle = "This note title should be cleaned.";
 		String newNoteText = "This note text should be cleaned.";
+		
 		//Fill the edittext fields 'notetext' and 'notetitle' with 'newNoteText' and 'newNoteTitle'
 		solo.enterText((EditText)solo.getView(R.id.notetitle), newNoteTitle);
 		solo.enterText((EditText)solo.getView(R.id.notetext), newNoteText);
+		
 		//Click on settings
 		solo.clickOnImage(2);
-		solo.clickOnText("Clean note text");
+		solo.clickOnText(solo.getString(R.string.cleannotetext));
+		
 		//Make sure that 'newNoteText' and 'newNoteTitle' can't be find.
 		Assert.assertFalse(solo.searchText(newNoteTitle));
 		Assert.assertFalse(solo.searchText(newNoteText));
@@ -48,48 +56,60 @@ public class ActivityNoteTest extends ActivityInstrumentationTestCase2<ActivityN
 	/**
 	 * Test that ActivityNote's method "getTitleofNoteText"  return same as the text in the edittext field 'notetitle'.
 	 */
-	public void testGetNoteTitle(){
+	public void test2GetNoteTitle(){
+		
 		// Check that we have the right activity
 		solo.assertCurrentActivity("wrong activiy", ActivityNote.class);
+		
 		//Clear edittextfield 'notetitle' from text
 		solo.clearEditText((EditText)solo.getView(R.id.notetitle));
 		String newNoteTitle = "This note title should be getted from method.";
+		
 		//Fill edittextfield 'notetitle' with 'newNoteTite
 		solo.enterText((EditText)solo.getView(R.id.notetitle), newNoteTitle);
 		ActivityNote activityNote = getActivity();
+		
 		//Make sure the 'newNoteTitle' is identical with the string the method 'getTextofNoteTitle' returns.
-		if(newNoteTitle.equals(activityNote.getTitleofNoteText())){
+		if(newNoteTitle.equals(activityNote.getTitleofNoteText()))
 			assert(true);
-		}
 	}
 	
 	/**
 	 * Test that ActivityNote's method "getTextofNoteText" return same as the text in the edittext field 'notetext'.
 	 */
-	public void testGetNoteText(){
+	public void test3GetNoteText(){
+		
 		// Check that we have the right activity
 		solo.assertCurrentActivity("wrong activiy", ActivityNote.class);
+		
 		//Clear edittextfield 'notetext' from text
 		solo.clearEditText((EditText)solo.getView(R.id.notetext));
 		String newNoteText = "This note title should be getted from method.";
+		
 		//Fill edittextfield 'notetext' with 'newNoteText
 		solo.enterText((EditText)solo.getView(R.id.notetext), newNoteText);
 		ActivityNote activityNote = getActivity();
+		
 		//Make sure the 'newNoteText' is identical with the string the method 'getTextofNoteText' returns.
-		if(newNoteText.equals(activityNote.getTextofNoteText())){
+		if(newNoteText.equals(activityNote.getTextofNoteText()))
 			assert(true);
-		}
 	}
 
 	/**
 	 * Test that Edittext field 'notetext' is focused after pressing enter after entering activitynote
 	 */
-	public void testFocusAfterPressEnter() {	
+	public void test4FocusAfterPressEnter() {	
+		
 		// Check that we have the right activity
 		solo.assertCurrentActivity("wrong activiy", ActivityNote.class);
 		sendKeys(KeyEvent.KEYCODE_ENTER);
+		
 		//Make sure 'notetext' is foucused
 		assertTrue("notetext should be focused",solo.getView(R.id.notetext).isFocusable());
+	}
+	
+	public void test5EndIt(){
+		DatabaseHandler.getInstance(getActivity()).deleteAllNotesInTestmode();
 	}
 
 	@Override

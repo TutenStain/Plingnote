@@ -2,7 +2,7 @@
 <PreferenceScreen 
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="Search">
-    	<com.plingnote.PreferenceDialogOption
+    	<com.plingnote.preferences.PreferenceDialogOption
        		android:key="resetSearchHistory"
        		android:defaultValue="false"
             android:dialogIcon="@android:drawable/ic_dialog_alert"
@@ -13,7 +13,7 @@
             android:negativeButtonText="Cancel"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="Notes">
-    	<com.plingnote.PreferenceDialogOption
+    	<com.plingnote.preferences.PreferenceDialogOption
        		android:key="resetAllNotes"
        		android:defaultValue="false"
             android:dialogIcon="@android:drawable/ic_dialog_alert"
@@ -24,25 +24,24 @@
             android:negativeButtonText="Cancel"/>
     </PreferenceCategory>      
     <PreferenceCategory android:title="About">
-        <com.plingnote.PreferenceDialogInfo
+        <com.plingnote.preferences.PreferenceDialogInfo
         	android:title="Plingnote" 
             android:summary="Plingnote Android Release 2"
             android:dialogMessage="Plingnote Android Release 2\nThis is the second release of the Plingnote application."  
             android:dialogIcon="@android:drawable/ic_dialog_info" />
-        <com.plingnote.PreferenceDialogEmail
+        <com.plingnote.preferences.PreferenceDialogEmail
         	android:title="Send feedback" 
         	android:summary="Send comments, request, or error reports to Plingnote"
         	android:dialogMessage="Placeholder"     	
             android:dialogIcon="@android:drawable/ic_dialog_info" />
-        <com.plingnote.PreferenceDialogInfo
+        <com.plingnote.preferences.PreferenceDialogInfo
         	android:title="Terms of Use" 
             android:summary="Know your rights"
             android:dialogMessage="We take no responsibility for your important notes in case of data loss or corruption."  
             android:dialogIcon="@android:drawable/ic_dialog_info" />
-    	<com.plingnote.PreferenceDialogInfo
+    	<com.plingnote.preferences.PreferenceDialogOpenSourceLicenses
         	android:title="Open Source Licenses" 
             android:summary="Modules used by Plingnote"
-            android:dialogMessage="	Big thanks to:\n*Ievgenii Nazaruk for map-fragment. Allowed us to use the MapView in a fragment, for tabbed navigation."
             android:dialogIcon="@android:drawable/ic_dialog_info" />
     </PreferenceCategory>                               
 </PreferenceScreen>
