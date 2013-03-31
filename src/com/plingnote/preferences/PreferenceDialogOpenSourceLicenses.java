@@ -14,7 +14,7 @@ public class PreferenceDialogOpenSourceLicenses extends DialogPreference{
 	
 	public PreferenceDialogOpenSourceLicenses(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		this.dialogeMessage = GooglePlayServicesUtil.getOpenSourceSoftwareLicenseInfo(context);//attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "dialogMessage");
+		this.dialogeMessage = GooglePlayServicesUtil.getOpenSourceSoftwareLicenseInfo(context);
 		setPersistent(false);
 		setDialogLayoutResource(R.layout.preference_dialog_license);
 	}

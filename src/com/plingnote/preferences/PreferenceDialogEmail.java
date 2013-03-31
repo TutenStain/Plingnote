@@ -52,7 +52,7 @@ public class PreferenceDialogEmail extends DialogPreference {
 		this.context = context;
 		this.appVersionName += this.context.getString(R.string.app_version_name);
 		setPersistent(false);
-		setDialogLayoutResource(R.layout.preference_dialog_email);
+		setDialogLayoutResource(R.layout.preference_dialog_feedback);
 	}
 	
 	@Override
@@ -72,7 +72,7 @@ public class PreferenceDialogEmail extends DialogPreference {
 	
 	@Override
 	public void onBindDialogView(View view){
-		editText = (EditText)view.findViewById(R.id.editText_email);
+		editText = (EditText)view.findViewById(R.id.editText_feedback);
 		super.onBindDialogView(view);
 	}
 
