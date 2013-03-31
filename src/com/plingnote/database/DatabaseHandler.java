@@ -1,6 +1,6 @@
 /**
  * This file is part of Plingnote.
- * Copyright (C) 2012 David Grankvist
+ * Copyright (C) 2012 David Grankvist, Barnabas Sapan
  *
  * Plingnote is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -52,7 +52,7 @@ public class DatabaseHandler extends Observable{
 	private static final String TABLE_NOTE = "Note";
 	
 	// Columns
-	private static final String ID = "docid"; //Automagical id
+	private static final String ID = "docid"; //Automagical id. Automatically increments for each new entry
 	private static final String KEY_TEXT = "Text";
 	private static final String KEY_TITLE = "Title";
 	private static final String KEY_LONGITUDE = "Longitude";
@@ -79,7 +79,6 @@ public class DatabaseHandler extends Observable{
 	private static DatabaseHandler instance = null;
 
 	/**
-	 * 
 	 * @param con The context
 	 * @return The singleton instance
 	 */
@@ -95,7 +94,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	private class DBHelper extends SQLiteOpenHelper{
-
 		DBHelper(Context con){
 			super(con, DATABASE_NAME, null, DATABASE_VERSION);
 		}
@@ -118,7 +116,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param title Title of the note to insert
 	 * @param text Text of the note to insert
 	 * @param l Location of the note to insert
@@ -167,7 +164,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param  id Id of the Note to delete
 	 * @return true if the whereclause is passed in, false otherwise
 	 */
@@ -181,7 +177,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note to delete the title from
 	 * @return true if database was updated, false otherwise
 	 */
@@ -191,7 +186,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note to delete the text from
 	 * @return true if database was updated, false otherwise
 	 */
@@ -212,7 +206,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note to delete the image path from
 	 * @return true if database was updated, false otherwise
 	 */
@@ -222,7 +215,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note to delete the alarm from
 	 * @return true if database was updated, false otherwise
 	 */
@@ -244,7 +236,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note to delete the address from
 	 * @return true if database was updated, false otherwise
 	 */
@@ -287,7 +278,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @return All data in the note table represented as a list of Note objects
 	 */
 	public List<Note> getNoteList(){
@@ -306,7 +296,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note to update
 	 * @param title Title to update to
 	 * @param text Text to update to
@@ -352,7 +341,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note to update
 	 * @param title The title to update to
 	 * @return true if database was updated, false otherwise 
@@ -371,7 +359,6 @@ public class DatabaseHandler extends Observable{
 	}
 	
 	/**
-	 * 
 	 * @param id Id of the note to update
 	 * @param text The text to update to
 	 * @return true if database was updated, false otherwise 
@@ -390,7 +377,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note to update
 	 * @param l The Location object with the longitude and latitude to update to
 	 * @return true if database was updated, false otherwise 
@@ -410,7 +396,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note to update
 	 * @param path The image path to update to
 	 * @return true if database was updated, false otherwise 
@@ -429,7 +414,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note to update
 	 * @param alarm The alarm date to update to
 	 * @return true if database was updated, false otherwise 
@@ -448,7 +432,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note which date will be refreshed
 	 * @return true if database was updated, false otherwise
 	 */
@@ -466,7 +449,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note which category will be updated
 	 * @param ncat The category to update to
 	 * @return true if database was updated, false otherwise
@@ -485,7 +467,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note which address will be updated
 	 * @param adr The address to update to
 	 * @return true if database was updated, false otherwise
@@ -504,7 +485,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param id Id of the note which request code will be updated
 	 * @param adr The request code to update to
 	 * @return true if database was updated, false otherwise
@@ -520,9 +500,8 @@ public class DatabaseHandler extends Observable{
 		return b;
 	}
 	/**
-	 * 
 	 * @param id Id of the row to retrieve data from
-	 * @return a Note object containting all data from the selected row
+	 * @return a Note object containing all data from the selected row
 	 */
 	public Note getNote(int id){
 		this.open();
@@ -550,7 +529,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @return The highest request code in the database
 	 */
 	public int getHighestRequest(){
@@ -563,7 +541,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @return Id of the latest inserted Note
 	 */
 	public int getLastId(){
@@ -577,7 +554,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param s The string to search the database with
 	 * @return A list of Note objects with at least one field matching the search
 	 */
@@ -591,7 +567,6 @@ public class DatabaseHandler extends Observable{
 	}
 
 	/**
-	 * 
 	 * @param c the cursor to create the note list from
 	 * @return the resulting list from the cursor
 	 */
@@ -627,4 +602,3 @@ public class DatabaseHandler extends Observable{
 			this.db.close();
 	}
 }
-	
