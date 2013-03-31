@@ -1,10 +1,6 @@
 /**
  * This file is part of Plingnote.
-<<<<<<< HEAD
  * Copyright (C) 2012 Barnabas sapan
-=======
- * Copyright (C) 2012 Barnabas Sapan
->>>>>>> base_gui
  * 
  * Plingnote is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -25,9 +21,6 @@ import java.util.ArrayList;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.app.SearchManager;
 import android.app.SearchManager.OnDismissListener;
 import android.content.Context;
@@ -36,7 +29,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
@@ -44,13 +36,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-
 import com.plingnote.R;
 import com.plingnote.gridview.FragmentImageGridView;
 import com.plingnote.listview.FragmentListView;
 import com.plingnote.map.FragmentMapView;
 import com.plingnote.preferences.ActivityAppPreference;
-import com.plingnote.service.LocationService;
 
 public class ActivityMain extends FragmentActivity{
 	private boolean isSearching = false;
