@@ -1,23 +1,27 @@
 /**
-* This file is part of Plingnote.
-* Copyright (C) 2012 Julia Gustafsson, Barnabas Sapan
-*
-* Plingnote is free software: you can redistribute it and/or modify it under
-* the terms of the GNU General Public License as published by the Free Software
-* Foundation, either version 3 of the License, or any later version.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-* FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-* details.
-*
-* You should have received a copy of the GNU General Public License along with
-* this program. If not, see <http://www.gnu.org/licenses/>.
-*/
+ * This file is part of Plingnote.
+ * Copyright (C) 2012 Julia Gustafsson, Barnabas Sapan
+ *
+ * Plingnote is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 package com.plingnote.notifications;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -29,11 +33,14 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -45,6 +52,7 @@ import com.plingnote.snotebar.NoteCategory;
 import com.plingnote.snotebar.PluginableFragment;
 import com.plingnote.utils.IntentExtra;
 import com.plingnote.utils.NoteExtra;
+import com.plingnote.utils.Utils;
 
 /**
  * A fragment representing a reminder/alarm that is using alarmmanager
@@ -59,10 +67,12 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 	private int requestCode;
 	private boolean changedValues = false;
 	private int yearSet, monthSet, daySet, hourSet, minutesSet;
+	private Button timeButton = null;
+	private Button dateButton = null;
 
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
-		
+
 		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
 			this.view = inflater.inflate(R.layout.fragment_reminder_landscape, container, false);		
 		else
@@ -70,41 +80,64 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 
 		return this.view;		
 	}
-	
+
 	/**
 	 * Attach onClick listeners to the buttons
 	 */
 	public void onStart(){
 		super.onStart();
+		timeButton = (Button) this.view.findViewById(R.id.pick_time_button);
+		dateButton = (Button) this.view.findViewById(R.id.pick_date_button);
+		final Calendar c = Calendar.getInstance();
+		
+		ActivityNote activityNote = (ActivityNote)getActivity();
+		int noteId = activityNote.getId();
+		
+		//Get the notes date as a string form from the database 
+		String d = DatabaseHandler.getInstance(getActivity()).getNote(noteId).getAlarm();
+		
+		//Set the time button text, either to the current time if no alarm is set for this note
+		//or to the already set alarm
+		if(!d.equals("")) {
+			Date date = Utils.parseDateFromDB(d);			
+			timeButton.setText(Utils.getFormatedTime(date.getHours()) + ":" + Utils.getFormatedTime(date.getMinutes()));
+		} else {
+			timeButton.setText(Utils.getFormatedTime(c.get(Calendar.HOUR_OF_DAY)) + ":" + Utils.getFormatedTime(c.get(Calendar.MINUTE)));
+		}
 
-		final Button timeButton = (Button) this.view.findViewById(R.id.pick_time_button);
-		final Calendar c = Calendar.getInstance(); 
-		int hour = c.get(Calendar.HOUR_OF_DAY);
-		int minute = c.get(Calendar.MINUTE);
-		timeButton.setText(hour + ":" + minute);
 		timeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				DialogFragment newFragment = new FragmentTimePicker();
-			    newFragment.show(getChildFragmentManager(), "timePicker");
-			    changedValues = true;
+				newFragment.show(getChildFragmentManager(), "timePicker");
+				changedValues = true;
 			}
 		});
-		
-		Button dateButton = (Button) this.view.findViewById(R.id.pick_date_button);
+
 		int year = c.get(Calendar.YEAR);
 		int month = c.get(Calendar.MONTH);
 		int day = c.get(Calendar.DAY_OF_MONTH);
-		dateButton.setText(year + "-" + month + "-" + day);
+		
+		//Set the date button text, either to the current time if no alarm is set for this note
+		//or to the already set alarm
+		if(!d.equals("")) {
+			Date date = Utils.parseDateFromDB(d);
+			dateButton.setText((date.getYear() + 1900) + "-" + Utils.getFormatedTime(date.getMonth()) + "-" + Utils.getFormatedTime(date.getDay()));
+		} else {
+			dateButton.setText(year + "-" + Utils.getFormatedTime(month) + "-" + Utils.getFormatedTime(day));
+		}
+		yearSet = year;
+		monthSet = month;
+		daySet = day;
 		dateButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				 DialogFragment newFragment = new FragmentDatePicker();
-				 newFragment.show(getChildFragmentManager(), "datePicker");
-				 changedValues = true;
+				DialogFragment newFragment = new FragmentDatePicker();
+				newFragment.show(getChildFragmentManager(), "datePicker");
+				changedValues = true;
 			}
 		});
-		
+
 		ImageButton okey = (ImageButton) this.view.findViewById(R.id.ok);
 		ImageButton cancel = (ImageButton) this.view.findViewById(R.id.cancel);
 
@@ -113,7 +146,7 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 				replaceBackFragment();
 			}
 		});	
-		
+
 		okey.setOnClickListener(new View.OnClickListener() {			
 			//Save the time and the the alarm in the method savetime
 			public void onClick(View v) {
@@ -121,25 +154,27 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 					saveTime();
 				else
 					Toast.makeText(getActivity(), "No reminder set, please change the time or date", Toast.LENGTH_LONG).show();
-				
+
 				replaceBackFragment();
 			}
 		});
 	}
-	
+
 	@Override
 	public void onDateSet(DatePicker view, int year, int month, int day) {
 		yearSet = year;
 		monthSet = month;
 		daySet = day;
+		dateButton.setText(year + "-" + Utils.getFormatedTime(month) + "-" + Utils.getFormatedTime(day));
 	}
 
 	@Override
 	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 		hourSet = hourOfDay;
 		minutesSet = minute;
+		timeButton.setText(Utils.getFormatedTime(hourOfDay) + ":" + Utils.getFormatedTime(minute));
 	}
-	
+
 	/**
 	 * Make an intent to broadcastreciever notenotification and save the time in datepicker and timepicker and set alarm by alarmmanager.
 	 * @param view
@@ -149,16 +184,16 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 		ActivityNote activityNote = (ActivityNote)getActivity();
 		intent.putExtra(IntentExtra.id.toString(), activityNote.getId()); 	
 		requestCode = DatabaseHandler.getInstance(getActivity()).getHighestRequest() + 1;
-		intent.putExtra(IntentExtra.requestCode.toString(),requestCode); 
+		intent.putExtra(IntentExtra.requestCode.toString(), requestCode); 
 		pendingIntent = PendingIntent.getBroadcast(getActivity(), requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
-		
+
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(yearSet, monthSet,	daySet, hourSet, minutesSet, 0);
-		this.value = calendar.getTime() + "";
-		
+		this.value = calendar.getTime().toString();
+
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);    
-		Toast.makeText(getActivity(), "Reminder set : " + value, Toast.LENGTH_LONG).show();	
+		Toast.makeText(getActivity(), "Reminder set: " + value, Toast.LENGTH_LONG).show();	
 	}
 
 	/**

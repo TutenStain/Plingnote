@@ -28,9 +28,11 @@
     <string name="cleanlocation">Clean Location</string>
     <string name="plingnote_settings">Plingnote Settings</string> 
     <string name="img_description_cancel_button">Cancel button</string>
-    <string name="img_description_confirm_button">Confirm button</string> 
-    <string name="date">Date:</string>
-    <string name="time">Time:</string>   
-	 <string name="img_description">Image</string>
+    <string name="img_description_confirm_button">Confirm button</string>
+    <string name="date">Date</string> 
+    <string name="date_info">at this date:</string>
+    <string name="time">Time</string>
+    <string name="time_info">you will be reminded:</string>   
+	<string name="img_description">Image</string>
 
 </resources>
