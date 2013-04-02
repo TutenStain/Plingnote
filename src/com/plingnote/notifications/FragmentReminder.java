@@ -17,11 +17,8 @@
 
 package com.plingnote.notifications;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -33,14 +30,11 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -69,6 +63,7 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 	private int yearSet, monthSet, daySet, hourSet, minutesSet;
 	private Button timeButton = null;
 	private Button dateButton = null;
+	private int noteId = -1;
 
 	public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
@@ -90,12 +85,14 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 		dateButton = (Button) this.view.findViewById(R.id.pick_date_button);
 		final Calendar c = Calendar.getInstance();
 		
+		//Get this notes id from the ActivityNote
 		ActivityNote activityNote = (ActivityNote)getActivity();
-		int noteId = activityNote.getId();
+		noteId = activityNote.getId();
 		
 		//Get the notes date as a string form from the database 
 		String d = DatabaseHandler.getInstance(getActivity()).getNote(noteId).getAlarm();
 		
+		//Get the current hour and minute
 		int hour = c.get(Calendar.HOUR_OF_DAY);
 		int minute = c.get(Calendar.MINUTE);
 		
@@ -108,9 +105,11 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 			timeButton.setText(Utils.getFormatedTime(hour) + ":" + Utils.getFormatedTime(minute));
 		}
 		
+		//Always set the current set time to the current time
 		hourSet = hour;
 		minutesSet = minute;
 
+		//Add onclick to the time button
 		timeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -120,6 +119,7 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 			}
 		});
 
+		//Get the current year, month and day
 		int year = c.get(Calendar.YEAR);
 		int month = c.get(Calendar.MONTH);
 		int day = c.get(Calendar.DAY_OF_MONTH);
@@ -133,10 +133,12 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 			dateButton.setText(year + "-" + Utils.getFormatedTime(month) + "-" + Utils.getFormatedTime(day));
 		}
 		
+		//Always set the current set date to the current date
 		yearSet = year;
 		monthSet = month;
 		daySet = day;
 		
+		//Add onclick to the date button
 		dateButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -149,16 +151,18 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 		ImageButton okey = (ImageButton) this.view.findViewById(R.id.ok);
 		ImageButton cancel = (ImageButton) this.view.findViewById(R.id.cancel);
 
+		//Add onclick to the cancel button
 		cancel.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {	  			
 				replaceBackFragment();
 			}
 		});	
 
+		//Add onclick to the confirm button
 		okey.setOnClickListener(new View.OnClickListener() {			
-			//Save the time and the the alarm in the method savetime
+			//Save the time and the the alarm in the method saveTime
 			public void onClick(View v) {
-				if(changedValues)
+				if(changedValues) //Only add a reminder if the user have changed the time or the date
 					saveTime();
 				else
 					Toast.makeText(getActivity(), "No reminder set, please change the time or date", Toast.LENGTH_LONG).show();
@@ -185,12 +189,10 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 
 	/**
 	 * Make an intent to broadcastreciever notenotification and save the time in datepicker and timepicker and set alarm by alarmmanager.
-	 * @param view
 	 */
 	public void saveTime(){
 		Intent intent = new Intent(getActivity(), NoteNotification.class);
-		ActivityNote activityNote = (ActivityNote)getActivity();
-		intent.putExtra(IntentExtra.id.toString(), activityNote.getId()); 	
+		intent.putExtra(IntentExtra.id.toString(), noteId); 	
 		requestCode = DatabaseHandler.getInstance(getActivity()).getHighestRequest() + 1;
 		intent.putExtra(IntentExtra.requestCode.toString(), requestCode); 
 		pendingIntent = PendingIntent.getBroadcast(getActivity(), requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -201,7 +203,7 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);    
-		Toast.makeText(getActivity(), "Reminder set: " + value, Toast.LENGTH_LONG).show();	
+		Toast.makeText(getActivity(), "Reminder set at " + value, Toast.LENGTH_LONG).show();	
 	}
 
 	/**
@@ -226,7 +228,7 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 	}
 
 	/**
-	 * Call replacebackfragment in the activity/fragment that hosts this fragment
+	 * Call replaceBackFragment in the activity/fragment that hosts this fragment
 	 */
 	public void replaceBackFragment() {
 		ActivityNote activityNote = (ActivityNote)getActivity();

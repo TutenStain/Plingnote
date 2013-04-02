@@ -84,6 +84,11 @@ public class Utils {
 		return x + "";
 	}
 
+	/**
+	 * Turns a String returned from the database to a Date object
+	 * @param d the String to parse from the database
+	 * @return a Date object with all the information about the parsed String
+	 */
 	public static Date parseDateFromDB(String d){
 		SimpleDateFormat fmt = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
 		Date date = null;
