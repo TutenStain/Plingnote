@@ -96,14 +96,20 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 		//Get the notes date as a string form from the database 
 		String d = DatabaseHandler.getInstance(getActivity()).getNote(noteId).getAlarm();
 		
+		int hour = c.get(Calendar.HOUR_OF_DAY);
+		int minute = c.get(Calendar.MINUTE);
+		
 		//Set the time button text, either to the current time if no alarm is set for this note
 		//or to the already set alarm
 		if(!d.equals("")) {
 			Date date = Utils.parseDateFromDB(d);			
 			timeButton.setText(Utils.getFormatedTime(date.getHours()) + ":" + Utils.getFormatedTime(date.getMinutes()));
 		} else {
-			timeButton.setText(Utils.getFormatedTime(c.get(Calendar.HOUR_OF_DAY)) + ":" + Utils.getFormatedTime(c.get(Calendar.MINUTE)));
+			timeButton.setText(Utils.getFormatedTime(hour) + ":" + Utils.getFormatedTime(minute));
 		}
+		
+		hourSet = hour;
+		minutesSet = minute;
 
 		timeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -126,9 +132,11 @@ public class FragmentReminder extends Fragment implements DatePickerDialog.OnDat
 		} else {
 			dateButton.setText(year + "-" + Utils.getFormatedTime(month) + "-" + Utils.getFormatedTime(day));
 		}
+		
 		yearSet = year;
 		monthSet = month;
 		daySet = day;
+		
 		dateButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
